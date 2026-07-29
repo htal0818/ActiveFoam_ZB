@@ -289,10 +289,36 @@ def fig2c():
     print("wrote compare_fig2c_z.png  (source:", src, ")")
 
 
+def fig2j():
+    f = os.path.join(ROOT, "data", "fig2j.npz")
+    if not os.path.exists(f):
+        return
+    d = np.load(f)
+    WS, sY, err = d["WS"], d["sigmaY"], d["err"]
+    m = np.isfinite(sY)
+    fig = plt.figure(figsize=(11, 4.6))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig2j.png")
+    ax = fig.add_subplot(1, 2, 2)
+    ax.axvspan(0.4, 0.6, color="#8fd18f", alpha=0.35)          # structural transition
+    ax.errorbar(WS[m], sY[m], yerr=err[m], fmt="o-", color="k", ms=5, capsize=2)
+    wpk = WS[m][np.argmax(sY[m])]
+    ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"$\sigma_Y/\sigma_0$")
+    ax.set_ylim(0, 0.45); ax.set_xlim(-0.05, 2.05)
+    ax.set_title(fr"This work (peak at $W/T_0\approx{wpk:.1f}$; $\rho=1,\ \Delta T=0$)",
+                 fontsize=11)
+    fig.suptitle(r"Fig. 2j  |  Yield stress vs adhesion — maximal rigidity at the "
+                 r"structural transition", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig2j_yield.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig2j_yield.png")
+
+
 if __name__ == "__main__":
     fig2a()
     fig2b()
     fig2c()
+    fig2j()
     fig3a()
     fig2f()
     fig4a()

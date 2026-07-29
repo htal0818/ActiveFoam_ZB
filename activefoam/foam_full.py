@@ -916,3 +916,50 @@ class FoamTissue:
                 if self._segs_cross(a, b, c, dd):
                     return True
         return False
+
+    # ------------------------------------------------------------------ #
+    #  stress tensor -- paper Eq. (4)/(5) (Methods, Kim et al. 2021)
+    #     sigma_mn = rho [ -sum_i dp_i a_i delta_mn
+    #                       + sum_ij t_ij l_ij,m l_ij,n / |l_ij| ]
+    #  Cell pressure dp_i = P0 (A0/A_i - 1); tension summed over curved-edge
+    #  segments so the arc geometry enters correctly.
+    # ------------------------------------------------------------------ #
+    def stress_tensor(self):
+        sig = np.zeros((2, 2))
+        # osmotic-pressure (isotropic) term, cells only
+        dp = self.P0 * (self.A0 / self.f_area - 1.0)
+        iso = np.sum(dp * self.f_area)
+        sig[0, 0] -= iso
+        sig[1, 1] -= iso
+        # junctional-tension term (Heaviside), summed over edge segments
+        for e in range(len(self.e_v)):
+            teff = self.e_t[e] if self.e_t[e] > 0.0 else 0.0
+            if teff == 0.0:
+                continue
+            emd = self.e_mid[e]
+            dl = np.diff(emd, axis=0)
+            L = np.hypot(dl[:, 0], dl[:, 1])
+            good = L > 1e-12
+            if not np.any(good):
+                continue
+            dlg, Lg = dl[good], L[good]
+            sig[0, 0] += np.sum(teff * dlg[:, 0] * dlg[:, 0] / Lg)
+            sig[0, 1] += np.sum(teff * dlg[:, 0] * dlg[:, 1] / Lg)
+            sig[1, 0] = sig[0, 1]
+            sig[1, 1] += np.sum(teff * dlg[:, 1] * dlg[:, 1] / Lg)
+        return self.rho * sig / (self.bs ** 2)
+
+    def shear_stress(self):
+        """sigma_xy (paper Eq. 5)."""
+        return self.stress_tensor()[0, 1]
+
+    def apply_affine_shear(self, strain):
+        """Impose an affine simple-shear step x -> x + strain*y (Lees-Edwards)."""
+        self.sstn = strain
+        self.vpos[:, 0] += strain * self.vpos[:, 1]
+        for e in range(len(self.e_mid)):
+            m = self.e_mid[e]
+            m[:, 0] = m[:, 0] + strain * m[:, 1]
+            self.e_mid[e] = m
+        self._wrap_vertices()
+        self._update_faces()

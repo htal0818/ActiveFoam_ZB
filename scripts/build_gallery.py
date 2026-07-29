@@ -33,6 +33,11 @@ CARDS = [
      "(T1 flips a contact into a space–space edge, T3-reverse merges the spaces). "
      "z rises to 6 with adhesion, matching for W/T₀ ≳ 0.25; the pure-foam W→0 "
      "limit over-fragments (small-triangle stability / full T4 still to come)."),
+    ("compare_fig2j_yield.png", "Fig 2j", "Yield stress vs adhesion",
+     "Foam model + paper Eq. 4/5 stress", "strong",
+     "Computed with the paper's Methods stress tensor: the yield stress is "
+     "maximal at the structural transition (W/T₀≈0.5–0.6) and vanishes at W=0 "
+     "(jamming) and W=2 (vanishing tension) — the tissue's two fluid limits."),
     ("compare_fig2f_jamming.png", "Fig 2f", "Foam-limit jamming",
      "Soft-particle jamming (O'Hern)", "strong",
      "φ_c ≈ 0.85 (paper 0.83), z_c = 4 at the isostatic point, z rising with "
