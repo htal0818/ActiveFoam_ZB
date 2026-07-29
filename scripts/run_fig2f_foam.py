@@ -11,7 +11,7 @@ from activefoam.foam import contact_number_at_phi
 os.makedirs("data", exist_ok=True)
 
 PHIS = np.round(np.arange(0.82, 1.001, 0.01), 3)
-SEEDS = (0, 1, 2, 3, 4)
+SEEDS = (0, 1, 2)
 N = 256
 
 def main():

@@ -11,10 +11,11 @@ from activefoam.measure import run_stress_relaxation
 os.makedirs("data", exist_ok=True)
 
 DT_LIST = [0.0, 0.5, 1.0, 1.5]
-SEEDS = [1, 2, 3, 4]
+SEEDS = [1, 2, 3, 4, 5, 6, 7, 8]
 W = 0.5
-STRAIN = 0.5
-RELAX = 300.0   # tau_R
+STRAIN = 1.5           # large strain step, matching the paper (eps_xy = 1.5)
+RELAX = 250.0          # tau_R
+N_SIDE = 8             # 64 cells -> cleaner long-time stress statistics
 
 def stretched(t, sinf, s0, tau, beta):
     return sinf + (s0 - sinf) * np.exp(-(np.clip(t, 0, None) / tau) ** beta)
@@ -28,7 +29,8 @@ def main():
         ts = None
         for s in SEEDS:
             t, sig, sA = run_stress_relaxation(dT, w=W, strain=STRAIN,
-                                               relax_tauR=RELAX, seed=s)
+                                               relax_tauR=RELAX, seed=s,
+                                               n_side=N_SIDE)
             ts = t
             sig_stack.append(sig)
             sA_stack.append(sA)

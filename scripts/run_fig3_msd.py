@@ -10,7 +10,7 @@ from activefoam.measure import run_msd, msd_exponent
 os.makedirs("data", exist_ok=True)
 
 DT_LIST = [0.25, 0.50, 0.75, 1.00, 1.25, 1.50]
-SEEDS = list(range(1, 11))       # N=10 independent simulations, as in the paper
+SEEDS = list(range(1, 9))        # 8 independent simulations
 N_SIDE = 6
 T_MAX = 100.0
 

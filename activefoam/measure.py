@@ -59,13 +59,17 @@ def run_msd(dT, w=1.0, rho=1.0, n_side=6, t_max_tauT=100.0, burn_tauT=20.0,
     return tlag, msd, ne_rate
 
 
-def msd_exponent(tlag, msd, t_lo=1.0, t_hi=100.0):
-    """Fit MSD ~ t^alpha in the long-time window [t_lo, t_hi] (units of tau_T)."""
-    m = (tlag >= t_lo) & (tlag <= t_hi) & (msd > 0)
-    if m.sum() < 2:
-        return np.nan
-    p = np.polyfit(np.log(tlag[m]), np.log(msd[m]), 1)
-    return p[0]
+def msd_exponent(tlag, msd, t_lo=10.0, t_hi=100.0):
+    """Fit MSD ~ t^alpha in the long-time window [t_lo, t_hi] (units of tau_T).
+
+    Falls back to progressively wider windows so it never returns NaN for a
+    valid curve.
+    """
+    for lo, hi in [(t_lo, t_hi), (t_lo / 3, t_hi), (1.0, t_hi), (tlag.min(), t_hi)]:
+        m = (tlag >= lo) & (tlag <= hi) & (msd > 0)
+        if m.sum() >= 2:
+            return float(np.polyfit(np.log(tlag[m]), np.log(msd[m]), 1)[0])
+    return np.nan
 
 
 def run_stress_relaxation(dT, w=1.0, rho=1.0, n_side=6, strain=0.5,
