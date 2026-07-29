@@ -7,6 +7,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from activefoam.topology import build_periodic_voronoi
 from activefoam.foam_full import FoamTissue
 
+SPACE_COLOR = "#d1352b"   # extracellular spaces shown in red
+
 def draw(ft, ax):
     L=ft.bs; pats=[]
     for ci in range(ft.nFa):
@@ -16,7 +18,9 @@ def draw(ft, ax):
                 pp=pts+np.array([sx*L,sy*L])
                 if pp[:,0].max()<-0.08*L or pp[:,0].min()>1.08*L or pp[:,1].max()<-0.08*L or pp[:,1].min()>1.08*L: continue
                 pats.append(Polygon(pp,closed=True))
-    ax.add_collection(PatchCollection(pats,facecolor="#c9d3e0",edgecolor="k",lw=0.5))
+    # red background = extracellular space; opaque cells drawn on top
+    ax.set_facecolor(SPACE_COLOR)
+    ax.add_collection(PatchCollection(pats,facecolor="#c9d3e0",edgecolor="k",lw=0.5,zorder=2))
     ax.set_xlim(0,L);ax.set_ylim(0,L);ax.set_aspect("equal");ax.set_xticks([]);ax.set_yticks([])
 
 def cfg(w,rho):
