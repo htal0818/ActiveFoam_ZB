@@ -614,10 +614,11 @@ class FoamTissue:
             for ci in (cL, cR, c1, c2):
                 if ci != SPACE:
                     self._recompute_cell(ci)
-            # validate
+            # validate (degenerate or self-intersecting -> reject; poor-man's T4)
             for ci in (cL, cR, c1, c2):
-                if ci != SPACE and (len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4):
-                    raise ValueError("degenerate cell")
+                if ci != SPACE and (len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4
+                                    or self._cell_self_intersects(ci)):
+                    raise ValueError("degenerate/tangled cell")
             return True
         except Exception:
             self._restore(snap)
@@ -856,8 +857,9 @@ class FoamTissue:
             for ci in set(fId):
                 self._recompute_cell(ci)
             for ci in set(fId):
-                if len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4:
-                    raise ValueError("degenerate cell after t3-reverse")
+                if (len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4
+                        or self._cell_self_intersects(ci)):
+                    raise ValueError("degenerate/tangled cell after t3-reverse")
             return True
         except Exception:
             self._restore(snap)
@@ -883,3 +885,34 @@ class FoamTissue:
             else:
                 removed += 1
         return removed
+
+    # ------------------------------------------------------------------ #
+    #  geometric robustness: reject transitions that tangle a cell
+    #  (a lightweight stand-in for T4 edge-crossing resolution)
+    # ------------------------------------------------------------------ #
+    @staticmethod
+    def _segs_cross(p1, p2, p3, p4):
+        """Do open segments p1p2 and p3p4 intersect? (port of ts_lineCross)."""
+        d = (p2[0] - p1[0]) * (p4[1] - p3[1]) - (p2[1] - p1[1]) * (p4[0] - p3[0])
+        if abs(d) < 1e-15:
+            return False
+        m = ((p3[0] - p1[0]) * (p2[1] - p1[1]) - (p3[1] - p1[1]) * (p2[0] - p1[0])) / d
+        k = ((p3[0] - p1[0]) * (p4[1] - p3[1]) - (p3[1] - p1[1]) * (p4[0] - p3[0])) / d
+        return (0.0 < m < 1.0) and (0.0 < k < 1.0)
+
+    def _cell_self_intersects(self, ci):
+        """True if cell ci's (physical-vertex) boundary crosses itself."""
+        loop = self.f_v[ci]
+        n = len(loop)
+        if n < 4:
+            return False
+        pts = crd_local(self.vpos[loop], self.bs, self.sstn)
+        for i in range(n):
+            a, b = pts[i], pts[(i + 1) % n]
+            for j in range(i + 2, n):
+                if i == 0 and j == n - 1:
+                    continue                      # adjacent across the wrap
+                c, dd = pts[j], pts[(j + 1) % n]
+                if self._segs_cross(a, b, c, dd):
+                    return True
+        return False
