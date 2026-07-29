@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from .topology import min_image
+
 SPACE = -1
 
 
@@ -634,6 +636,8 @@ class FoamTissue:
             if int(self.e_f[i, 0]) != SPACE and int(self.e_f[i, 1]) != SPACE:
                 if self.t1_foam(int(i)):
                     n1 += 1
+        # after T1s, any edge left between two spaces is merged away (T3-reverse)
+        self.resolve_space_space_edges()
         # T2: annihilate collapsed spaces
         na = self.t2_annihilate_spaces()
         # optional ongoing space creation at all-cell vertices (topTransitionType2)
@@ -777,3 +781,97 @@ class FoamTissue:
         except Exception:
             self._restore(snap)
             return False
+
+    # ------------------------------------------------------------------ #
+    #  T3-reverse: remove a space-space edge, merging the two spaces
+    # ------------------------------------------------------------------ #
+    def t3_reverse(self, deId):
+        """Remove space-space edge deId (both faces SPACE), merging the spaces.
+
+        Port of ts_t3ReverseTransition.m.  Removes the edge and its two vertices,
+        merging the two adjacent edges at each endpoint.
+        """
+        if not (int(self.e_f[deId, 0]) == SPACE and int(self.e_f[deId, 1]) == SPACE):
+            return False
+        cv = [int(self.e_v[deId, 0]), int(self.e_v[deId, 1])]
+        fId = []
+        for k in range(2):
+            cells = [int(f) for f in self.v_f[cv[k]] if f != SPACE]
+            if len(cells) != 1:
+                return False                      # only the simple T1-created case
+            fId.append(cells[0])
+        # two non-deId edges at each endpoint
+        e01 = [int(x) for x in self.v_e[cv[0]] if x != deId and x != -1]
+        e23 = [int(x) for x in self.v_e[cv[1]] if x != deId and x != -1]
+        if len(e01) != 2 or len(e23) != 2:
+            return False
+        eId = e01 + e23                            # [eA, eB, eC, eD]
+
+        def far(e, notv):
+            a, b = int(self.e_v[e, 0]), int(self.e_v[e, 1])
+            return a if b == notv else b
+        if eId[0] == eId[1] or eId[2] == eId[3]:
+            return False                           # 2-gon degenerate; skip
+        vId = [far(eId[0], cv[0]), far(eId[1], cv[0]),
+               far(eId[2], cv[1]), far(eId[3], cv[1])]
+        if len({vId[0], vId[1], cv[0]}) < 3 or len({vId[2], vId[3], cv[1]}) < 3:
+            return False
+
+        snap = self._snapshot()
+        try:
+            # reconnect far vertices: eId[1]->eId[0] at vId[1]; eId[3]->eId[2] at vId[3]
+            self.v_e[vId[1]] = self._sortf(
+                [eId[0] if x == eId[1] else int(x) for x in self.v_e[vId[1]]])
+            self.v_e[vId[3]] = self._sortf(
+                [eId[2] if x == eId[3] else int(x) for x in self.v_e[vId[3]]])
+            # merged edge endpoints
+            self.e_v[eId[0]] = self._sortf([vId[0], vId[1]])
+            self.e_v[eId[2]] = self._sortf([vId[2], vId[3]])
+            self.e_t[eId[0]] = 0.5 * (self.e_t[eId[0]] + self.e_t[eId[1]])
+            self.e_t[eId[2]] = 0.5 * (self.e_t[eId[2]] + self.e_t[eId[3]])
+            # merge polylines
+            for (ea, eb, shared, keep) in [(eId[0], eId[1], cv[0], eId[0]),
+                                           (eId[2], eId[3], cv[1], eId[2])]:
+                emd1 = self.e_mid[ea]
+                if int(snap[3][ea, 0]) == shared:
+                    emd1 = emd1[::-1]
+                emd2 = self.e_mid[eb]
+                if int(snap[3][eb, 1]) == shared:
+                    emd2 = emd2[::-1]
+                vr = crd_local(np.vstack([emd1, emd2[1:]]), self.bs, self.sstn)
+                self.e_mid[keep], self.e_rfn[keep] = edge_mid_vrtx_average(vr, self.edpc)
+            # cells lose the removed vertices
+            self.f_v[fId[0]] = [x for x in self.f_v[fId[0]] if x != cv[0]]
+            self.f_v[fId[1]] = [x for x in self.f_v[fId[1]] if x != cv[1]]
+            # remove vertices cv, edges deId,eId[1],eId[3]
+            self._remove_ve({cv[0], cv[1]}, {deId, eId[1], eId[3]})
+            for ci in set(fId):
+                self._recompute_cell(ci)
+            for ci in set(fId):
+                if len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4:
+                    raise ValueError("degenerate cell after t3-reverse")
+            return True
+        except Exception:
+            self._restore(snap)
+            return False
+
+    def resolve_space_space_edges(self, max_events=400):
+        """Remove all space-space edges via T3-reverse (re-detect after each)."""
+        removed = 0
+        for _ in range(max_events):
+            ss = [e for e in range(len(self.e_v))
+                  if int(self.e_f[e, 0]) == SPACE and int(self.e_f[e, 1]) == SPACE]
+            if not ss:
+                break
+            if not self.t3_reverse(ss[0]):
+                # can't resolve this one; drop it to avoid an infinite loop
+                ss = ss[1:]
+                progressed = False
+                for e in ss:
+                    if self.t3_reverse(e):
+                        removed += 1; progressed = True; break
+                if not progressed:
+                    break
+            else:
+                removed += 1
+        return removed
