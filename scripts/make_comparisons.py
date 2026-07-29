@@ -68,13 +68,35 @@ def fig3a():
     print("wrote compare_fig3a_msd.png")
 
 
+def _fit_jamming(phis, z, zc=4.0):
+    """Robust fit z-zc = z0 sqrt(phi-phic) + z1 (phi-phic), z0,z1>=0."""
+    from scipy.optimize import curve_fit
+    mask = z > zc + 0.02
+    pj, zj = phis[mask], z[mask]
+
+    def model(phi, phic, z0, z1):
+        dd = np.clip(phi - phic, 0, None)
+        return zc + z0 * np.sqrt(dd) + z1 * dd
+    best, berr = None, np.inf
+    for phic0 in np.linspace(0.80, 0.86, 13):
+        try:
+            popt, _ = curve_fit(model, pj, zj, p0=[phic0, 1.45, 10.45],
+                                bounds=([0.78, 0, 0], [0.88, 20, 40]), maxfev=40000)
+            err = np.mean((model(pj, *popt) - zj) ** 2)
+            if err < berr:
+                berr, best = err, popt
+        except Exception:
+            pass
+    return best if best is not None else [0.83, 1.45, 10.45]
+
+
 def fig2f():
     f = os.path.join(ROOT, "data", "fig2f.npz")
     if not os.path.exists(f):
         return
     d = np.load(f)
-    phis, z, zsd, fit, zc = d["phis"], d["zmean"], d["zstd"], d["fit"], float(d["zc"])
-    phic, z0, z1 = fit
+    phis, z, zsd, zc = d["phis"], d["zmean"], d["zstd"], float(d["zc"])
+    phic, z0, z1 = _fit_jamming(phis, z, zc)
 
     fig = plt.figure(figsize=(11, 4.6))
     axp = fig.add_subplot(1, 2, 1)
@@ -170,7 +192,63 @@ def shapefactor():
     print("wrote compare_fig2g_shape.png")
 
 
+def fig2a():
+    panel = os.path.join(OUT, "foam_fig2a_panel.png")
+    if not os.path.exists(panel):
+        return
+    fig = plt.figure(figsize=(12, 5))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig2a.png")
+    ax = fig.add_subplot(1, 2, 2)
+    ax.imshow(mpimg.imread(panel)); ax.axis("off")
+    ax.set_title("This work (curved-edge foam model)", fontsize=11)
+    fig.suptitle("Fig. 2a  |  Equilibrium configurations: extracellular spaces vs "
+                 "adhesion & density", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig2a_configs.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig2a_configs.png")
+
+
+def _phi_z_panel(npz, crop, title, outname, quantity):
+    f = os.path.join(ROOT, "data", npz)
+    if not os.path.exists(f):
+        return
+    d = np.load(f)
+    WS, RHOS = d["WS"], d["RHOS"]
+    Q = d[quantity]
+    fig = plt.figure(figsize=(11, 4.6))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, crop)
+    ax = fig.add_subplot(1, 2, 2)
+    cols = ["#2c7fb8", "#41ab5d", "#c0392b", "#7a5aa8"]
+    for i, rho in enumerate(RHOS):
+        ax.plot(WS, Q[i], "o-", color=cols[i % len(cols)], label=fr"$\rho={rho:.2f}$")
+    ax.set_xlabel(r"$W/T_0$")
+    ax.set_ylabel(r"$\phi$" if quantity == "phi" else r"$z$")
+    ax.legend(fontsize=9)
+    ax.set_title("This work", fontsize=11)
+    fig.suptitle(title, fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, outname), dpi=120)
+    plt.close(fig)
+    print("wrote", outname)
+
+
+def fig2b():
+    _phi_z_panel("fig2b_full.npz", "crop_fig2b.png",
+                 r"Fig. 2b  |  Volume fraction vs adhesion (faithful foam model)",
+                 "compare_fig2b_phi.png", "phi")
+
+
+def fig2c():
+    _phi_z_panel("fig2bc_def.npz", "crop_fig2c.png",
+                 r"Fig. 2c  |  Contact number vs adhesion (deformable model)",
+                 "compare_fig2c_z.png", "z")
+
+
 if __name__ == "__main__":
+    fig2a()
+    fig2b()
+    fig2c()
     fig3a()
     fig2f()
     fig4a()

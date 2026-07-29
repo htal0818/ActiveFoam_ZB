@@ -59,6 +59,38 @@ same force law, restricted to the confluent regime.
 Each driver saves `data/*.npz`; `scripts/make_comparisons.py` renders the
 side‑by‑side comparison PNGs into `figures/`.
 
+## Faithful vertex-network foam model (`foam_full.py`)
+
+`foam_full.py` ports the reference model's **actual data structure** rather than a
+confluent surrogate:
+
+* **physical vertices** — triple junctions (3 incident edges / 3 faces each);
+* **intermediate vertices** — extra points along every contact, re-sampled by
+  `edge_mid_vrtx_average` (port of `ts_edgeMidVrtxAverage.m`), giving each contact
+  **curvature** (paper Fig 1g, blue dots);
+* **extracellular spaces** — encoded as face id `-1` (the MATLAB's face 0), with
+  free-boundary tension `T₀` and cell–cell tension `2−W`;
+* forces from a direct port of `ts_iteration.m` / `ts_edgeNormalForce.m` /
+  `ts_edgeVector.m`;
+* **T2-reverse** (`ts_t2ReverseTransition.m`) opens a triangular space at every
+  vertex — the paper's space-initialisation protocol.
+
+`figures/compare_fig2a_configs.png` shows the result: curved cells with
+adhesion-dependent extracellular spaces, matching Fig 2a.
+
+### Topological-transition inventory
+
+| Transition | Meaning | Status |
+|---|---|---|
+| **T1** | neighbour exchange (edge flip) | ✅ confluent model (`model.py`), validated |
+| **T2-reverse** | create a triangular extracellular space | ✅ foam model (`foam_full.py`) |
+| **T2** | destroy a collapsed space/cell | ⚠️ not ported (spaces close by area only) |
+| **T3 / T4** | space–cell rewiring / merge adjacent spaces | ⚠️ not ported |
+
+Because breaking a cell–cell contact as a space grows needs T3/T4, the faithful
+foam model is used for Fig 2a and **φ(W/T₀)** (Fig 2b); the deformable-particle
+model — where cells are independent objects — supplies **z(W/T₀)** (Fig 2c).
+
 ## Scope & honesty about "exact"
 
 A stochastic simulation seeded with MATLAB's `rng('shuffle')`, `voronoin` and
