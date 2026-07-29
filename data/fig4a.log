@@ -1,1 +1,5 @@
 dT=0.00  sigma_A=0.000  sigma(end)=-0.048  tauSR=0.4 beta=0.85  [220s]
+dT=0.50  sigma_A=0.009  sigma(end)=-0.100  tauSR=0.4 beta=0.78  [439s]
+dT=1.00  sigma_A=0.023  sigma(end)=0.088  tauSR=0.5 beta=0.76  [666s]
+dT=1.50  sigma_A=0.034  sigma(end)=-0.034  tauSR=0.6 beta=0.86  [925s]
+saved data/fig4a.npz  total 925 s

@@ -621,8 +621,8 @@ class FoamTissue:
             self._restore(snap)
             return False
 
-    def do_transitions(self, mu=0.0):
-        """Apply T1 (short cell-cell edges) + ongoing space creation (T2-reverse)."""
+    def do_transitions(self, mu=0.0, create_spaces=False):
+        """Apply T1 (short cell-cell edges) + T2 annihilation (+ optional creation)."""
         n1 = 0
         # T1 on short cell-cell edges
         lens = np.array([edge_len(self.e_mid[i]).sum() for i in range(len(self.e_mid))])
@@ -636,14 +636,15 @@ class FoamTissue:
                     n1 += 1
         # T2: annihilate collapsed spaces
         na = self.t2_annihilate_spaces()
-        # ongoing space creation at all-cell vertices (topTransitionType2)
+        # optional ongoing space creation at all-cell vertices (topTransitionType2)
         n2 = 0
-        for v in range(len(self.vpos)):
-            if np.all(self.v_f[v] != SPACE):
-                try:
-                    self.t2_reverse(v); n2 += 1
-                except Exception:
-                    pass
+        if create_spaces:
+            for v in range(len(self.vpos)):
+                if np.all(self.v_f[v] != SPACE):
+                    try:
+                        self.t2_reverse(v); n2 += 1
+                    except Exception:
+                        pass
         self._update_faces()
         return n1, n2, na
 
@@ -694,10 +695,13 @@ class FoamTissue:
                             return (a, b, c, adj[a][b], adj[a][c], adj[c][b])
         return None
 
-    def t2_annihilate_spaces(self, area_thr=None, max_events=200):
-        """Collapse tiny triangular spaces to triple junctions (re-detect each time)."""
-        if area_thr is None:
-            area_thr = (0.2 * self.edpc) ** 2
+    def t2_annihilate_spaces(self, area_thr=1e-5, max_events=200):
+        """Collapse fully-collapsed triangular spaces to triple junctions.
+
+        The threshold is well below the 1%-triangle area at which spaces are
+        seeded, so only genuinely closed spaces are removed (growing spaces
+        survive to set the equilibrium volume fraction).
+        """
         removed = 0
         for _ in range(max_events):
             tri = self._find_collapsible_triangle(area_thr)
