@@ -94,13 +94,24 @@ two spaces, so the two cells lose their contact. The unified foam model therefor
 reproduces **both φ(W/T₀) and z(W/T₀)** on its own — z rises from the foam limit
 toward 6 with adhesion, matching the paper for W/T₀ ≳ 0.5.
 
-**Known limitation:** in the pure-foam W→0 limit the model *over-fragments*
-(z falls below the paper's ≈4–6) because small triangular spaces are not fully
-stabilised — that is the delicate curved-edge force balance of the paper's
-Supplementary Section 1. The **T4** edge-crossing machinery (`ts_edgeCutPiece`,
-`ts_t4Transition`) is also still to be ported for geometric robustness under large
-deformation. The `crit ≈ 0.05` size guard from `ts_t4AdjacentTransition` is the
-analogue we approximate with the snapshot/revert validation.
+**Known limitation — W→0 over-fragmentation.** In the pure-foam W→0 limit the
+model *over-fragments*: z falls to ≈2.8–3.7 versus the paper's ≈6 at ρ=1 (even
+*below* the isostatic value 4). This is the delicate curved-edge force balance of
+Supplementary Section 1: a corner where a cell–cell contact (tension 2−W) meets
+two free edges (tension 1 each) cannot balance by tension alone at W=0
+(2 > 1+1), so finite contacts are held open only by the free edges' Laplace
+pressure/curvature — which the refined-but-nearly-straight edges under-capture.
+The following were tested and did **not** fix it (confirming it is a
+force-calibration issue, not a transition-logic or cascade bug): gentler/zero
+annealing (z 3.4→3.7), finer edge refinement (worse), and limiting the T1
+break-rate (worse). The contact-breaking chain itself is correct and gives the
+right z(W/T₀) trend for W/T₀ ≳ 0.25.
+
+**Known limitation — full T4.** The extreme foam corner can still tangle via
+*inter-cell* edge crossing. A lightweight `_cell_self_intersects` guard
+(port of `ts_lineCross`) rejects transitions that self-intersect a cell, but the
+full lens-resolution (`ts_t4Transition` + `ts_edgeCutPiece`/`SinglePiece`) is not
+ported; the sweep flags un-resolvable corners as NaN.
 
 ## Scope & honesty about "exact"
 

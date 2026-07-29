@@ -25,8 +25,12 @@ def cfg(w,rho):
     for _ in range(150): ft.step(mu=0.0)
     for v in range(len(ft.vpos)): ft.t2_reverse(v)
     ft._update_faces()
-    for it in range(350): ft.step(mu=0.5)
-    for it in range(700): ft.step(mu=0.0)
+    for it in range(350):
+        ft.step(mu=0.5)
+        if it % 15 == 0: ft.do_transitions()   # T1 + T3-reverse + T2 chain
+    for it in range(700):
+        ft.step(mu=0.0)
+        if it % 15 == 0: ft.do_transitions()
     return ft
 
 RHOS=[1.0,0.9,0.8]; WS=[0.0,0.5,1.5]
