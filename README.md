@@ -174,11 +174,22 @@ standard O'Hern soft‑particle jamming model the paper cites (ref. 36). The ful
 extracellular‑space machinery ported from `ts_t*.m` — subject to the W→0
 over‑fragmentation and full‑T4 limitations noted above.
 
+## Movies
+
+| File | What it shows | Script |
+|---|---|---|
+| `figures/fluid_solid_movie.gif` | **Fig 5j-style**: a fluid MPZ (high activity, thousands of T1s) beside a solid PSM (low activity, ≈0 T1s) — active fluidisation at fixed adhesion, cells coloured by shape factor with tracked trajectories | `scripts/make_fluid_solid_movie.py` |
+| `figures/active_foam_full_movie.gif` | the **faithful foam model**: curved cells with extracellular spaces (red) opening under tension fluctuations and rearranging via the full T1–T4 machinery near the structural transition (spaces coarsen at long times — a model limit) | `scripts/make_foam_movie.py` |
+| `figures/active_foam_movie.gif` | single active tissue (confluent) with T1 events and tracked cell trails | `scripts/make_movie.py` |
+
 ## Running
 
 ```bash
-pip install numpy scipy matplotlib
-python tests/test_model.py            # correctness checks
+pip install numpy scipy matplotlib pillow
+python tests/test_model.py            # correctness checks (incl. full T4)
 python scripts/run_fig3_msd.py        # (each driver writes data/*.npz)
 python scripts/make_comparisons.py    # writes figures/compare_*.png
+python scripts/make_fig4h_panel.py    # Fig 4h shape-factor snapshots
+python scripts/make_fluid_solid_movie.py   # Fig 5j fluid-vs-solid movie
+python scripts/make_foam_movie.py     # curved-cell foam-with-spaces movie
 ```

@@ -62,6 +62,12 @@ CARDS = [
      "Confluent dynamic vertex model", "good",
      "s̄ rises with adhesion and with activity, crossing the 3.81 rigidity line; "
      "the spread across ΔT/T₀ is milder than the paper."),
+    ("compare_fig4h_snapshots.png", "Fig 4h", "Shape-factor snapshots vs activity",
+     "Confluent dynamic vertex model", "good",
+     "Configurations at W/T₀=1 coloured by shape factor s: increasing activity "
+     "ΔT/T₀ raises s̄ (3.80 → 3.86 → 3.91) and flips the tissue from solid (blue "
+     "frame) to fluid (red frame). The ordering and fluid/solid classification "
+     "match the paper (s̄ = 3.83/3.89/4.08); the shape heterogeneity is milder."),
     ("compare_fig4a_stress.png", "Fig 4a", "Shear-stress relaxation",
      "Confluent dynamic vertex model", "partial",
      "The elastic jump (≈ 0.85) and fast initial decay are captured, but the "
