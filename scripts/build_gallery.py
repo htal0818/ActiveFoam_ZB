@@ -24,14 +24,15 @@ CARDS = [
      "Curved cells (intermediate vertices) with extracellular spaces opening at low "
      "adhesion / low density and closing to confluence as W/T₀ rises."),
     ("compare_fig2b_phi.png", "Fig 2b", "Volume fraction φ vs adhesion",
-     "Faithful foam model (T1 + T2 + T2-reverse)", "strong",
+     "Unified foam model (T1 + T2 + T2-reverse + T3-reverse)", "strong",
      "φ rises from ≈ the jamming value toward 1 (confluent) as adhesion "
      "increases, with lower density giving lower φ."),
     ("compare_fig2c_z.png", "Fig 2c", "Contact number z vs adhesion",
-     "Deformable-particle model", "good",
-     "z increases with both adhesion and density. Breaking contacts as spaces grow "
-     "needs T3/T4, so z here comes from the deformable model where cells are "
-     "independent objects."),
+     "Unified foam model (contact-breaking via T1 → T3-reverse)", "good",
+     "The single faithful model now produces z too: contacts break as spaces grow "
+     "(T1 flips a contact into a space–space edge, T3-reverse merges the spaces). "
+     "z rises to 6 with adhesion, matching for W/T₀ ≳ 0.25; the pure-foam W→0 "
+     "limit over-fragments (small-triangle stability / full T4 still to come)."),
     ("compare_fig2f_jamming.png", "Fig 2f", "Foam-limit jamming",
      "Soft-particle jamming (O'Hern)", "strong",
      "φ_c ≈ 0.85 (paper 0.83), z_c = 4 at the isostatic point, z rising with "
