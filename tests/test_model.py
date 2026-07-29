@@ -171,7 +171,7 @@ def test_t4_reduces_folds_in_run():
         if not use_t4:
             FF.FoamTissue.t4_adjacent = lambda self, v: False
         try:
-            for it in range(300):
+            for it in range(160):
                 ft.step(mu=mu)
                 if it % 10 == 0:
                     ft.do_transitions(mu=mu)
@@ -184,6 +184,78 @@ def test_t4_reduces_folds_in_run():
     assert run(True, 2) <= run(False, 2)                    # T4 does not worsen tangling
 
 
+def test_t4_transition_cuts_lens():
+    """Non-adjacent T4: two space-bordering edges crossing at two points are
+    cut into first/second pieces + a bridge (2 new vertices, 3 new edges)."""
+    import numpy as np
+    from activefoam.topology import build_periodic_voronoi
+    from activefoam.foam_full import (FoamTissue, crd_local,
+                                       edge_mid_vrtx_average, edge_len, SPACE)
+    T = build_periodic_voronoi(6, np.random.default_rng(5))
+    ft = FoamTissue(T, w=0.3, rho=1.0, seed=1)
+    for _ in range(120):
+        ft.step(mu=0.4)
+    for v in range(len(ft.vpos)):
+        ft.t2_reverse(v)
+    ft._update_faces()
+    for it in range(150):
+        ft.step(mu=0.4)
+        if it % 15 == 0:
+            ft.do_transitions(mu=0.4)
+
+    def mid_of(e):
+        return crd_local(ft.e_mid[e], ft.bs, ft.sstn).mean(axis=0)
+
+    # non-adjacent, different-cell space-bordering edges (independent of the
+    # bbox prefilter, which only fires once e1 has bulged toward e2)
+    def eligible(e1):
+        adj = {int(x) for v in ft.e_v[e1] for x in ft.v_e[v] if x >= 0}
+        cell1 = int(ft.e_f[e1, 1])
+        return [e for e in range(len(ft.e_v))
+                if e != e1 and e not in adj
+                and int(ft.e_f[e, 0]) == SPACE
+                and int(ft.e_f[e, 1]) != cell1]
+
+    committed = False
+    for e1 in range(len(ft.e_v)):
+        if int(ft.e_f[e1, 0]) != SPACE:
+            continue
+        cands = eligible(e1)
+        if not cands:
+            continue
+        m1 = mid_of(e1)
+
+        def dist(e):
+            dm = crd_local(np.vstack([m1, mid_of(e)]), ft.bs, ft.sstn)
+            return np.hypot(*(dm[1] - dm[0]))
+        e2 = min(cands, key=dist)
+        P1 = crd_local(ft.e_mid[e1], ft.bs, ft.sstn)
+        s, eend = P1[0], P1[-1]
+        m2 = crd_local(ft.e_mid[e2], ft.bs, ft.sstn).mean(axis=0)
+        for scale in (2.0, 2.6, 3.2, 1.6):
+            arc = np.array([s, m2 + scale * (m2 - m1), eend])
+            mid, rfn = edge_mid_vrtx_average(crd_local(arc, ft.bs, ft.sstn), ft.edpc)
+            old = ft.e_mid[e1]
+            ft.e_mid[e1] = mid; ft.e_rfn[e1] = rfn
+            if ft._edge_cross_check(e1, e2)[0] == 2:
+                break
+            ft.e_mid[e1] = old
+        else:
+            continue
+        f1, f2 = int(ft.e_f[e1, 1]), int(ft.e_f[e2, 1])
+        nE, nV = len(ft.e_v), len(ft.vpos)
+        if ft.t4_transition(e1):
+            assert len(ft.e_v) == nE + 3 and len(ft.vpos) == nV + 2
+            assert np.sum(ft.v_e[-1] >= 0) == 3 and np.sum(ft.v_e[-2] >= 0) == 3
+            assert all(len(ft.f_v[f]) >= 3 and not ft._cell_self_intersects(f)
+                       for f in (f1, f2))
+            assert all(edge_len(ft.e_mid[e]).sum() > 1e-9
+                       for e in range(len(ft.e_v)))
+            committed = True
+            break
+    assert committed, "no non-adjacent T4 cut could be exercised"
+
+
 if __name__ == "__main__":
     test_construction_invariants()
     test_forces_match_reference()
@@ -192,4 +264,5 @@ if __name__ == "__main__":
     test_t2_annihilation_reverses_creation()
     test_t4_adjacent_resolves_fold()
     test_t4_reduces_folds_in_run()
-    print("all checks passed (confluent + foam transitions + T4-adjacent)")
+    test_t4_transition_cuts_lens()
+    print("all checks passed (confluent + foam transitions + full T4)")

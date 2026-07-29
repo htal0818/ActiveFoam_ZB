@@ -659,6 +659,8 @@ class FoamTissue:
                     n1 += 1
         # after T1s, any edge left between two spaces is merged away (T3-reverse)
         self.resolve_space_space_edges()
+        # T4 (non-adjacent): cut two space-bordering films that cross (lens)
+        self.top_transition_type3()
         # T2: annihilate collapsed spaces
         na = self.t2_annihilate_spaces()
         # optional ongoing space creation at all-cell vertices (topTransitionType2)
@@ -1035,6 +1037,214 @@ class FoamTissue:
             self._prev_lens = None
             return True
         return False
+
+    # ------------------------------------------------------------------ #
+    #  T4 (non-adjacent): two space-bordering edges that physically cross at
+    #  TWO points (a lens between two films) are cut and re-spliced with a new
+    #  bridge edge.  Faithful port of ts_t4Transition.m + ts_edgeCutPiece.m +
+    #  ts_edgeRangeCheck.m + ts_edgeCrossCheck.m, invoked over every
+    #  space-bordering edge by top_transition_type3 (= ts_topTransitionType3).
+    # ------------------------------------------------------------------ #
+    def _edge_cross_check(self, e1, e2):
+        """All-segment-pair crossings between two polylines (ts_edgeCrossCheck).
+        Returns (n_crossings, [points])."""
+        P1, P2 = self.e_mid[e1], self.e_mid[e2]
+        n1 = len(P1)
+        cat = crd_local(np.vstack([P1, P2]), self.bs, self.sstn)
+        Q1, Q2 = cat[:n1], cat[n1:]
+        pts = []
+        for ii in range(len(Q1) - 1):
+            for jj in range(len(Q2) - 1):
+                p = self._seg_cross_pt(Q1[ii], Q1[ii + 1], Q2[jj], Q2[jj + 1])
+                if p is not None:
+                    pts.append(p)
+        return len(pts), pts
+
+    def _edge_bbox(self, e):
+        m = self.e_mid[e]
+        return (m[:, 0].min(), m[:, 0].max(), m[:, 1].min(), m[:, 1].max())
+
+    def _t4_candidates(self, ce):
+        """Non-adjacent, space-bordering edges with a different opposite face
+        whose bounding box overlaps edge ce (port of ts_edgeRangeCheck: eId1/eId2
+        range overlap, eId3 space-bordering, eId4 non-adjacent, eId5 different
+        opposite face).  The bbox prefilter keeps this ~O(E) in practice."""
+        if int(self.e_f[ce, 0]) != SPACE:                  # edge{1}(ce,3)==0
+            return []
+        adj = set()                                        # eId4: adjacent edges
+        for v in self.e_v[ce]:
+            for e in self.v_e[v]:
+                if e >= 0:
+                    adj.add(int(e))
+        ce_cell = int(self.e_f[ce, 1])                     # eId5 reference (col 4)
+        cx0, cx1, cy0, cy1 = self._edge_bbox(ce)
+        bs = self.bs
+        out = []
+        for e in range(len(self.e_v)):
+            if e == ce or e in adj:
+                continue
+            if int(self.e_f[e, 0]) != SPACE:               # eId3: space-bordering
+                continue
+            if int(self.e_f[e, 1]) == ce_cell:             # eId5: different opposite face
+                continue
+            x0, x1, y0, y1 = self._edge_bbox(e)            # eId1/eId2: range overlap
+            sx = bs * round((x0 - cx0) / bs)               # bring bbox to min image of ce
+            sy = bs * round((y0 - cy0) / bs)
+            if (x1 - sx) < cx0 or (x0 - sx) > cx1 or (y1 - sy) < cy0 or (y0 - sy) > cy1:
+                continue
+            out.append(e)
+        return out
+
+    @staticmethod
+    def _cut_index(ept_l, emd):
+        """Index k s.t. inserting ept between emd[k],emd[k+1] is smoothest
+        (ts_edgeCutPiece slope heuristic)."""
+        d = emd - ept_l
+        with np.errstate(divide="ignore", invalid="ignore"):
+            sl = d[:, 1] / d[:, 0]
+        sldf = np.abs(sl[1:] - sl[:-1])
+        sldf = np.where(np.isfinite(sldf), sldf, np.inf)
+        return int(np.argmin(sldf))
+
+    def edge_cut_piece(self, emdi, ept, evr1, evr2, vId):
+        """Port of ts_edgeCutPiece.m: the piece of polyline emdi on the vId side
+        of the cut point ept.  evr1=original endpoints, evr2=new endpoints."""
+        emdc = crd_local(np.vstack([ept, emdi]), self.bs, self.sstn)
+        ept_l, emd = emdc[0], emdc[1:]
+        k = self._cut_index(ept_l, emd)
+        if int(evr1[0]) == vId:
+            emdf = np.vstack([emd[:k + 1], ept_l])
+            if int(evr2[1]) == vId:
+                emdf = emdf[::-1]
+        else:
+            emdf = np.vstack([ept_l, emd[k + 1:]])
+            if int(evr2[0]) == vId:
+                emdf = emdf[::-1]
+        return emdf
+
+    def _replace_in_ve(self, v, old_e, new_e):
+        row = [new_e if int(x) == old_e else int(x) for x in self.v_e[v]]
+        self.v_e[v] = self._sortf(row)
+
+    def _t4_face_update(self, f, va, vb, v5, v6):
+        """Insert the two new crossing vertices into cell f's loop and rebuild."""
+        fvr = self._face_vrtx_insert(va, vb, v5, self.f_v[f])
+        fvr = self._face_vrtx_insert(vb, v5, v6, fvr)
+        self.f_v[f] = fvr
+        self._recompute_cell(f)
+
+    def t4_transition(self, t4Id):
+        """Resolve a two-point crossing (lens) between edge t4Id and a
+        non-adjacent space-bordering edge.  Port of ts_t4Transition.m
+        (general case: both edges have distinct endpoints -> 2 new vertices,
+        3 new edges).  Returns True on a committed cut."""
+        if int(self.e_f[t4Id, 0]) != SPACE:
+            return False
+        target = None
+        for ne in self._t4_candidates(t4Id):
+            n, pts = self._edge_cross_check(t4Id, ne)
+            if n == 2 and np.all(np.isfinite(pts[0])) and np.all(np.isfinite(pts[1])):
+                target = (ne, pts); break
+        if target is None:
+            return False
+        ne, pts = target
+        ePt1, ePt2 = pts[0].copy(), pts[1].copy()
+        e1, e2 = t4Id, ne
+        v1a, v1b = int(self.e_v[e1, 0]), int(self.e_v[e1, 1])
+        v2a, v2b = int(self.e_v[e2, 0]), int(self.e_v[e2, 1])
+        if v1a == v1b or v2a == v2b:                        # only the general case
+            return False
+        flId = [int(self.e_f[e1, 1]), int(self.e_f[e2, 1])]
+        if flId[0] == SPACE or flId[1] == SPACE or flId[0] == flId[1]:
+            return False                                    # need two distinct cells
+
+        # orient endpoints so [vl0->ePt1] and [vl1->ePt2] don't cross (ts_lineCross)
+        vl = [v1a, v1b, v2a, v2b, None, None]
+        vr = crd_local(np.array([self.vpos[vl[0]], ePt1, self.vpos[vl[1]], ePt2]),
+                       self.bs, self.sstn)
+        if self._segs_cross(vr[0], vr[1], vr[2], vr[3]):
+            vl[0], vl[1] = vl[1], vl[0]
+        vr = crd_local(np.array([self.vpos[vl[2]], ePt1, self.vpos[vl[3]], ePt2]),
+                       self.bs, self.sstn)
+        if self._segs_cross(vr[0], vr[1], vr[2], vr[3]):
+            vl[2], vl[3] = vl[3], vl[2]
+
+        snap = self._snapshot()
+        t1_old, t2_old = float(self.e_t[e1]), float(self.e_t[e2])
+        ft1_old, ft2_old = self.fixed_tension(e1), self.fixed_tension(e2)
+        e1f = self.e_f[e1].copy(); e2f = self.e_f[e2].copy()
+        e1_oldmid, e1_oldev = self.e_mid[e1].copy(), (v1a, v1b)
+        e2_oldmid, e2_oldev = self.e_mid[e2].copy(), (v2a, v2b)
+
+        v5 = self._add_vertex(np.mod(ePt1, self.bs))
+        v6 = self._add_vertex(np.mod(ePt2, self.bs))
+        vl[4], vl[5] = v5, v6
+
+        ev_e1 = self._sortf([vl[0], v5])      # elId(1): e1 first piece
+        ev_e2 = self._sortf([vl[2], v5])      # elId(2): e2 first piece
+        ev_e3 = self._sortf([vl[1], v6])      # elId(3): e1 second piece
+        ev_e4 = self._sortf([vl[3], v6])      # elId(4): e2 second piece
+        ev_e5 = self._sortf([v5, v6])         # elId(5): bridge (two cells)
+
+        m1, r1 = edge_mid_vrtx_average(crd_local(
+            self.edge_cut_piece(e1_oldmid, ePt1, e1_oldev, ev_e1, vl[0]),
+            self.bs, self.sstn), self.edpc)
+        m3, r3 = edge_mid_vrtx_average(crd_local(
+            self.edge_cut_piece(e1_oldmid, ePt2, e1_oldev, ev_e3, vl[1]),
+            self.bs, self.sstn), self.edpc)
+        m2, r2 = edge_mid_vrtx_average(crd_local(
+            self.edge_cut_piece(e2_oldmid, ePt1, e2_oldev, ev_e2, vl[2]),
+            self.bs, self.sstn), self.edpc)
+        m4, r4 = edge_mid_vrtx_average(crd_local(
+            self.edge_cut_piece(e2_oldmid, ePt2, e2_oldev, ev_e4, vl[3]),
+            self.bs, self.sstn), self.edpc)
+        m5, r5 = edge_mid_vrtx_average(crd_local(
+            np.array([ePt1, ePt2]), self.bs, self.sstn), self.edpc)
+
+        # bridge tension: base average + fixed-point correction (ts_t4Transition)
+        ft5 = 2.0 - self.gam                                # interior (two cells)
+        t5 = 0.5 * (t1_old + t2_old) + (ft5 - 0.5 * (ft1_old + ft2_old))
+
+        # first pieces reuse e1,e2; add second pieces + bridge (order e3,e4,e5)
+        self.e_v[e1] = ev_e1; self.e_mid[e1] = m1; self.e_rfn[e1] = r1
+        self.e_v[e2] = ev_e2; self.e_mid[e2] = m2; self.e_rfn[e2] = r2
+        e3 = self._add_edge(ev_e3[0], ev_e3[1], int(e1f[0]), int(e1f[1]), m3, r3, t1_old)
+        e4 = self._add_edge(ev_e4[0], ev_e4[1], int(e2f[0]), int(e2f[1]), m4, r4, t2_old)
+        fls = self._sortf(flId)
+        e5 = self._add_edge(ev_e5[0], ev_e5[1], fls[0], fls[1], m5, r5, t5)
+
+        # vertex incidences
+        self._replace_in_ve(vl[1], e1, e3)
+        self._replace_in_ve(vl[3], e2, e4)
+        self.v_e[v5] = self._sortf([e1, e2, e5])
+        self.v_e[v6] = self._sortf([e3, e4, e5])
+        self.v_f[v5] = self._sortf([SPACE, flId[0], flId[1]])
+        self.v_f[v6] = self._sortf([SPACE, flId[0], flId[1]])
+
+        # cell faces gain the two crossing vertices
+        self._t4_face_update(flId[0], vl[0], vl[1], v5, v6)
+        self._t4_face_update(flId[1], vl[2], vl[3], v5, v6)
+
+        # validity guard (my curved geometry may differ from the reference)
+        for f in flId:
+            if (len(self.f_v[f]) < 3 or self.f_area[f] < 1e-3
+                    or self._cell_self_intersects(f)):
+                self._restore(snap)
+                return False
+        self._prev_lens = None
+        return True
+
+    def top_transition_type3(self):
+        """Apply non-adjacent T4 to every space-bordering edge (ts_topTransitionType3)."""
+        n, e = 0, 0
+        while e < len(self.e_v):
+            if int(self.e_f[e, 0]) == SPACE:
+                if self.t4_transition(e):
+                    n += 1
+            e += 1
+        if n:
+            self._update_faces()
+        return n
 
     # ------------------------------------------------------------------ #
     #  stress tensor -- paper Eq. (4)/(5) (Methods, Kim et al. 2021)

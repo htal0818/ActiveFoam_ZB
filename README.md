@@ -113,7 +113,7 @@ adhesion-dependent extracellular spaces, matching Fig 2a.
 | **T2** | annihilate a collapsed space back to a triple junction | ✅ `t2_annihilate_spaces` (+ id remap `_remove_ve`) |
 | **T3-reverse** | merge two spaces across a space–space edge | ✅ `ts_t3ReverseTransition` port (`t3_reverse`) |
 | **T4 (adjacent)** | uncross two curved edges *sharing a vertex* that folded through each other | ✅ `ts_t4AdjacentTransition` + `ts_edgeCrossAdjacent` port (`t4_adjacent`), with revert guard, validated |
-| **T4 (non-adjacent)** | cut two *non-adjacent* crossing edges and splice a new edge | ⚠️ not ported (needs `ts_t4Transition` + `ts_edgeCutPiece`/`SinglePiece`) |
+| **T4 (non-adjacent)** | cut two *non-adjacent* space-bordering edges crossing at two points (a lens) and splice a bridge edge | ✅ `ts_t4Transition` + `ts_edgeCutPiece` + `ts_topTransitionType3` port (`t4_transition` / `top_transition_type3`), validated |
 
 **The contact-breaking chain now works.** As a space grows, a cell–cell contact
 collapses → **T1** flips it into a space–space edge → **T3-reverse** merges the
@@ -134,20 +134,29 @@ annealing (z 3.4→3.7), finer edge refinement (worse), and limiting the T1
 break-rate (worse). The contact-breaking chain itself is correct and gives the
 right z(W/T₀) trend for W/T₀ ≳ 0.25.
 
-**T4 status — adjacent done, non-adjacent pending.** The common tangle mode —
-two curved edges *sharing a vertex* folding through each other — is now resolved
-by `t4_adjacent` (port of `ts_t4AdjacentTransition` + `ts_edgeCrossAdjacent`):
-the shared vertex is moved onto the edges' intersection point and both
-folded-over pieces are trimmed to it, with the reference's revert guard (undo if
-an edge collapses below 5 % of its length or an incident face area drops below
-`10⁻²`). It runs as the first pass of `do_transitions`. In a fragmentation-prone
-run (ρ=0.8, W=0, high activity) it roughly halves the residual adjacent folds;
-the remainder are genuinely un-resolvable corners the guard correctly refuses
-(the W→0 force-balance limit above). The **non-adjacent** cut
-(`ts_t4Transition` + `ts_edgeCutPiece`/`SinglePiece`), which changes
-connectivity, is still pending; the `_cell_self_intersects` guard (port of
-`ts_lineCross`) continues to reject those, and the sweep flags un-resolvable
-corners as NaN.
+**T4 — both modes ported.** Two curved edges *sharing a vertex* that fold
+through each other are resolved by `t4_adjacent` (port of
+`ts_t4AdjacentTransition` + `ts_edgeCrossAdjacent`): the shared vertex is moved
+onto the edges' intersection point and both folded-over pieces are trimmed to
+it, with the reference's revert guard (undo if an edge collapses below 5 % of
+its length or an incident face area drops below `10⁻²`).
+
+Two *non-adjacent* space-bordering edges (films) that cross at **two** points —
+a lens — are resolved by `t4_transition` (port of `ts_t4Transition` +
+`ts_edgeCutPiece`, driven over every space-bordering edge by
+`top_transition_type3` = `ts_topTransitionType3`). Following the reference
+general case, each edge is cut at both crossing points and re-spliced into a
+first piece, a second piece and a shared **bridge** edge — adding exactly two
+trivalent vertices and three edges, with the bridge tension set by the code's
+fixed-point averaging rule. A validity guard reverts the cut if it would leave a
+cell degenerate or self-intersecting. Both modes are exercised by the test suite
+(`test_t4_adjacent_resolves_fold`, `test_t4_transition_cuts_lens`). They run in
+the MATLAB order inside `do_transitions` (T4-adjacent → T1 → T3-reverse →
+T4-non-adjacent → T2), matching the `ts_simStep` schedule.
+
+The residual W→0 over-fragmentation noted above is a curved-edge
+**force-balance** limit, not a missing-transition one, so it persists even with
+the full T4 machinery in place.
 
 ## Scope & honesty about "exact"
 
