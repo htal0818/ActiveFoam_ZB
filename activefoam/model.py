@@ -45,7 +45,7 @@ class ActiveFoam:
         P0: float = 10.0,
         tauT: float = 10.0,
         dt: float = 0.005,
-        l_t1: float = 0.05,
+        l_t1: float = 0.035449,  # = 0.01*2*sqrt(pi), the paper's shEd
         seed: int | None = None,
     ):
         self.rng = np.random.default_rng(seed)
