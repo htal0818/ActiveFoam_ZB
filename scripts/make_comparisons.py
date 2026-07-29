@@ -263,9 +263,30 @@ def fig2b():
 
 
 def fig2c():
-    _phi_z_panel("fig2bc_def.npz", "crop_fig2c.png",
-                 r"Fig. 2c  |  Contact number vs adhesion (deformable model)",
-                 "compare_fig2c_z.png", "z")
+    # unified foam model now produces z via the T1->T3-reverse contact-breaking
+    # chain; fall back to the deformable model if the foam sweep isn't present.
+    src = "fig2b_full.npz" if os.path.exists(
+        os.path.join(ROOT, "data", "fig2b_full.npz")) else "fig2bc_def.npz"
+    crop = "crop_fig2c.png"
+    f = os.path.join(ROOT, "data", src)
+    d = np.load(f)
+    WS = d["WS"]; RHOS = d["RHOS"]; Q = d["z"]
+    fig = plt.figure(figsize=(11, 4.6))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, crop)
+    ax = fig.add_subplot(1, 2, 2)
+    cols = ["#c0392b", "#41ab5d", "#2c7fb8", "#7a5aa8"]
+    for i, rho in enumerate(RHOS):
+        ax.plot(WS, Q[i], "o-", color=cols[i % 4], label=fr"$\rho={rho:.2f}$")
+    ax.axhline(6, color="gray", lw=0.6, ls=":")
+    ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"$z$"); ax.set_ylim(2, 6.5)
+    ax.legend(fontsize=9)
+    model = "faithful foam model" if src.startswith("fig2b") else "deformable model"
+    ax.set_title(f"This work ({model})", fontsize=11)
+    fig.suptitle(r"Fig. 2c  |  Contact number vs adhesion", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig2c_z.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig2c_z.png  (source:", src, ")")
 
 
 if __name__ == "__main__":

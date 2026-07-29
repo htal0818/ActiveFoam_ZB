@@ -626,13 +626,19 @@ class FoamTissue:
     def do_transitions(self, mu=0.0, create_spaces=False):
         """Apply T1 (short cell-cell edges) + T2 annihilation (+ optional creation)."""
         n1 = 0
-        # T1 on short cell-cell edges
+        # T1 on short *and shrinking* cell-cell edges (cf. ts_topTransitionType1,
+        # which requires len < shEd AND len < gmp.eLnc so momentarily-short but
+        # recovering contacts are not broken).
         lens = np.array([edge_len(self.e_mid[i]).sum() for i in range(len(self.e_mid))])
         thr = 0.01 * 2 * np.sqrt(np.pi)
+        prev = getattr(self, "_prev_lens", None)
+        shrinking = (prev is not None and len(prev) == len(lens))
         order = np.argsort(lens)
         for i in order:
             if lens[i] >= thr:
                 break
+            if shrinking and lens[i] >= prev[i] - 1e-9:
+                continue                     # short but not shrinking -> leave it
             if int(self.e_f[i, 0]) != SPACE and int(self.e_f[i, 1]) != SPACE:
                 if self.t1_foam(int(i)):
                     n1 += 1
@@ -650,6 +656,8 @@ class FoamTissue:
                     except Exception:
                         pass
         self._update_faces()
+        self._prev_lens = np.array([edge_len(self.e_mid[i]).sum()
+                                    for i in range(len(self.e_mid))])
         return n1, n2, na
 
     # ------------------------------------------------------------------ #
