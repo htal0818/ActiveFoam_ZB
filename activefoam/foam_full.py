@@ -634,6 +634,8 @@ class FoamTissue:
             if int(self.e_f[i, 0]) != SPACE and int(self.e_f[i, 1]) != SPACE:
                 if self.t1_foam(int(i)):
                     n1 += 1
+        # T2: annihilate collapsed spaces
+        na = self.t2_annihilate_spaces()
         # ongoing space creation at all-cell vertices (topTransitionType2)
         n2 = 0
         for v in range(len(self.vpos)):
@@ -643,4 +645,131 @@ class FoamTissue:
                 except Exception:
                     pass
         self._update_faces()
-        return n1, n2
+        return n1, n2, na
+
+    # ------------------------------------------------------------------ #
+    #  T2: annihilate a collapsed triangular extracellular space
+    # ------------------------------------------------------------------ #
+    def _remove_ve(self, vdel, edel):
+        """Delete vertices/edges and remap all ids (port of ts_newIdAssign)."""
+        vdel, edel = set(vdel), set(edel)
+        vkeep = [v for v in range(len(self.vpos)) if v not in vdel]
+        ekeep = [e for e in range(len(self.e_v)) if e not in edel]
+        vmap = {old: new for new, old in enumerate(vkeep)}
+        emap = {old: new for new, old in enumerate(ekeep)}
+
+        def rm_e(e):
+            return emap[e] if e in emap else -1
+        self.vpos = self.vpos[vkeep]
+        self.v_e = np.array([[rm_e(e) if e != -1 else -1 for e in self.v_e[v]]
+                             for v in vkeep], np.int64)
+        self.v_f = self.v_f[vkeep]
+        self.e_v = np.array([[vmap[int(self.e_v[e, 0])], vmap[int(self.e_v[e, 1])]]
+                             for e in ekeep], np.int64)
+        self.e_f = self.e_f[ekeep]
+        self.e_t = self.e_t[ekeep]
+        self.e_rfn = self.e_rfn[ekeep]
+        self.e_mid = [self.e_mid[e] for e in ekeep]
+        self.f_v = [[vmap[v] for v in loop] for loop in self.f_v]
+        for ci in range(self.nFa):
+            self.f_e[ci] = self._face_edge_id(ci)
+
+    def _find_collapsible_triangle(self, area_thr):
+        """Return (a,b,c,eab,eac,ebc) of one tiny space triangle, or None."""
+        space_edges = [e for e in range(len(self.e_v))
+                       if int(self.e_f[e, 0]) == SPACE or int(self.e_f[e, 1]) == SPACE]
+        adj = {}
+        for e in space_edges:
+            a, b = int(self.e_v[e, 0]), int(self.e_v[e, 1])
+            adj.setdefault(a, {})[b] = e
+            adj.setdefault(b, {})[a] = e
+        for a in adj:
+            nbrs = list(adj[a])
+            for i in range(len(nbrs)):
+                for j in range(i + 1, len(nbrs)):
+                    b, c = nbrs[i], nbrs[j]
+                    if b in adj.get(c, {}):
+                        tri = crd_local(self.vpos[[a, b, c]], self.bs, self.sstn)
+                        if abs(poly_area_centroid(tri)[0]) < area_thr:
+                            return (a, b, c, adj[a][b], adj[a][c], adj[c][b])
+        return None
+
+    def t2_annihilate_spaces(self, area_thr=None, max_events=200):
+        """Collapse tiny triangular spaces to triple junctions (re-detect each time)."""
+        if area_thr is None:
+            area_thr = (0.2 * self.edpc) ** 2
+        removed = 0
+        for _ in range(max_events):
+            tri = self._find_collapsible_triangle(area_thr)
+            if tri is None:
+                break
+            if not self._collapse_triangle(*tri):
+                break
+            removed += 1
+        if removed:
+            self._update_faces()
+        return removed
+
+    def _collapse_triangle(self, a, b, c, eab, eac, ebc):
+        """Merge b,c into a; drop the 3 triangle edges (reverse ts_t2Reverse)."""
+        snap = self._snapshot()
+        try:
+            # outer edge of each corner (the one not on the triangle)
+            def outer(v, tri_edges):
+                for e in self.v_e[v]:
+                    if e != -1 and e not in tri_edges:
+                        return int(e)
+                return None
+            oa = outer(a, {eab, eac})
+            ob = outer(b, {eab, ebc})
+            oc = outer(c, {eac, ebc})
+            if None in (oa, ob, oc):
+                raise ValueError
+            # reconnect b's and c's outer edges to a
+            for (v, ov) in ((b, ob), (c, oc)):
+                if int(self.e_v[ov, 0]) == v:
+                    self.e_v[ov, 0] = a
+                else:
+                    self.e_v[ov, 1] = a
+            # a's incident edges: its outer + b's outer + c's outer
+            self.v_e[a] = self._sortf([oa, ob, oc])
+            # a's faces: union of the 3 corners' non-space faces
+            faces = set()
+            for v in (a, b, c):
+                for f in self.v_f[v]:
+                    if f != SPACE:
+                        faces.add(int(f))
+            faces = sorted(faces)[:3]
+            while len(faces) < 3:
+                faces.append(SPACE)
+            self.v_f[a] = self._sortf(faces)
+            # position -> triangle centroid
+            tri = crd_local(self.vpos[[a, b, c]], self.bs, self.sstn)
+            self.vpos[a] = np.mod(tri.mean(axis=0), self.bs)
+            # cells: replace b,c by a, drop duplicates
+            for ci in range(self.nFa):
+                loop = self.f_v[ci]
+                if b in loop or c in loop:
+                    new = [a if v in (b, c) else v for v in loop]
+                    dedup = [new[0]]
+                    for v in new[1:]:
+                        if v != dedup[-1]:
+                            dedup.append(v)
+                    if len(dedup) > 1 and dedup[0] == dedup[-1]:
+                        dedup.pop()
+                    self.f_v[ci] = dedup
+            # rebuild outer-edge polylines to end at a
+            for ov in (oa, ob, oc):
+                pts = crd_local(self.vpos[self.e_v[ov]], self.bs, self.sstn)
+                self.e_mid[ov], self.e_rfn[ov] = edge_mid_vrtx_average(pts, self.edpc)
+            self._remove_ve({b, c}, {eab, eac, ebc})
+            # recompute the touched cells
+            for ci in range(self.nFa):
+                self._recompute_cell(ci)
+            for ci in range(self.nFa):
+                if len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4:
+                    raise ValueError("degenerate cell after collapse")
+            return True
+        except Exception:
+            self._restore(snap)
+            return False

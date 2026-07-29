@@ -44,7 +44,7 @@ def run_msd(dT, w=1.0, rho=1.0, n_side=6, t_max_tauT=100.0, burn_tauT=20.0,
             times.append(af.time)
     traj = np.asarray(traj)
     times = np.asarray(times)
-    dt_s = times[1] - times[0]
+    dt_s = sample_every * af.dt          # regular sample spacing (not the 1st gap)
     # measure displacements in the tissue centre-of-mass frame
     traj = traj - traj.mean(axis=1, keepdims=True)
 
