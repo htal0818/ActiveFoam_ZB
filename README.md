@@ -51,13 +51,39 @@ same force law, restricted to the confluent regime.
 
 | Figure | Quantity | Script |
 |---|---|---|
-| **3a** | MSD(t) vs `t/τ_T` for varying `ΔT/T₀`, and exponent `α(ΔT)` | `scripts/run_fig3_msd.py` |
+| **2a** | Curved‑cell configurations with extracellular spaces vs `W/T₀` | `scripts/make_fig2a_panel.py` |
+| **2b/2c** | Volume fraction `φ` and contact number `z` vs `W/T₀`, `ρ` | `scripts/run_fig2b_unified.py` |
 | **2f** | Foam‑limit jamming: `z` vs `φ`, `φ_c≈0.83`, `z_c=4` | `scripts/run_fig2f_foam.py` |
-| **4a** | Shear‑stress relaxation → stretched exponential | `scripts/run_fig4a_stress.py` |
 | **2g/4g** | Cell shape factor `s̄` vs `W/T₀` (equilibrium & dynamic) | `scripts/run_shapefactor.py` |
+| **2i** | Shear‑stress relaxation `σ_xy(t)/σ₀` vs `W/T₀` (paper Eq. 4/5) | `scripts/run_fig2i_stress_relax.py` |
+| **2j** | Yield stress `σ_Y` vs `W/T₀` (paper Eq. 4/5) | `scripts/run_fig2j_yieldstress.py` |
+| **3a** | MSD(t) vs `t/τ_T` for varying `ΔT/T₀`, and exponent `α(ΔT)` | `scripts/run_fig3_msd.py` |
+| **4a** | Shear‑stress relaxation → stretched exponential | `scripts/run_fig4a_stress.py` |
+| **4d/4e** | `τ_SR` map and fluid/solid phase diagram over `(W/T₀, ΔT/T₀)` | `scripts/run_fig4de.py` |
 
 Each driver saves `data/*.npz`; `scripts/make_comparisons.py` renders the
 side‑by‑side comparison PNGs into `figures/`.
+
+### Stress, yield stress and stress relaxation (Figs 2i, 2j, 4a, 4d, 4e)
+
+These use the paper's **Methods stress tensor** (Eq. 4/5),
+`σ_mn = ρ [ −Σ_i Δp_i a_i δ_mn + Σ_ij t_ij ℓ_m ℓ_n / |ℓ| ]`, implemented on the
+curved‑edge foam model (`FoamTissue.stress_tensor`), together with the affine
+shear‑step‑and‑relax protocol (`apply_affine_shear`). Fig 2i recovers the paper's
+family exactly — largest elastic jump at `W=0`, highest residual (yield) stress at
+the structural transition `W/T₀≈0.5`, and zero stress at `W/T₀=2`.
+
+For the **τ_SR map (4d)** and **phase diagram (4e)** the paper states that
+long‑timescale stress relaxation is driven by *actively induced NE (T1)
+transitions*, with the stress‑relaxation time set by the inverse cellular NE
+rate. We therefore measure the steady‑state NE (topological‑event) rate `k_NE`
+directly from the foam model across `(W/T₀, ΔT/T₀)` and set
+`τ_SR = τ_T · (k_NE^max / k_NE)` (stress relaxes within one tension‑persistence
+time at the fully‑fluid NE ceiling, diverging as the NE rate → 0). Applying the
+paper's fluidity criterion `τ_SR/τ_T = 10²` reproduces the topology of Fig 4e:
+a solid band bordering the structural transition at low activity, fluid
+everywhere for large enough `ΔT/T₀`. This is a reduced NE‑rate reconstruction,
+not a per‑point stretched‑exponential fit of the full stress‑relaxation curve.
 
 ## Faithful vertex-network foam model (`foam_full.py`)
 
@@ -121,12 +147,13 @@ means recovering the paper's **quantitative results** — the same curves,
 scaling exponents, and transition values (`φ_c≈0.83`, `z_c=4`, `s_c≈3.81`,
 caged→diffusive MSD with `α: 0→1`, stretched‑exponential stress relaxation).
 
-The confluent dynamic vertex model (Figs 3, 4, 2g) is a faithful port of the
+The confluent dynamic vertex model (Figs 3, 4a, 2g, 4g) is a faithful port of the
 paper's force law and dynamics. The foam limit (Fig 2f) is reproduced with the
 standard O'Hern soft‑particle jamming model the paper cites (ref. 36). The full
-**non‑confluent structural sweep** (Fig 2b–d) additionally requires the
-extracellular‑space machinery (T2/T3/T4 transitions in `ts_t*.m`); that part is
-described but not ported here.
+**non‑confluent structural sweep** (Figs 2a–c) and the **paper's stress tensor**
+(Figs 2i, 2j, 4d, 4e) use the curved‑edge foam model with the T2/T3‑reverse
+extracellular‑space machinery ported from `ts_t*.m` — subject to the W→0
+over‑fragmentation and full‑T4 limitations noted above.
 
 ## Running
 

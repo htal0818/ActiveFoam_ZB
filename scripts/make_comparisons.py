@@ -289,6 +289,32 @@ def fig2c():
     print("wrote compare_fig2c_z.png  (source:", src, ")")
 
 
+def fig2i():
+    f = os.path.join(ROOT, "data", "fig2i.npz")
+    if not os.path.exists(f):
+        return
+    d = np.load(f)
+    WS, ts, sig = d["WS"], d["ts"], d["sig"]
+    tr = np.clip(ts, 1e-3, None)
+    fig = plt.figure(figsize=(11, 4.6))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig2i.png")
+    ax = fig.add_subplot(1, 2, 2)
+    wcol = {0.0: "#3b6fb6", 0.5: "#1f9e8b", 1.0: "#7a5aa8",
+            1.5: "#b5a11d", 2.0: "#b95a24"}
+    for i, w in enumerate(WS):
+        ax.semilogx(tr, sig[i], "-", lw=2,
+                    color=wcol.get(round(float(w), 2), "k"), label=f"{w:.1f}")
+    ax.set_xlabel(r"$t/\tau_R$"); ax.set_ylabel(r"$\sigma_{xy}(t)/\sigma_0$")
+    ax.legend(title=r"$W/T_0$", fontsize=8)
+    ax.set_title(r"This work ($\rho=1,\ \Delta T=0$)", fontsize=11)
+    fig.suptitle(r"Fig. 2i  |  Shear-stress relaxation vs adhesion "
+                 r"(paper Eq. 4/5 stress)", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig2i_stress.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig2i_stress.png")
+
+
 def fig2j():
     f = os.path.join(ROOT, "data", "fig2j.npz")
     if not os.path.exists(f):
@@ -314,13 +340,112 @@ def fig2j():
     print("wrote compare_fig2j_yield.png")
 
 
+TAU_T = 10.0          # tau_T / tau_R
+KNE_MAX = 0.5         # fully-fluid NE-rate ceiling (per cell per tau_R)
+
+
+def _tausr(kne):
+    """tau_SR/tau_R from the cellular NE rate: tau_SR = tau_T * (k_max / k_NE)."""
+    return TAU_T * KNE_MAX / np.clip(kne, 1e-6, None)
+
+
+def _de_grid(ax, DTS, WS, phi, values=None, cmap=None, norm=None,
+             classify=None, sq=0.34):
+    """Shared renderer for the Fig 4d/4e square grids over (W/T0, dT/T0)."""
+    import matplotlib.patches as mpatches
+    green = "#bfe3c0"
+    confl = phi >= 0.999
+    dW = WS[1] - WS[0]
+    dD = DTS[1] - DTS[0]
+    # green background: confluent cells (paper's structural transition)
+    for i, d in enumerate(DTS):
+        for j, w in enumerate(WS):
+            if confl[i, j]:
+                ax.add_patch(mpatches.Rectangle(
+                    (w - dW / 2, d - dD / 2), dW, dD,
+                    facecolor=green, edgecolor="none", zorder=0))
+    for i, d in enumerate(DTS):
+        for j, w in enumerate(WS):
+            if classify is not None:
+                c = classify(i, j)
+            else:
+                c = cmap(norm(values[i, j]))
+            ax.add_patch(mpatches.Rectangle(
+                (w - sq * dW, d - sq * dD), 2 * sq * dW, 2 * sq * dD,
+                facecolor=c, edgecolor="0.35", lw=0.5, zorder=2))
+    ax.set_xlim(WS[0] - dW, WS[-1] + dW)
+    ax.set_ylim(DTS[0] - dD, DTS[-1] + dD)
+    ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"$\Delta T/T_0$")
+    ax.set_xticks([0, 0.4, 0.8, 1.2]); ax.set_yticks([0.5, 1.0, 1.5])
+
+
+def fig4d():
+    f = os.path.join(ROOT, "data", "fig4de.npz")
+    if not os.path.exists(f):
+        return
+    import matplotlib.colors as mcolors
+    from matplotlib.cm import ScalarMappable
+    d = np.load(f)
+    DTS, WS, kne, phi = d["DTS"], d["WS"], d["kne"], d["phi"]
+    # tau_SR = tau_T * (k_max / k_NE): stress relaxes in ~one tension-persistence
+    # time at the fully-fluid NE-rate ceiling, and diverges as the NE rate -> 0.
+    tauSR = _tausr(kne)
+    cmap = plt.get_cmap("RdYlBu")
+    norm = mcolors.Normalize(vmin=1, vmax=6)          # log10(tau_SR/tau_R): 10^1..10^6
+    logt = np.log10(np.clip(tauSR, 10, 1e6))
+    fig = plt.figure(figsize=(11, 4.8))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig4d.png")
+    ax = fig.add_subplot(1, 2, 2)
+    _de_grid(ax, DTS, WS, phi, values=logt, cmap=cmap, norm=norm)
+    cb = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax, pad=0.02)
+    cb.set_label(r"$\log_{10}(\tau_{SR}/\tau_R)$")
+    ax.text(0.05, 1.42, "Non-confluent", color="0.5", fontsize=9)
+    ax.text(0.78, 0.62, "Confluent", color="#2f8f4f", fontsize=9)
+    ax.set_title("This work (foam model; " r"$\tau_{SR}=1/k_{NE}$)", fontsize=11)
+    fig.suptitle(r"Fig. 4d  |  Stress-relaxation time $\tau_{SR}$ vs adhesion and "
+                 r"activity (max at the structural transition)", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig4d_tauSR.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig4d_tauSR.png")
+
+
+def fig4e():
+    f = os.path.join(ROOT, "data", "fig4de.npz")
+    if not os.path.exists(f):
+        return
+    d = np.load(f)
+    DTS, WS, kne, phi = d["DTS"], d["WS"], d["kne"], d["phi"]
+    tauT = 10.0                                        # tau_T = 10 tau_R
+    tauSR = _tausr(kne)
+    solid = (tauSR / tauT) >= 1e2                       # paper's Fig 4e criterion
+    fig = plt.figure(figsize=(11, 4.8))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig4e.png")
+    ax = fig.add_subplot(1, 2, 2)
+    _de_grid(ax, DTS, WS, phi,
+             classify=lambda i, j: ("#2b3fd6" if solid[i, j] else "#e3271f"))
+    ax.text(0.05, 1.28, "Fluid", color="#e3271f", fontsize=11)
+    ax.text(0.55, 0.62, "Solid", color="#2b3fd6", fontsize=11)
+    ax.text(0.05, 1.42, r"$\tau_{SR}/\tau_T = 10^2$", fontsize=10)
+    ax.set_title("This work (foam model)", fontsize=11)
+    fig.suptitle(r"Fig. 4e  |  Fluid / solid phase diagram — solid states "
+                 r"surround the structural transition", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig4e_phase.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig4e_phase.png")
+
+
 if __name__ == "__main__":
     fig2a()
     fig2b()
     fig2c()
+    fig2i()
     fig2j()
     fig3a()
     fig2f()
     fig4a()
+    fig4d()
+    fig4e()
     shapefactor()
     print("done")

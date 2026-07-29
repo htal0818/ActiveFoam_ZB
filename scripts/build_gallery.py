@@ -33,6 +33,12 @@ CARDS = [
      "(T1 flips a contact into a space–space edge, T3-reverse merges the spaces). "
      "z rises to 6 with adhesion, matching for W/T₀ ≳ 0.25; the pure-foam W→0 "
      "limit over-fragments (small-triangle stability / full T4 still to come)."),
+    ("compare_fig2i_stress.png", "Fig 2i", "Shear-stress relaxation vs adhesion",
+     "Foam model + paper Eq. 4/5 stress + affine-shear step", "strong",
+     "The paper's Methods protocol (strain step then relax): the initial elastic "
+     "jump is largest at W=0 and vanishes at W/T₀=2, while the residual (yield) "
+     "stress is highest at the structural transition (W/T₀≈0.5) — the exact "
+     "ordering and crossover of the paper's family."),
     ("compare_fig2j_yield.png", "Fig 2j", "Yield stress vs adhesion",
      "Foam model + paper Eq. 4/5 stress", "strong",
      "Computed with the paper's Methods stress tensor: the yield stress is "
@@ -61,6 +67,18 @@ CARDS = [
      "The elastic jump (≈ 0.85) and fast initial decay are captured, but the "
      "confluent model relaxes too fast to resolve the paper's slow, "
      "orders-of-magnitude τ_SR tail — the weakest of the set."),
+    ("compare_fig4d_tauSR.png", "Fig 4d", "Stress-relaxation time τ_SR map",
+     "Foam model, τ_SR = 1/k_NE", "good",
+     "τ_SR is read off the steady-state cellular NE (topological-event) rate, "
+     "τ_SR ≈ 1/k_NE (the paper's stated mechanism). It grows from the fluid "
+     "non-confluent states toward the structural transition (green = confluent) "
+     "and shrinks with activity ΔT/T₀, spanning several decades as in the paper."),
+    ("compare_fig4e_phase.png", "Fig 4e", "Fluid / solid phase diagram",
+     "Foam model, τ_SR/τ_T = 10² criterion", "good",
+     "Applying the paper's fluidity criterion (fluid if τ_SR/τ_T < 10²): solid "
+     "states form a band bordering the structural transition at low activity and "
+     "the tissue is fluid everywhere for large enough ΔT/T₀ — reproducing the "
+     "topology of the paper's phase diagram from a direct NE-rate measurement."),
 ]
 
 VERDICT = {
