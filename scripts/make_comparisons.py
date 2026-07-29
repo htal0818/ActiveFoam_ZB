@@ -350,11 +350,13 @@ def _tausr(kne):
 
 
 def _de_grid(ax, DTS, WS, phi, values=None, cmap=None, norm=None,
-             classify=None, sq=0.34):
+             classify=None, sq=0.30):
     """Shared renderer for the Fig 4d/4e square grids over (W/T0, dT/T0)."""
     import matplotlib.patches as mpatches
     green = "#bfe3c0"
-    confl = phi >= 0.999
+    # confluent = spaces closed (phi -> 1); phi > 1.02 is a fragmentation blow-up
+    # (self-overlap), which is non-confluent/fluid, not confluent.
+    confl = (phi >= 0.999) & (phi <= 1.02)
     dW = WS[1] - WS[0]
     dD = DTS[1] - DTS[0]
     # green background: confluent cells (paper's structural transition)

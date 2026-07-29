@@ -68,11 +68,13 @@ CARDS = [
      "confluent model relaxes too fast to resolve the paper's slow, "
      "orders-of-magnitude τ_SR tail — the weakest of the set."),
     ("compare_fig4d_tauSR.png", "Fig 4d", "Stress-relaxation time τ_SR map",
-     "Foam model, τ_SR = 1/k_NE", "good",
-     "τ_SR is read off the steady-state cellular NE (topological-event) rate, "
-     "τ_SR ≈ 1/k_NE (the paper's stated mechanism). It grows from the fluid "
-     "non-confluent states toward the structural transition (green = confluent) "
-     "and shrinks with activity ΔT/T₀, spanning several decades as in the paper."),
+     "Foam model, τ_SR = τ_T·(k_NE^max/k_NE)", "good",
+     "τ_SR is read off the steady-state cellular NE (topological-event) rate "
+     "(the paper's stated mechanism). It grows from the fluid non-confluent "
+     "states toward the structural transition (green = confluent) and shrinks "
+     "with activity ΔT/T₀ — the same trend as the paper. The colour range is "
+     "compressed relative to the paper: the finite measurement window "
+     "(60 τ_R) resolves τ_SR only up to ~10³·⁵, not the paper's 10⁶ tail."),
     ("compare_fig4e_phase.png", "Fig 4e", "Fluid / solid phase diagram",
      "Foam model, τ_SR/τ_T = 10² criterion", "good",
      "Applying the paper's fluidity criterion (fluid if τ_SR/τ_T < 10²): solid "
