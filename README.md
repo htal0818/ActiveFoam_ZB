@@ -82,19 +82,25 @@ adhesion-dependent extracellular spaces, matching Fig 2a.
 
 | Transition | Meaning | Status |
 |---|---|---|
-| **T1** | neighbour exchange (edge flip) | ✅ confluent model + foam model (`t1_foam`, handles adjacent spaces), validated |
+| **T1** | neighbour exchange (edge flip) | ✅ confluent + foam model (`t1_foam`, handles adjacent spaces), validated |
 | **T2-reverse** | create a triangular extracellular space at a vertex | ✅ `ts_t2ReverseTransition` port (`t2_reverse`) |
 | **T2** | annihilate a collapsed space back to a triple junction | ✅ `t2_annihilate_spaces` (+ id remap `_remove_ve`) |
-| **T3 / T4** | merge cells across a space edge / resolve crossing edges | ⚠️ not ported (need `ts_edgeCut*`, `ts_t3ReverseTransition`, `ts_t4Transition`) |
+| **T3-reverse** | merge two spaces across a space–space edge | ✅ `ts_t3ReverseTransition` port (`t3_reverse`) |
+| **T4** | resolve two curved edges that geometrically cross | ⚠️ not ported (needs `ts_edgeCut*` / `ts_t4Transition`) |
 
-T1, T2-reverse and T2 are all implemented, stable (invariants verified across
-long runs), and wired into `do_transitions`. The remaining T3/T4 handle the
-curved-edge *collision* cases (two edges geometrically crossing when a space
-pinches, and merging adjacent spaces) — the `ts_edgeCutPiece` / `ts_t4Transition`
-machinery. Because cleanly *breaking* a cell–cell contact as a space grows needs
-those, the faithful foam model supplies Fig 2a and **φ(W/T₀)** (Fig 2b), while the
-deformable-particle model — cells as independent objects — supplies **z(W/T₀)**
-(Fig 2c).
+**The contact-breaking chain now works.** As a space grows, a cell–cell contact
+collapses → **T1** flips it into a space–space edge → **T3-reverse** merges the
+two spaces, so the two cells lose their contact. The unified foam model therefore
+reproduces **both φ(W/T₀) and z(W/T₀)** on its own — z rises from the foam limit
+toward 6 with adhesion, matching the paper for W/T₀ ≳ 0.5.
+
+**Known limitation:** in the pure-foam W→0 limit the model *over-fragments*
+(z falls below the paper's ≈4–6) because small triangular spaces are not fully
+stabilised — that is the delicate curved-edge force balance of the paper's
+Supplementary Section 1. The **T4** edge-crossing machinery (`ts_edgeCutPiece`,
+`ts_t4Transition`) is also still to be ported for geometric robustness under large
+deformation. The `crit ≈ 0.05` size guard from `ts_t4AdjacentTransition` is the
+analogue we approximate with the snapshot/revert validation.
 
 ## Scope & honesty about "exact"
 
