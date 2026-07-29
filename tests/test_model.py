@@ -75,8 +75,56 @@ def test_t1_conserves_topology():
     _invariants(af)
 
 
+def test_foam_transitions_stable():
+    """Foam model: build -> spaces (T2-reverse) -> relax with T1+T2, invariants hold."""
+    import numpy as np
+    from activefoam.topology import build_periodic_voronoi
+    from activefoam.foam_full import FoamTissue, SPACE
+
+    T = build_periodic_voronoi(6, np.random.default_rng(3))
+    ft = FoamTissue(T, w=0.3, rho=0.9, seed=1)
+    for _ in range(120):
+        ft.step(mu=0.0)
+    assert abs(ft.f_area.sum() - ft.bs ** 2) < 1e-3          # confluent area
+    nv0 = len(ft.vpos)
+    for v in range(nv0):
+        ft.t2_reverse(v)                                     # create spaces
+    ft._update_faces()
+    assert len(ft.vpos) == 3 * nv0                           # each vertex -> triangle
+    assert int(np.sum(np.any(ft.e_f == SPACE, axis=1))) == 3 * nv0
+    for it in range(200):
+        ft.step(mu=0.4 if it < 100 else 0.0)
+        if it % 20 == 0:
+            ft.do_transitions()
+    # invariants: trivalent vertices, valid cells
+    assert np.all(np.sum(ft.v_e != -1, axis=1) == 3)
+    assert all(len(ft.f_v[c]) >= 3 and ft.f_area[c] > 1e-4 for c in range(ft.nFa))
+
+
+def test_t2_annihilation_reverses_creation():
+    import numpy as np
+    from activefoam.topology import build_periodic_voronoi
+    from activefoam.foam_full import FoamTissue, SPACE
+    T = build_periodic_voronoi(6, np.random.default_rng(3))
+    ft = FoamTissue(T, w=1.5, rho=1.0, seed=1)
+    for _ in range(120):
+        ft.step(mu=0.0)
+    nv0 = len(ft.vpos)
+    for v in range(nv0):
+        ft.t2_reverse(v)
+    ft._update_faces()
+    for _ in range(150):
+        ft.step(mu=0.0)                                      # high W closes spaces
+    n = ft.t2_annihilate_spaces(area_thr=1e-2)               # generous -> remove all
+    assert len(ft.vpos) == nv0                               # back to confluent
+    assert int(np.sum(np.any(ft.e_f == SPACE, axis=1))) == 0
+    assert abs(ft.f_area.sum() - ft.bs ** 2) < 1e-2
+
+
 if __name__ == "__main__":
     test_construction_invariants()
     test_forces_match_reference()
     test_t1_conserves_topology()
-    print("all invariants + force checks passed")
+    test_foam_transitions_stable()
+    test_t2_annihilation_reverses_creation()
+    print("all checks passed (confluent + foam transitions)")

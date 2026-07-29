@@ -82,14 +82,19 @@ adhesion-dependent extracellular spaces, matching Fig 2a.
 
 | Transition | Meaning | Status |
 |---|---|---|
-| **T1** | neighbour exchange (edge flip) | ✅ confluent model (`model.py`), validated |
-| **T2-reverse** | create a triangular extracellular space | ✅ foam model (`foam_full.py`) |
-| **T2** | destroy a collapsed space/cell | ⚠️ not ported (spaces close by area only) |
-| **T3 / T4** | space–cell rewiring / merge adjacent spaces | ⚠️ not ported |
+| **T1** | neighbour exchange (edge flip) | ✅ confluent model + foam model (`t1_foam`, handles adjacent spaces), validated |
+| **T2-reverse** | create a triangular extracellular space at a vertex | ✅ `ts_t2ReverseTransition` port (`t2_reverse`) |
+| **T2** | annihilate a collapsed space back to a triple junction | ✅ `t2_annihilate_spaces` (+ id remap `_remove_ve`) |
+| **T3 / T4** | merge cells across a space edge / resolve crossing edges | ⚠️ not ported (need `ts_edgeCut*`, `ts_t3ReverseTransition`, `ts_t4Transition`) |
 
-Because breaking a cell–cell contact as a space grows needs T3/T4, the faithful
-foam model is used for Fig 2a and **φ(W/T₀)** (Fig 2b); the deformable-particle
-model — where cells are independent objects — supplies **z(W/T₀)** (Fig 2c).
+T1, T2-reverse and T2 are all implemented, stable (invariants verified across
+long runs), and wired into `do_transitions`. The remaining T3/T4 handle the
+curved-edge *collision* cases (two edges geometrically crossing when a space
+pinches, and merging adjacent spaces) — the `ts_edgeCutPiece` / `ts_t4Transition`
+machinery. Because cleanly *breaking* a cell–cell contact as a space grows needs
+those, the faithful foam model supplies Fig 2a and **φ(W/T₀)** (Fig 2b), while the
+deformable-particle model — cells as independent objects — supplies **z(W/T₀)**
+(Fig 2c).
 
 ## Scope & honesty about "exact"
 
