@@ -492,3 +492,155 @@ class FoamTissue:
         # tensions of triangle edges (free boundaries -> fixed point 1)
         for e in (elId[3], elId[4], elId[5]):
             self.e_t[e] = self.fixed_tension(e)
+
+    # ------------------------------------------------------------------ #
+    #  T1 neighbour exchange (curved edges + spaces)
+    # ------------------------------------------------------------------ #
+    def _cell_dir(self, v1, v2):
+        """Cell whose loop contains v1 immediately followed by v2 (or None)."""
+        for ci in range(self.nFa):
+            loop = self.f_v[ci]
+            n = len(loop)
+            for k in range(n):
+                if loop[k] == v1 and loop[(k + 1) % n] == v2:
+                    return ci, k
+        return None, None
+
+    def _edge_between(self, a, b):
+        for e in self.v_e[a]:
+            if e == -1:
+                continue
+            if {int(self.e_v[e, 0]), int(self.e_v[e, 1])} == {a, b}:
+                return e
+        return None
+
+    def _third_face(self, v, exclude):
+        for f in self.v_f[v]:
+            if f not in exclude:
+                return int(f)
+        return SPACE
+
+    def _snapshot(self):
+        import copy
+        return (self.vpos.copy(), self.v_e.copy(), self.v_f.copy(),
+                self.e_v.copy(), self.e_f.copy(), self.e_t.copy(),
+                self.e_rfn.copy(), [m.copy() for m in self.e_mid],
+                [list(x) for x in self.f_v], [list(x) for x in self.f_e],
+                self.f_area.copy(), self.f_center.copy())
+
+    def _restore(self, s):
+        (self.vpos, self.v_e, self.v_f, self.e_v, self.e_f, self.e_t,
+         self.e_rfn, self.e_mid, self.f_v, self.f_e, self.f_area,
+         self.f_center) = (s[0], s[1], s[2], s[3], s[4], s[5], s[6],
+                           s[7], s[8], s[9], s[10], s[11])
+
+    def t1_foam(self, e):
+        """Neighbour exchange on cell-cell edge e (handles adjacent spaces)."""
+        v1, v2 = int(self.e_v[e, 0]), int(self.e_v[e, 1])
+        fa, fb = int(self.e_f[e, 0]), int(self.e_f[e, 1])
+        if fa == SPACE or fb == SPACE:
+            return False
+        resL = self._cell_dir(v1, v2)
+        resR = self._cell_dir(v2, v1)
+        cL, kL = resL
+        cR, kR = resR
+        if cL is None or cR is None or cL == cR:
+            return False
+        loopL, loopR = self.f_v[cL], self.f_v[cR]
+        nL, nR = len(loopL), len(loopR)
+        if nL <= 3 or nR <= 3:
+            return False
+        a = loopL[(kL - 1) % nL]
+        b = loopL[(kL + 2) % nL]
+        c = loopR[(kR - 1) % nR]
+        d = loopR[(kR + 2) % nR]
+        c1 = self._third_face(v1, {cL, cR})
+        c2 = self._third_face(v2, {cL, cR})
+        if c1 == c2 and c1 != SPACE:
+            return False
+        # both cells and already neighbours -> would double an edge
+        if c1 != SPACE and c2 != SPACE:
+            nbr = set()
+            for ee in range(len(self.e_v)):
+                f0, f1 = int(self.e_f[ee, 0]), int(self.e_f[ee, 1])
+                if c1 in (f0, f1):
+                    nbr.add(f0); nbr.add(f1)
+            if c2 in nbr:
+                return False
+        e_a = self._edge_between(v1, a)
+        e_c = self._edge_between(v2, c)
+        if e_a is None or e_c is None or e_a == e_c:
+            return False
+
+        snap = self._snapshot()
+        try:
+            # geometry: rotate edge 90 deg about midpoint
+            p1 = self.vpos[v1]
+            p2 = p1 + min_image(self.vpos[v2] - p1, self.bs)
+            mid = 0.5 * (p1 + p2)
+            ev = p2 - p1
+            perp = np.array([-ev[1], ev[0]])
+            npp = np.hypot(*perp)
+            perp = perp / npp if npp > 1e-12 else np.array([1.0, 0.0])
+            half = 0.5 * max(self.edpc, np.hypot(*ev)) * 1.2
+            self.vpos[v1] = np.mod(mid + half * perp, self.bs)
+            self.vpos[v2] = np.mod(mid - half * perp, self.bs)
+
+            # combinatorics
+            self.e_f[e] = self._sortf([c1, c2])
+            self.e_v[e_a] = self._sortf([a, v2])
+            self.e_v[e_c] = self._sortf([c, v1])
+            e_d = self._edge_between(v1, d)   # (recompute after? still v1-d) -> unchanged
+            e_b = self._edge_between(v2, b)
+            self.v_e[v1] = self._sortf([e, e_c, e_d])
+            self.v_e[v2] = self._sortf([e, e_a, e_b])
+            self.v_f[v1] = self._sortf([cR, c1, c2])
+            self.v_f[v2] = self._sortf([cL, c1, c2])
+
+            self.f_v[cL] = [v for v in loopL if v != v1]
+            self.f_v[cR] = [v for v in loopR if v != v2]
+            if c1 != SPACE:
+                self.f_v[c1] = self._face_vrtx_insert(v1, a, v2, self.f_v[c1])
+            if c2 != SPACE:
+                self.f_v[c2] = self._face_vrtx_insert(v2, c, v1, self.f_v[c2])
+
+            # rebuild affected polylines (straight; relaxation re-curves them)
+            for ee in (e, e_a, e_c):
+                pts = crd_local(self.vpos[self.e_v[ee]], self.bs, self.sstn)
+                self.e_mid[ee], self.e_rfn[ee] = edge_mid_vrtx_average(pts, self.edpc)
+            self.e_t[e] = self.fixed_tension(e)
+            for ci in (cL, cR, c1, c2):
+                if ci != SPACE:
+                    self._recompute_cell(ci)
+            # validate
+            for ci in (cL, cR, c1, c2):
+                if ci != SPACE and (len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4):
+                    raise ValueError("degenerate cell")
+            return True
+        except Exception:
+            self._restore(snap)
+            return False
+
+    def do_transitions(self, mu=0.0):
+        """Apply T1 (short cell-cell edges) + ongoing space creation (T2-reverse)."""
+        n1 = 0
+        # T1 on short cell-cell edges
+        lens = np.array([edge_len(self.e_mid[i]).sum() for i in range(len(self.e_mid))])
+        thr = 0.01 * 2 * np.sqrt(np.pi)
+        order = np.argsort(lens)
+        for i in order:
+            if lens[i] >= thr:
+                break
+            if int(self.e_f[i, 0]) != SPACE and int(self.e_f[i, 1]) != SPACE:
+                if self.t1_foam(int(i)):
+                    n1 += 1
+        # ongoing space creation at all-cell vertices (topTransitionType2)
+        n2 = 0
+        for v in range(len(self.vpos)):
+            if np.all(self.v_f[v] != SPACE):
+                try:
+                    self.t2_reverse(v); n2 += 1
+                except Exception:
+                    pass
+        self._update_faces()
+        return n1, n2

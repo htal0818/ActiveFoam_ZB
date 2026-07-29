@@ -30,8 +30,12 @@ def equilibrate(w, rho, seed):
     ft._update_faces()
     for it in range(350):
         ft.step(mu=0.5)               # anneal
+        if it % 5 == 0:
+            ft.do_transitions()       # T1 + ongoing space creation
     for it in range(700):
         ft.step(mu=0.0)               # quench
+        if it % 5 == 0:
+            ft.do_transitions()
     z = ft.neighbor_number()
     return ft.volume_fraction(), z[z > 0].mean() if np.any(z > 0) else 0.0
 
