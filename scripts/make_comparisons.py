@@ -234,9 +234,32 @@ def _phi_z_panel(npz, crop, title, outname, quantity):
 
 
 def fig2b():
-    _phi_z_panel("fig2b_full.npz", "crop_fig2b.png",
-                 r"Fig. 2b  |  Volume fraction vs adhesion (faithful foam model)",
-                 "compare_fig2b_phi.png", "phi")
+    # deformable model gives phi across all three densities; overlay the faithful
+    # foam-model rho=1 result as a cross-check
+    f = os.path.join(ROOT, "data", "fig2bc_def.npz")
+    if not os.path.exists(f):
+        return
+    d = np.load(f)
+    WS, RHOS, phi = d["WS"], d["RHOS"], d["phi"]
+    fig = plt.figure(figsize=(11, 4.6))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig2b.png")
+    ax = fig.add_subplot(1, 2, 2)
+    cols = ["#c0392b", "#41ab5d", "#2c7fb8"]
+    for i, rho in enumerate(RHOS):
+        ax.plot(WS, phi[i], "o-", color=cols[i % 3], label=fr"$\rho={rho:.2f}$")
+    ff = os.path.join(ROOT, "data", "fig2b_full.npz")
+    if os.path.exists(ff):
+        df = np.load(ff)
+        ax.plot(df["WS"], df["phi"][0], "k^--", ms=5, label=r"foam model, $\rho=1$")
+    ax.axhline(1.0, color="gray", lw=0.6, ls=":")
+    ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"$\phi$")
+    ax.set_ylim(0.6, 1.03); ax.legend(fontsize=8)
+    ax.set_title("This work", fontsize=11)
+    fig.suptitle(r"Fig. 2b  |  Volume fraction vs adhesion & density", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig2b_phi.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig2b_phi.png")
 
 
 def fig2c():
