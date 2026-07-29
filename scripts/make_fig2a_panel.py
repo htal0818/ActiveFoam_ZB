@@ -33,7 +33,7 @@ def cfg(w,rho):
         if it % 15 == 0: ft.do_transitions()
     return ft
 
-RHOS=[1.0,0.9,0.8]; WS=[0.0,0.5,1.5]
+RHOS=[1.0,0.9,0.8]; WS=[0.15,0.5,1.5]
 fig,axes=plt.subplots(len(RHOS),len(WS),figsize=(9,9))
 for i,rho in enumerate(RHOS):
     for j,w in enumerate(WS):
