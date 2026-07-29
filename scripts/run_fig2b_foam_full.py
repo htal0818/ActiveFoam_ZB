@@ -36,8 +36,14 @@ def equilibrate(w, rho, seed):
         ft.step(mu=0.0)               # quench
         if it % 20 == 0:
             ft.do_transitions()
+    # robustness guard: without T4 edge-crossing resolution the extreme foam
+    # limit can tangle (self-intersecting cells -> nonsensical area). Flag those.
+    areas = ft.f_area
+    phi = ft.volume_fraction()
+    if phi > 1.08 or np.any(areas < -1e-6) or np.sum(areas > 3 * ft.A0) > 0:
+        return np.nan, np.nan
     z = ft.neighbor_number()
-    return ft.volume_fraction(), z[z > 0].mean() if np.any(z > 0) else 0.0
+    return phi, z[z > 0].mean() if np.any(z > 0) else 0.0
 
 
 def main():
@@ -50,8 +56,8 @@ def main():
             for s in SEEDS:
                 p, z = equilibrate(w, rho, s)
                 pv.append(p); zv.append(z)
-            phi[i, j] = np.mean(pv)
-            zz[i, j] = np.mean(zv)
+            phi[i, j] = np.nanmean(pv) if np.any(np.isfinite(pv)) else np.nan
+            zz[i, j] = np.nanmean(zv) if np.any(np.isfinite(zv)) else np.nan
         print(f"rho={rho}: phi={np.round(phi[i],3)}  [{time.time()-t0:.0f}s]", flush=True)
         print(f"          z={np.round(zz[i],2)}", flush=True)
     np.savez("data/fig2b_full.npz", WS=WS, RHOS=np.array(RHOS), phi=phi, z=zz)
