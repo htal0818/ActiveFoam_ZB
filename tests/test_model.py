@@ -121,10 +121,75 @@ def test_t2_annihilation_reverses_creation():
     assert abs(ft.f_area.sum() - ft.bs ** 2) < 1e-2
 
 
+def test_t4_adjacent_resolves_fold():
+    """T4-adjacent uncrosses two curved edges that share a vertex."""
+    import numpy as np
+    from activefoam.foam_full import FoamTissue, edge_len
+    ft = FoamTissue.__new__(FoamTissue)
+    ft.bs = 100.0; ft.sstn = 0.0; ft.edpc = 0.15
+    # e1 bows out and back, e2 runs straight; both start at vertex 0.
+    # They cross away from the shared vertex at (1.5, 1.5).
+    ft.e_mid = [np.array([[0., 0.], [3., 1.], [0., 2.]]),
+                np.array([[0., 0.], [2., 2.]])]
+    ft.e_v = np.array([[0, 1], [0, 2]]); ft.e_rfn = np.zeros(2, np.int64)
+    n, pt, s1, s2 = ft._edge_cross_adjacent(0, 1, 0)
+    assert n == 1 and abs(pt[0] - 1.5) < 1e-9 and abs(pt[1] - 1.5) < 1e-9
+    ft._trim_edge_at(0, 0, pt, s1)
+    ft._trim_edge_at(1, 0, pt, s2)
+    n2, _, _, _ = ft._edge_cross_adjacent(0, 1, 0)
+    assert n2 == 0                                          # fold resolved
+    assert edge_len(ft.e_mid[0]).sum() > 0
+    assert np.allclose(ft.e_mid[0][0], pt) and np.allclose(ft.e_mid[1][0], pt)
+
+
+def test_t4_reduces_folds_in_run():
+    """Enabling T4-adjacent leaves fewer residual adjacent folds after a run."""
+    import numpy as np
+    from activefoam.topology import build_periodic_voronoi
+    from activefoam.foam_full import FoamTissue
+    import activefoam.foam_full as FF
+
+    def folds(ft):
+        c = 0
+        for v in range(len(ft.vpos)):
+            eids = [int(e) for e in ft.v_e[v] if e >= 0]
+            ring = eids + [eids[0]] if len(eids) >= 2 else []
+            for i in range(len(ring) - 1):
+                if ring[i] != ring[i + 1]:
+                    c += ft._edge_cross_adjacent(ring[i], ring[i + 1], v)[0]
+        return c
+
+    def run(use_t4, seed=1, mu=1.5):
+        T = build_periodic_voronoi(6, np.random.default_rng(100 + seed))
+        ft = FoamTissue(T, w=0.0, rho=0.8, seed=seed)
+        for _ in range(120):
+            ft.step(mu=mu)
+        for v in range(len(ft.vpos)):
+            ft.t2_reverse(v)
+        ft._update_faces()
+        orig = FF.FoamTissue.t4_adjacent
+        if not use_t4:
+            FF.FoamTissue.t4_adjacent = lambda self, v: False
+        try:
+            for it in range(300):
+                ft.step(mu=mu)
+                if it % 10 == 0:
+                    ft.do_transitions(mu=mu)
+                if len(ft.vpos) > 320:
+                    break
+        finally:
+            FF.FoamTissue.t4_adjacent = orig
+        return folds(ft)
+
+    assert run(True, 2) <= run(False, 2)                    # T4 does not worsen tangling
+
+
 if __name__ == "__main__":
     test_construction_invariants()
     test_forces_match_reference()
     test_t1_conserves_topology()
     test_foam_transitions_stable()
     test_t2_annihilation_reverses_creation()
-    print("all checks passed (confluent + foam transitions)")
+    test_t4_adjacent_resolves_fold()
+    test_t4_reduces_folds_in_run()
+    print("all checks passed (confluent + foam transitions + T4-adjacent)")

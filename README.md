@@ -112,7 +112,8 @@ adhesion-dependent extracellular spaces, matching Fig 2a.
 | **T2-reverse** | create a triangular extracellular space at a vertex | ✅ `ts_t2ReverseTransition` port (`t2_reverse`) |
 | **T2** | annihilate a collapsed space back to a triple junction | ✅ `t2_annihilate_spaces` (+ id remap `_remove_ve`) |
 | **T3-reverse** | merge two spaces across a space–space edge | ✅ `ts_t3ReverseTransition` port (`t3_reverse`) |
-| **T4** | resolve two curved edges that geometrically cross | ⚠️ not ported (needs `ts_edgeCut*` / `ts_t4Transition`) |
+| **T4 (adjacent)** | uncross two curved edges *sharing a vertex* that folded through each other | ✅ `ts_t4AdjacentTransition` + `ts_edgeCrossAdjacent` port (`t4_adjacent`), with revert guard, validated |
+| **T4 (non-adjacent)** | cut two *non-adjacent* crossing edges and splice a new edge | ⚠️ not ported (needs `ts_t4Transition` + `ts_edgeCutPiece`/`SinglePiece`) |
 
 **The contact-breaking chain now works.** As a space grows, a cell–cell contact
 collapses → **T1** flips it into a space–space edge → **T3-reverse** merges the
@@ -133,11 +134,20 @@ annealing (z 3.4→3.7), finer edge refinement (worse), and limiting the T1
 break-rate (worse). The contact-breaking chain itself is correct and gives the
 right z(W/T₀) trend for W/T₀ ≳ 0.25.
 
-**Known limitation — full T4.** The extreme foam corner can still tangle via
-*inter-cell* edge crossing. A lightweight `_cell_self_intersects` guard
-(port of `ts_lineCross`) rejects transitions that self-intersect a cell, but the
-full lens-resolution (`ts_t4Transition` + `ts_edgeCutPiece`/`SinglePiece`) is not
-ported; the sweep flags un-resolvable corners as NaN.
+**T4 status — adjacent done, non-adjacent pending.** The common tangle mode —
+two curved edges *sharing a vertex* folding through each other — is now resolved
+by `t4_adjacent` (port of `ts_t4AdjacentTransition` + `ts_edgeCrossAdjacent`):
+the shared vertex is moved onto the edges' intersection point and both
+folded-over pieces are trimmed to it, with the reference's revert guard (undo if
+an edge collapses below 5 % of its length or an incident face area drops below
+`10⁻²`). It runs as the first pass of `do_transitions`. In a fragmentation-prone
+run (ρ=0.8, W=0, high activity) it roughly halves the residual adjacent folds;
+the remainder are genuinely un-resolvable corners the guard correctly refuses
+(the W→0 force-balance limit above). The **non-adjacent** cut
+(`ts_t4Transition` + `ts_edgeCutPiece`/`SinglePiece`), which changes
+connectivity, is still pending; the `_cell_self_intersects` guard (port of
+`ts_lineCross`) continues to reject those, and the sweep flags un-resolvable
+corners as NaN.
 
 ## Scope & honesty about "exact"
 

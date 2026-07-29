@@ -216,7 +216,9 @@ figcaption{padding:15px 20px 19px;color:var(--muted);font-size:14.5px;line-heigh
     <tbody><tr><td class='m'>T1</td><td>neighbour exchange (edge flip)</td><td><span class='dot done'></span>implemented</td><td class='sub'>confluent + foam model, validated</td></tr>
 <tr><td class='m'>T2-reverse</td><td>create a triangular extracellular space</td><td><span class='dot done'></span>implemented</td><td class='sub'>ts_t2ReverseTransition port</td></tr>
 <tr><td class='m'>T2</td><td>annihilate a collapsed space → triple junction</td><td><span class='dot done'></span>implemented</td><td class='sub'>with id remap</td></tr>
-<tr><td class='m'>T3 / T4</td><td>merge cells / resolve crossing edges</td><td><span class='dot todo'></span>not ported</td><td class='sub'>needs ts_edgeCut* machinery</td></tr></tbody></table>
+<tr><td class='m'>T3-reverse</td><td>merge two spaces across a space–space edge</td><td><span class='dot done'></span>implemented</td><td class='sub'>ts_t3ReverseTransition port</td></tr>
+<tr><td class='m'>T4 (adjacent)</td><td>uncross two curved edges sharing a vertex</td><td><span class='dot done'></span>implemented</td><td class='sub'>ts_t4AdjacentTransition port, revert-guarded</td></tr>
+<tr><td class='m'>T4 (non-adjacent)</td><td>cut two non-adjacent crossing edges</td><td><span class='dot todo'></span>not ported</td><td class='sub'>needs ts_t4Transition + ts_edgeCut*</td></tr></tbody></table>
     <p class="note" style="margin-top:18px">T1, T2-reverse and T2 are implemented, stable
     (invariants verified across long runs), and wired into the foam dynamics. T3/T4 handle the
     curved-edge <em>collision</em> cases (edges crossing as a space pinches, merging adjacent

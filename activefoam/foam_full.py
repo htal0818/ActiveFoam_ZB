@@ -625,7 +625,21 @@ class FoamTissue:
             return False
 
     def do_transitions(self, mu=0.0, create_spaces=False):
-        """Apply T1 (short cell-cell edges) + T2 annihilation (+ optional creation)."""
+        """Apply T4-adjacent (untangle) + T1 + T2 annihilation (+ optional creation)."""
+        # T4 (adjacent): repair curved edges that folded through each other,
+        # so a genuine tangle is un-folded rather than silently committed.
+        # Iterate a few sweeps: fixing one fold can expose an adjacent one.
+        n4 = 0
+        for _ in range(3):
+            k = 0
+            for v in range(len(self.vpos)):
+                if self.t4_adjacent(v):
+                    k += 1
+            n4 += k
+            if k == 0:
+                break
+        if n4:
+            self._update_faces()
         n1 = 0
         # T1 on short *and shrinking* cell-cell edges (cf. ts_topTransitionType1,
         # which requires len < shEd AND len < gmp.eLnc so momentarily-short but
@@ -915,6 +929,111 @@ class FoamTissue:
                 c, dd = pts[j], pts[(j + 1) % n]
                 if self._segs_cross(a, b, c, dd):
                     return True
+        return False
+
+    # ------------------------------------------------------------------ #
+    #  T4 (adjacent): resolve two curved edges sharing a vertex that have
+    #  folded through each other.  Port of ts_t4AdjacentTransition.m +
+    #  ts_edgeCrossAdjacent.m.  Pure geometry repair (no connectivity change):
+    #  the shared vertex is moved onto the edges' intersection point and both
+    #  folded-over edge pieces are trimmed to it.
+    # ------------------------------------------------------------------ #
+    @staticmethod
+    def _seg_cross_pt(p1, p2, p3, p4):
+        """Intersection point of open segments p1p2, p3p4 (port of ts_lineCross)."""
+        d = (p2[0] - p1[0]) * (p4[1] - p3[1]) - (p2[1] - p1[1]) * (p4[0] - p3[0])
+        if abs(d) < 1e-15:
+            return None
+        m = ((p3[0] - p1[0]) * (p2[1] - p1[1]) - (p3[1] - p1[1]) * (p2[0] - p1[0])) / d
+        k = ((p3[0] - p1[0]) * (p4[1] - p3[1]) - (p3[1] - p1[1]) * (p4[0] - p3[0])) / d
+        if 0.0 < m < 1.0 and 0.0 < k < 1.0:
+            return np.array([p1[0] + k * (p2[0] - p1[0]),
+                             p1[1] + k * (p2[1] - p1[1])])
+        return None
+
+    def _edge_cross_adjacent(self, e1, e2, v):
+        """Crossings between adjacent edges e1,e2 (sharing v), excluding the
+        segment pair that legitimately meets at v.  Returns (n, pt, seg1, seg2)."""
+        P1, P2 = self.e_mid[e1], self.e_mid[e2]
+        n1 = len(P1)
+        cat = crd_local(np.vstack([P1, P2]), self.bs, self.sstn)
+        Q1, Q2 = cat[:n1], cat[n1:]
+        s1, s2 = len(Q1) - 1, len(Q2) - 1
+        a1 = 0 if int(self.e_v[e1, 0]) == v else s1 - 1     # segment of e1 at v
+        a2 = 0 if int(self.e_v[e2, 0]) == v else s2 - 1     # segment of e2 at v
+        n, pt, c1, c2 = 0, None, None, None
+        for ii in range(s1):
+            for jj in range(s2):
+                if ii == a1 and jj == a2:
+                    continue
+                p = self._seg_cross_pt(Q1[ii], Q1[ii + 1], Q2[jj], Q2[jj + 1])
+                if p is not None:
+                    n += 1; pt = p; c1 = ii; c2 = jj
+        return n, pt, c1, c2
+
+    def _trim_edge_at(self, e, v, ept, seg):
+        """Replace edge e's polyline on the v-side of crossing segment `seg`
+        with the intersection point ept, then re-refine."""
+        P = crd_local(self.e_mid[e], self.bs, self.sstn)
+        if int(self.e_v[e, 0]) == v:                # edge starts at v
+            new = np.vstack([ept, P[seg + 1:]])
+        else:                                       # edge ends at v
+            new = np.vstack([P[:seg + 1], ept])
+        new = crd_local(new, self.bs, self.sstn)
+        mid, rfn = edge_mid_vrtx_average(new, self.edpc)
+        self.e_mid[e] = mid; self.e_rfn[e] = rfn
+
+    def _move_edge_end(self, e, v, ept):
+        """Drag edge e's endpoint at vertex v to ept and re-refine."""
+        P = crd_local(self.e_mid[e], self.bs, self.sstn).copy()
+        if int(self.e_v[e, 0]) == v:
+            P[0] = ept
+        else:
+            P[-1] = ept
+        P = crd_local(P, self.bs, self.sstn)
+        mid, rfn = edge_mid_vrtx_average(P, self.edpc)
+        self.e_mid[e] = mid; self.e_rfn[e] = rfn
+
+    def t4_adjacent(self, v):
+        """Resolve a fold between two edges incident on vertex v. Returns True
+        if a crossing was repaired (and the repair passed the revert guard)."""
+        eids = [int(e) for e in self.v_e[v] if e >= 0]
+        if len(eids) < 2:
+            return False
+        ring = eids + [eids[0]]
+        for idx in range(len(ring) - 1):
+            ea, eb = ring[idx], ring[idx + 1]
+            if ea == eb:
+                continue
+            va, vb = self.e_v[ea], self.e_v[eb]
+            if (va[0] == vb[0] and va[1] == vb[1]) or \
+               (va[0] == vb[1] and va[1] == vb[0]):
+                continue                            # identical edge pair (chk~=1)
+            ncr, ept, s_a, s_b = self._edge_cross_adjacent(ea, eb, v)
+            if ncr != 1 or ept is None:
+                continue
+            snap = self._snapshot()
+            old_a = edge_len(self.e_mid[ea]).sum()
+            old_b = edge_len(self.e_mid[eb]).sum()
+            self.vpos[v] = np.mod(ept, self.bs)
+            self._trim_edge_at(ea, v, ept, s_a)
+            self._trim_edge_at(eb, v, ept, s_b)
+            for e3 in eids:
+                if e3 != ea and e3 != eb:
+                    self._move_edge_end(e3, v, ept)
+            faces = [int(f) for f in self.v_f[v] if f != SPACE and f >= 0]
+            for f in faces:
+                a, c = self.cell_area_center(f)
+                self.f_area[f] = a; self.f_center[f] = c
+            new_a = edge_len(self.e_mid[ea]).sum()
+            new_b = edge_len(self.e_mid[eb]).sum()
+            cri = min(new_a / max(old_a, 1e-12), new_b / max(old_b, 1e-12))
+            far = min((self.f_area[f] for f in faces), default=1.0)
+            if cri < 0.05 or far < 1e-2:            # revert guard (matlab)
+                self._restore(snap)
+                continue
+            self._prev_lens = None
+            return True
         return False
 
     # ------------------------------------------------------------------ #
