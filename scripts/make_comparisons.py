@@ -269,6 +269,8 @@ def fig2c():
         os.path.join(ROOT, "data", "fig2b_full.npz")) else "fig2bc_def.npz"
     crop = "crop_fig2c.png"
     f = os.path.join(ROOT, "data", src)
+    if not os.path.exists(f):
+        return
     d = np.load(f)
     WS = d["WS"]; RHOS = d["RHOS"]; Q = d["z"]
     fig = plt.figure(figsize=(11, 4.6))
@@ -287,6 +289,86 @@ def fig2c():
     fig.savefig(os.path.join(OUT, "compare_fig2c_z.png"), dpi=120)
     plt.close(fig)
     print("wrote compare_fig2c_z.png  (source:", src, ")")
+
+
+def fig3cd():
+    """Fig 3c (long-time MSD) and Fig 3d (cellular NE rate) vs adhesion."""
+    f = os.path.join(ROOT, "data", "fig3cd.npz")
+    if not os.path.exists(f):
+        return
+    d = np.load(f)
+    DTS, WS, kne, msd = d["DTS"], d["WS"], d["kne"], d["msd"]
+    win = float(d["win_taur"]) if "win_taur" in d else 20.0
+    floor = float(d["kne_floor"]) if "kne_floor" in d else 1.0 / (36 * win * 2)
+
+    # ---- 3c: MSD ---------------------------------------------------------
+    fig = plt.figure(figsize=(11, 4.6))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig3c.png")
+    ax = fig.add_subplot(1, 2, 2)
+    for i, dT in enumerate(DTS):
+        ax.plot(WS, msd[i], "o-", color=dtcol(dT), lw=1.8, ms=4, label=f"{dT:.2f}")
+    ax.set_xlabel(r"$W/T_0$")
+    ax.set_ylabel(fr"MSD$(t={win/10:.0f}\,\tau_T)/L_0^2$")
+    ax.set_yscale("log")
+    ax.legend(title=r"$\Delta T/T_0$", fontsize=8)
+    ax.set_title("This work (foam model; shorter lag, log axis)", fontsize=11)
+    fig.suptitle(r"Fig. 3c  |  Cell movements vs adhesion — minimal at the "
+                 r"structural transition", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig3c_msd_vs_w.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig3c_msd_vs_w.png")
+
+    # ---- 3d: NE rate -----------------------------------------------------
+    fig = plt.figure(figsize=(11, 4.6))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig3d.png")
+    ax = fig.add_subplot(1, 2, 2)
+    for i, dT in enumerate(DTS):
+        k = np.where(kne[i] > 0, kne[i], floor)
+        ax.semilogy(WS, k, "o-", color=dtcol(dT), lw=1.8, ms=4, label=f"{dT:.2f}")
+        z0 = kne[i] <= 0
+        if np.any(z0):                     # no event in the window: upper bound
+            ax.plot(WS[z0], k[z0], "v", color=dtcol(dT), ms=7, mfc="white")
+    ax.axhline(floor, color="gray", lw=0.7, ls=":")
+    ax.text(WS[-1], floor * 1.15, "resolution floor", fontsize=7, ha="right", color="gray")
+    ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"cellular NE rate $(\tau_R^{-1})$")
+    ax.legend(title=r"$\Delta T/T_0$", fontsize=8)
+    ax.set_title("This work (foam model: T1 + contact changes)", fontsize=11)
+    fig.suptitle(r"Fig. 3d  |  Neighbour-exchange rate vs adhesion — minimal at the "
+                 r"structural transition", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig3d_ne_rate.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig3d_ne_rate.png")
+
+
+def fig2c_map():
+    """Fig 2c as the paper draws it: z over the (W/T0, rho) plane with contours."""
+    f = os.path.join(ROOT, "data", "fig2c_map.npz")
+    if not os.path.exists(f):
+        return
+    d = np.load(f)
+    WS, RHOS, z = d["WS"], d["RHOS"], d["z"]
+    fig = plt.figure(figsize=(11, 4.6))
+    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig2c.png")
+    ax = fig.add_subplot(1, 2, 2)
+    zm = np.ma.masked_invalid(z)
+    im = ax.pcolormesh(WS, RHOS, zm, cmap="RdYlBu_r", vmin=1.5, vmax=5.5, shading="gouraud")
+    try:
+        cs = ax.contour(WS, RHOS, zm, levels=[4, 5], colors="k", linestyles="--", linewidths=1)
+        ax.clabel(cs, fmt="z=%d", fontsize=8)
+        cs6 = ax.contour(WS, RHOS, zm, levels=[5.9], colors="k", linewidths=1.2)
+        ax.clabel(cs6, fmt="z=6", fontsize=8)
+    except Exception:
+        pass
+    fig.colorbar(im, ax=ax, label=r"$z$")
+    ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"$\rho$")
+    ax.set_title("This work (foam model, full T1–T4)", fontsize=11)
+    fig.suptitle(r"Fig. 2c  |  Contact number over adhesion and density", fontsize=12)
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.savefig(os.path.join(OUT, "compare_fig2c_z.png"), dpi=120)
+    plt.close(fig)
+    print("wrote compare_fig2c_z.png (map)")
 
 
 def fig2i():
@@ -442,6 +524,8 @@ if __name__ == "__main__":
     fig2a()
     fig2b()
     fig2c()
+    fig2c_map()
+    fig3cd()
     fig2i()
     fig2j()
     fig3a()

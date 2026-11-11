@@ -256,6 +256,39 @@ def test_t4_transition_cuts_lens():
     assert committed, "no non-adjacent T4 cut could be exercised"
 
 
+def test_t4_rejects_degenerate_lens():
+    """A 'lens' whose two crossing points coincide (one crossing at a polyline
+    node counted twice) must not be cut: it would create a zero-length bridge
+    edge and NaN forces.  Zero-length segments must also carry no force."""
+    import numpy as np
+    from activefoam.topology import build_periodic_voronoi
+    from activefoam.foam_full import FoamTissue, edge_vector, SPACE
+    tv, nv, eln = edge_vector(np.array([1.0, 1.0]), np.array([1.0, 1.0]),
+                              np.array([0.5, 0.5]), 6.0)
+    assert eln == 0.0 and np.all(np.isfinite(tv)) and np.all(np.isfinite(nv))
+
+    T = build_periodic_voronoi(6, np.random.default_rng(5))
+    ft = FoamTissue(T, w=0.3, rho=1.0, seed=1)
+    for _ in range(60):
+        ft.step(mu=0.0)
+    for v in range(len(ft.vpos)):
+        ft.t2_reverse(v)
+    ft._update_faces()
+    e1 = next(e for e in range(len(ft.e_v)) if int(ft.e_f[e, 0]) == SPACE)
+    adj = {int(x) for v in ft.e_v[e1] for x in ft.v_e[v] if x >= 0}
+    e2 = next(e for e in range(len(ft.e_v)) if e not in adj
+              and int(ft.e_f[e, 0]) == SPACE and int(ft.e_f[e, 1]) != int(ft.e_f[e1, 1]))
+    p = ft.e_mid[e1].mean(axis=0)
+    ft._t4_candidates = lambda ce: [e2]
+    ft._edge_cross_check = lambda a, b: (2, [p.copy(), p + 1e-13])
+    nE, nV = len(ft.e_v), len(ft.vpos)
+    assert ft.t4_transition(e1) is False
+    assert len(ft.e_v) == nE and len(ft.vpos) == nV
+    for _ in range(20):                                  # still finite afterwards
+        ft.step(mu=0.5)
+    assert np.all(np.isfinite(ft.vpos))
+
+
 if __name__ == "__main__":
     test_construction_invariants()
     test_forces_match_reference()
@@ -265,4 +298,5 @@ if __name__ == "__main__":
     test_t4_adjacent_resolves_fold()
     test_t4_reduces_folds_in_run()
     test_t4_transition_cuts_lens()
+    test_t4_rejects_degenerate_lens()
     print("all checks passed (confluent + foam transitions + full T4)")

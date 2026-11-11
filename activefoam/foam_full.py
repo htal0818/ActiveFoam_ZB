@@ -91,6 +91,8 @@ def edge_vector(evs, evf, fcn, bs, sstn=0.0):
     tv = evf - evs
     md = 0.5 * (evf + evs)
     eln = np.hypot(tv[0], tv[1])
+    if eln < 1e-14:                      # degenerate segment: no direction, no force
+        return np.zeros(2), np.zeros(2), 0.0
     tv = tv / eln
     nv = np.array([-tv[1], tv[0]])
     fcmp = crd_local(np.array([fcn, md]), bs, sstn)
@@ -940,6 +942,16 @@ class FoamTissue:
     #  the shared vertex is moved onto the edges' intersection point and both
     #  folded-over edge pieces are trimmed to it.
     # ------------------------------------------------------------------ #
+    T4_MIN_LENS = 1e-4      # min separation (in L0) of the two crossing points of a lens
+
+    def _edge_degenerate(self, e):
+        """True if edge e has a non-finite point or a (near) zero-length segment."""
+        P = self.e_mid[e]
+        if not np.all(np.isfinite(P)):
+            return True
+        l = edge_len(P)
+        return len(l) == 0 or l.min() < 1e-10
+
     @staticmethod
     def _seg_cross_pt(p1, p2, p3, p4):
         """Intersection point of open segments p1p2, p3p4 (port of ts_lineCross)."""
@@ -1031,7 +1043,8 @@ class FoamTissue:
             new_b = edge_len(self.e_mid[eb]).sum()
             cri = min(new_a / max(old_a, 1e-12), new_b / max(old_b, 1e-12))
             far = min((self.f_area[f] for f in faces), default=1.0)
-            if cri < 0.05 or far < 1e-2:            # revert guard (matlab)
+            if (cri < 0.05 or far < 1e-2            # revert guard (matlab)
+                    or any(self._edge_degenerate(e) for e in eids)):
                 self._restore(snap)
                 continue
             self._prev_lens = None
@@ -1144,6 +1157,10 @@ class FoamTissue:
         for ne in self._t4_candidates(t4Id):
             n, pts = self._edge_cross_check(t4Id, ne)
             if n == 2 and np.all(np.isfinite(pts[0])) and np.all(np.isfinite(pts[1])):
+                # one crossing at a polyline node can be counted twice; that is a
+                # tangency, not a lens, and would give a zero-length bridge edge
+                if np.hypot(*(pts[0] - pts[1])) < self.T4_MIN_LENS * self.lsc:
+                    continue
                 target = (ne, pts); break
         if target is None:
             return False
@@ -1231,6 +1248,9 @@ class FoamTissue:
                     or self._cell_self_intersects(f)):
                 self._restore(snap)
                 return False
+        if any(self._edge_degenerate(e) for e in (e1, e2, e3, e4, e5)):
+            self._restore(snap)
+            return False
         self._prev_lens = None
         return True
 
