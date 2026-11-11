@@ -292,7 +292,12 @@ def fig2c():
 
 
 def fig3cd():
-    """Fig 3c (long-time MSD) and Fig 3d (cellular NE rate) vs adhesion."""
+    """Fig 3c (long-time MSD) and Fig 3d (cellular NE rate) vs adhesion.
+
+    Solid lines: curved-edge foam model over the full adhesion range (20 tau_R
+    window).  Dashed lines / open squares: confluent model on the confluent
+    branch, run 100x longer (true 10^2 tau_T lag, NE rates down to ~1e-5).
+    """
     f = os.path.join(ROOT, "data", "fig3cd.npz")
     if not os.path.exists(f):
         return
@@ -300,19 +305,34 @@ def fig3cd():
     DTS, WS, kne, msd = d["DTS"], d["WS"], d["kne"], d["msd"]
     win = float(d["win_taur"]) if "win_taur" in d else 20.0
     floor = float(d["kne_floor"]) if "kne_floor" in d else 1.0 / (36 * win * 2)
+    fc = os.path.join(ROOT, "data", "fig3cd_confluent.npz")
+    c = np.load(fc) if os.path.exists(fc) else None
 
     # ---- 3c: MSD ---------------------------------------------------------
-    fig = plt.figure(figsize=(11, 4.6))
-    axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig3c.png")
-    ax = fig.add_subplot(1, 2, 2)
+    ncol = 3 if c is not None else 2
+    fig = plt.figure(figsize=(5.4 * ncol, 4.6))
+    axp = fig.add_subplot(1, ncol, 1); _paper(axp, "crop_fig3c.png")
+    ax = fig.add_subplot(1, ncol, 2)
     for i, dT in enumerate(DTS):
-        ax.plot(WS, msd[i], "o-", color=dtcol(dT), lw=1.8, ms=4, label=f"{dT:.2f}")
+        ok = np.isfinite(msd[i])
+        ax.plot(WS[ok], msd[i][ok], "o-", color=dtcol(dT), lw=1.8, ms=4, label=f"{dT:.2f}")
     ax.set_xlabel(r"$W/T_0$")
     ax.set_ylabel(fr"MSD$(t={win/10:.0f}\,\tau_T)/L_0^2$")
-    ax.set_yscale("log")
+    ax.set_yscale("log"); ax.set_xlim(-0.05, 1.25)
     ax.legend(title=r"$\Delta T/T_0$", fontsize=8)
-    ax.set_title("This work (foam model; shorter lag, log axis)", fontsize=11)
-    fig.suptitle(r"Fig. 3c  |  Cell movements vs adhesion — minimal at the "
+    ax.set_title(fr"Foam model, all $W/T_0$ (lag ${win/10:.0f}\,\tau_T$)", fontsize=10)
+    if c is not None:
+        ax2 = fig.add_subplot(1, ncol, 3)
+        lag = int(c["lag_taut"])
+        for i, dT in enumerate(c["DTS"]):
+            ax2.plot(c["WS"], c["msd"][i], "s--", color=dtcol(dT), lw=1.8, ms=5,
+                     mfc="white", label=f"{dT:.2f}")
+        ax2.set_xlabel(r"$W/T_0$")
+        ax2.set_ylabel(fr"MSD$(t={lag}\,\tau_T)/L_0^2$")
+        ax2.set_yscale("log"); ax2.set_xlim(-0.05, 1.25)
+        ax2.legend(title=r"$\Delta T/T_0$", fontsize=8)
+        ax2.set_title(fr"Confluent branch at the paper's lag (${lag}\,\tau_T$)", fontsize=10)
+    fig.suptitle(r"Fig. 3c  |  Cell movements vs adhesion — minimal near the "
                  r"structural transition", fontsize=12)
     fig.tight_layout(rect=[0, 0, 1, 0.95])
     fig.savefig(os.path.join(OUT, "compare_fig3c_msd_vs_w.png"), dpi=120)
@@ -324,15 +344,29 @@ def fig3cd():
     axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig3d.png")
     ax = fig.add_subplot(1, 2, 2)
     for i, dT in enumerate(DTS):
+        ok = np.isfinite(kne[i])
         k = np.where(kne[i] > 0, kne[i], floor)
-        ax.semilogy(WS, k, "o-", color=dtcol(dT), lw=1.8, ms=4, label=f"{dT:.2f}")
-        z0 = kne[i] <= 0
+        ax.semilogy(WS[ok], k[ok], "o-", color=dtcol(dT), lw=1.8, ms=4, label=f"{dT:.2f}")
+        z0 = ok & (kne[i] <= 0)
         if np.any(z0):                     # no event in the window: upper bound
             ax.plot(WS[z0], k[z0], "v", color=dtcol(dT), ms=7, mfc="white")
     ax.axhline(floor, color="gray", lw=0.7, ls=":")
-    ax.text(WS[-1], floor * 1.15, "resolution floor", fontsize=7, ha="right", color="gray")
+    ax.text(0.0, floor * 1.2, "foam-model floor (1 event)", fontsize=7, color="gray")
+    if c is not None:
+        cfloor = float(c["kne_floor"])
+        for i, dT in enumerate(c["DTS"]):
+            kc = np.where(c["kne"][i] > 0, c["kne"][i], cfloor)
+            ax.semilogy(c["WS"], kc, "s--", color=dtcol(dT), lw=1.4, ms=5, mfc="white")
+            z0 = c["kne"][i] <= 0
+            if np.any(z0):
+                ax.plot(c["WS"][z0], kc[z0], "v", color=dtcol(dT), ms=7, mfc="white")
+        ax.plot([], [], "s--", color="0.3", mfc="white", ms=5,
+                label="confluent model,\n2000 $\\tau_R$ window")
+        ax.axhline(cfloor, color="gray", lw=0.7, ls=":")
+        ax.text(0.0, cfloor * 1.2, "long-window floor", fontsize=7, color="gray")
+    ax.set_xlim(-0.05, 1.25)
     ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"cellular NE rate $(\tau_R^{-1})$")
-    ax.legend(title=r"$\Delta T/T_0$", fontsize=8)
+    ax.legend(title=r"$\Delta T/T_0$", fontsize=8, loc="upper right", ncol=2)
     ax.set_title("This work (foam model: T1 + contact changes)", fontsize=11)
     fig.suptitle(r"Fig. 3d  |  Neighbour-exchange rate vs adhesion — minimal at the "
                  r"structural transition", fontsize=12)
