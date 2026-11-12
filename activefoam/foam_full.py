@@ -404,11 +404,14 @@ class FoamTissue:
                 raise ValueError("2-vertex cell has no positively oriented loop")
             return best
         fed = []
+        mine = np.nonzero((self.e_f[:, 0] == ci) | (self.e_f[:, 1] == ci))[0]
+        by_pair = {}
+        for e in mine:                               # ascending, so cand[0] is unchanged
+            u, w = int(self.e_v[e, 0]), int(self.e_v[e, 1])
+            by_pair.setdefault((u, w) if u < w else (w, u), []).append(int(e))
         for k in range(n):
             a, b = fvr[k], fvr[(k + 1) % n]
-            cand = [e for e in range(len(self.e_v))
-                    if {int(self.e_v[e, 0]), int(self.e_v[e, 1])} == {a, b}
-                    and ci in (int(self.e_f[e, 0]), int(self.e_f[e, 1]))]
+            cand = by_pair[(a, b) if a < b else (b, a)]
             e = cand[0]
             if int(self.e_v[e, 0]) == a and int(self.e_v[e, 1]) == b:
                 fed.append(e)
@@ -1159,36 +1162,38 @@ class FoamTissue:
         m = self.e_mid[e]
         return (m[:, 0].min(), m[:, 0].max(), m[:, 1].min(), m[:, 1].max())
 
+    def _bbox_table(self):
+        """(E, 4) array of [xmin, xmax, ymin, ymax] per edge polyline."""
+        t = np.empty((len(self.e_mid), 4))
+        for e, m in enumerate(self.e_mid):
+            t[e] = (m[:, 0].min(), m[:, 0].max(), m[:, 1].min(), m[:, 1].max())
+        return t
+
     def _t4_candidates(self, ce):
         """Non-adjacent, space-bordering edges with a different opposite face
         whose bounding box overlaps edge ce (port of ts_edgeRangeCheck: eId1/eId2
         range overlap, eId3 space-bordering, eId4 non-adjacent, eId5 different
-        opposite face).  The bbox prefilter keeps this ~O(E) in practice."""
+        opposite face).  Uses the bounding-box table cached by
+        top_transition_type3 when it is current."""
         if int(self.e_f[ce, 0]) != SPACE:                  # edge{1}(ce,3)==0
             return []
-        adj = set()                                        # eId4: adjacent edges
-        for v in self.e_v[ce]:
+        bb = getattr(self, "_bbox_cache", None)
+        if bb is None or len(bb) != len(self.e_mid):
+            bb = self._bbox_table()
+        cx0, cx1, cy0, cy1 = bb[ce]
+        bs = self.bs
+        sx = bs * np.round((bb[:, 0] - cx0) / bs)          # min image of ce
+        sy = bs * np.round((bb[:, 2] - cy0) / bs)
+        ok = ((self.e_f[:, 0] == SPACE)                    # eId3: space-bordering
+              & (self.e_f[:, 1] != self.e_f[ce, 1])        # eId5: different opposite face
+              & ~((bb[:, 1] - sx < cx0) | (bb[:, 0] - sx > cx1)       # eId1/eId2: overlap
+                  | (bb[:, 3] - sy < cy0) | (bb[:, 2] - sy > cy1)))
+        ok[ce] = False
+        for v in self.e_v[ce]:                             # eId4: adjacent edges
             for e in self.v_e[v]:
                 if e >= 0:
-                    adj.add(int(e))
-        ce_cell = int(self.e_f[ce, 1])                     # eId5 reference (col 4)
-        cx0, cx1, cy0, cy1 = self._edge_bbox(ce)
-        bs = self.bs
-        out = []
-        for e in range(len(self.e_v)):
-            if e == ce or e in adj:
-                continue
-            if int(self.e_f[e, 0]) != SPACE:               # eId3: space-bordering
-                continue
-            if int(self.e_f[e, 1]) == ce_cell:             # eId5: different opposite face
-                continue
-            x0, x1, y0, y1 = self._edge_bbox(e)            # eId1/eId2: range overlap
-            sx = bs * round((x0 - cx0) / bs)               # bring bbox to min image of ce
-            sy = bs * round((y0 - cy0) / bs)
-            if (x1 - sx) < cx0 or (x0 - sx) > cx1 or (y1 - sy) < cy0 or (y0 - sy) > cy1:
-                continue
-            out.append(e)
-        return out
+                    ok[int(e)] = False
+        return [int(e) for e in np.nonzero(ok)[0]]
 
     @staticmethod
     def _cut_index(ept_l, emd):
@@ -1392,11 +1397,14 @@ class FoamTissue:
     def top_transition_type3(self):
         """Apply non-adjacent T4 to every space-bordering edge (ts_topTransitionType3)."""
         n, e = 0, 0
+        self._bbox_cache = self._bbox_table()
         while e < len(self.e_v):
             if int(self.e_f[e, 0]) == SPACE:
                 if self.t4_transition(e):
                     n += 1
+                    self._bbox_cache = self._bbox_table()   # geometry changed
             e += 1
+        self._bbox_cache = None
         if n:
             self._update_faces()
         return n

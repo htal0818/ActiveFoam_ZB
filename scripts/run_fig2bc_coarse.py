@@ -3,9 +3,8 @@
 Follows ts_simVolumeFraction.m: Voronoi start, a space opened at every vertex,
 anneal at dT/T0 = 0.5, then quench at dT = 0, all on the reference transition
 schedule (FoamTissue.advance: T1 every 3 steps, T4 / space reseeding every 5).
-Departures from the published protocol, for cost: 36 cells (paper: 100), one
-seed (paper: reportedly 20), and half the run length (anneal 1000 + quench
-3000 steps; paper 2000 + 6000).
+Run length matches the published template (anneal 2000 + quench 6000 steps).
+Departures, for cost: 36 cells (paper: 100) and one seed (paper: reportedly 20).
 
 z is the mean number of DISTINCT neighbouring cells; z_edges counts cell-cell
 edges.  Each finished run is appended to data/fig2bc_coarse_runs.jsonl, so a
@@ -22,7 +21,7 @@ PSIS = [0.90, 0.96, 1.00, 1.06, 1.12, 1.20]
 RHOS = [round(p * p, 4) for p in PSIS]
 WS = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 SEEDS = [1]
-ANNEAL, QUENCH, BLOCK = 1000, 3000, 100
+ANNEAL, QUENCH, BLOCK = 2000, 6000, 100
 MAX_SECONDS = 2400            # give up on a run that crawls (tangled / fragmented)
 RUNS = "data/fig2bc_coarse_runs.jsonl"
 
