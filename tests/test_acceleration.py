@@ -22,6 +22,8 @@ def test_accelerated_trajectory_matches_python(shear):
         np.testing.assert_array_equal(fast.e_rfn,ref.e_rfn)
         for a,b in zip(fast.e_mid,ref.e_mid):
             np.testing.assert_allclose(a,b,atol=2e-11,rtol=2e-11)
+    np.testing.assert_allclose(fast.shape_factors(), ref.shape_factors(), atol=2e-11)
+    np.testing.assert_allclose(fast.shear_stress(), ref.shear_stress(), atol=2e-11)
 
 def test_accelerated_transition_search_matches_python():
     pytest.importorskip('numba')

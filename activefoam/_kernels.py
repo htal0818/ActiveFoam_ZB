@@ -110,21 +110,50 @@ def face_geometry(mids, face_edges, bs, shear):
         centers[c,1]=cy
     return areas,centers
 
+@njit(cache=True, inline="always")
+def _intersection_parameter(p, q, i, j, dx, dy):
+    ex = q[j+1, 0] - q[j, 0]
+    ey = q[j+1, 1] - q[j, 1]
+    det = dx*ey - dy*ex
+    if abs(det) < 1e-15:
+        return -1.
+    rx = q[j, 0] - p[i, 0]
+    ry = q[j, 1] - p[i, 1]
+    u = (rx*dy - ry*dx)/det
+    t = (rx*ey - ry*ex)/det
+    return t if 0. < u < 1. and 0. < t < 1. else -1.
+
+
 @njit(cache=True)
 def crossings(p, q, skip_i=-1, skip_j=-1):
     points = []
     ii = []; jj = []
     for i in range(len(p)-1):
+        dx = p[i+1, 0] - p[i, 0]
+        dy = p[i+1, 1] - p[i, 1]
         for j in range(len(q)-1):
             if i == skip_i and j == skip_j: continue
-            dx,dy = p[i+1]-p[i]; ex,ey = q[j+1]-q[j]
-            det = dx*ey-dy*ex
-            if abs(det)<1e-15: continue
-            rx,ry = q[j]-p[i]
-            u=(rx*dy-ry*dx)/det; t=(rx*ey-ry*ex)/det
-            if 0.<u<1. and 0.<t<1.:
+            t = _intersection_parameter(p, q, i, j, dx, dy)
+            if t > 0.:
                 points.append(p[i]+t*(p[i+1]-p[i]));ii.append(i);jj.append(j)
     return points,ii,jj
+
+
+@njit(cache=True)
+def _crossing_count(p, q, limit, skip_i=-1, skip_j=-1):
+    count = 0
+    for i in range(len(p)-1):
+        dx = p[i+1, 0] - p[i, 0]
+        dy = p[i+1, 1] - p[i, 1]
+        for j in range(len(q)-1):
+            if i == skip_i and j == skip_j:
+                continue
+            if _intersection_parameter(p, q, i, j, dx, dy) > 0.:
+                count += 1
+                if count == limit:
+                    return count
+    return count
+
 
 @njit(cache=True)
 def adjacent_vertices(mids, ends, incidences, bs, shear):
@@ -138,8 +167,7 @@ def adjacent_vertices(mids, ends, incidences, bs, shear):
             both=local(np.vstack((p,q)),bs,shear)
             i=0 if ends[ea,0]==v else len(p)-2
             j=0 if ends[eb,0]==v else len(q)-2
-            pts,_,_=crossings(both[:n],both[n:],i,j)
-            if len(pts)==1:
+            if _crossing_count(both[:n],both[n:],2,i,j) == 1:
                 result.append(v);break
     return result
 
@@ -163,12 +191,15 @@ def edge_bounds(mids):
 
 @njit(cache=True)
 def lens_edges(mids, ends, faces, bs, shear):
-    n=len(ends);bounds=edge_bounds(mids);result=np.zeros(n,np.bool_)
-    for a in range(n):
-        if faces[a,0]!=-1 or faces[a,1]<0:continue
+    result = np.zeros(len(ends), np.bool_)
+    free_edges = np.flatnonzero((faces[:, 0] == -1) & (faces[:, 1] >= 0))
+    if len(free_edges) < 2:
+        return result
+    bounds = edge_bounds(mids)
+    for i, a in enumerate(free_edges):
         cx0,cx1,cy0,cy1=bounds[a]
-        for b in range(a+1,n):
-            if faces[b,0]!=-1 or faces[b,1]<0 or faces[b,1]==faces[a,1]:continue
+        for b in free_edges[i+1:]:
+            if faces[b,1]==faces[a,1]:continue
             if (ends[a,0]==ends[b,0] or ends[a,0]==ends[b,1] or
                 ends[a,1]==ends[b,0] or ends[a,1]==ends[b,1]):continue
             x0,x1,y0,y1=bounds[b]
@@ -177,8 +208,8 @@ def lens_edges(mids, ends, faces, bs, shear):
             if x1-sx<cx0 or x0-sx>cx1 or y1-sy<cy0 or y0-sy>cy1:continue
             p,q=mids[a],mids[b];n1=len(p)
             both=local(np.vstack((p,q)),bs,shear)
-            pts,_,_=crossings(both[:n1],both[n1:])
-            if len(pts)==2:result[a]=True;result[b]=True
+            if _crossing_count(both[:n1],both[n1:],3) == 2:
+                result[a]=True;result[b]=True
     return result
 
 
@@ -216,6 +247,34 @@ def polygon_centroids(mids, loops, bs, shear):
         centers[face, 0] = (cx-shear*cy) % bs + shear*cy
         centers[face, 1] = cy
     return centers
+
+
+@njit(cache=True)
+def cell_perimeters(mids, loops):
+    edge_lengths = lengths(mids)
+    perimeters = np.zeros(len(loops))
+    for face, loop in enumerate(loops):
+        for e in loop:
+            perimeters[face] += edge_lengths[e if e >= 0 else -e-1]
+    return perimeters
+
+
+@njit(cache=True)
+def shear_component(mids, tensions):
+    total = 0.
+    for e, points in enumerate(mids):
+        tension = tensions[e]
+        if tension <= 0.:
+            continue
+        subtotal = 0.
+        for i in range(len(points)-1):
+            dx = points[i+1, 0] - points[i, 0]
+            dy = points[i+1, 1] - points[i, 1]
+            length = np.hypot(dx, dy)
+            if length > 1e-12:
+                subtotal += tension*dx*dy/length
+        total += subtotal
+    return total
 
 @njit(cache=True)
 def self_crosses(points):

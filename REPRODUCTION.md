@@ -13,6 +13,11 @@ curved-edge `FoamTissue` for all five panels.
 - Paper and Methods: https://pmc.ncbi.nlm.nih.gov/articles/PMC8336761/
 - Euler–Maruyama dt = 0.005 tau_R, tau_T = 10 tau_R, P0 = 10,
   intermediate-point spacing = 0.15, beta = 0.
+- `ts_initialConf` prepares the confluent random Voronoi tiling at W=0,
+  rho=1 and spacing 0.20 for 1,500 steps. Every fifth step it checks shrinking
+  short edges, and it raises the threshold when there are no candidates.
+  This prepared geometry is cached per seed and system size within each
+  worker. The production parameters are applied before opening spaces.
 - The noise input is MATLAB's `mu`: the interior diffusion coefficient is
   `mu/tau_T`, and a free film receives half that coefficient. It is **not** the
   stationary standard deviation of the OU process.
@@ -21,16 +26,18 @@ curved-edge `FoamTissue` for all five panels.
   The T1 sweep visits cell contacts before free boundaries, shuffles each
   class, and rechecks candidate length after accepted transitions. The
   Python sweep batches space-space edge removal after the T1 candidates.
-- Equilibrium: initialize spaces, anneal for tau_T at mu=0.5, reset tensions to
+- Equilibrium: seed spaces on the initial tiling, anneal for tau_T at mu=0.5, reset tensions to
   their fixed points, then quench for 3 tau_T. Both phi and z include all cells,
   including cells with zero neighbours. Neighbour number counts distinct cells,
 not disjoint contact segments; final edge-face tables are saved for auditing.
-- Dynamics: initialize, discard 20 tau_T, measure for 120 tau_T at W=1 (MSD
-  through lag 100 tau_T), and 25 tau_T at the other shape-factor points.
-- Stress: initialize, pre-equilibrate for 4 tau_T, measure active stress over
-  1000 tau_R, apply strain 1.5, and measure relaxation for 580 tau_R. The
-  full topology schedule remains enabled after shear; the supplied MATLAB
-  step driver instead repeats Type1 in two post-shear schedule slots.
+- Dynamics: seed spaces, anneal at the target activity for tau_T, then measure
+  for 120 tau_T (MSD through lag 100 tau_T). Coarse shape diagnostics away from
+  W=1 use 25 tau_T. This follows the durations in `ts_simDynamics`.
+- Stress: anneal at the target activity for 4 tau_T, evolve at zero strain
+  for another 20 tau_R, apply strain 1.5, and measure relaxation for 580 tau_R.
+  Estimate active stress from a separate unstrained trajectory of 1000 tau_R
+  branched from the pre-shear geometry. After shear, apply Type1 in slots
+  1 and 3 mod 5 as in `ts_simStep`, and coalesce coincident Type1 sweeps.
 - MSD stores both lab-frame and COM-subtracted results using polygon area
   centroids. The force integrator still uses the boundary vertex mean from
   MATLAB's `ts_faceArea`. The plotted MSD averages lab-frame displacements
@@ -75,6 +82,11 @@ face incidence replaces repeated whole-network edge lookups. Rejected adjacent
 repairs no longer trigger an unchanged global crossing search, and sweeps with
 no lens candidates skip redundant Python bounding-box construction. Independent runs
 use separate worker processes, with BLAS/Numba thread counts capped at one.
+The latest candidate scan counts segment crossings without constructing point
+arrays. On one fixed 36-cell low-adhesion state, the adjacent and non-adjacent
+scans returned identical candidates and took 0.46 vs 3.33 ms and 0.19 vs
+0.75 ms per sweep, respectively. Shape perimeters and the off-diagonal
+stress sum also use compiled measurement kernels.
 
 Run `scripts/benchmark_foam.py` for a compilation-excluded benchmark. Results
 are saved in `data/benchmark.json`; actual wall time depends on topology and
@@ -103,7 +115,9 @@ For the 100-cell map protocol, use `--figures 2b 2c --n-side 10 --seeds 20`.
 `--coarse-grid` selects a subset of the published points. Supply custom axes
 with `--map-grid` using a JSON object with increasing arrays `w` and `rho`
 and an optional `source` field. `--pilot` shortens the dynamics and stress
-durations and labels the plots as pipeline validation.
+durations and labels the plots as pipeline validation. The earlier diagnostics
+used 150 extra steps before seeding spaces. Use `--map-prerelax-steps 150`
+to measure sensitivity to that initialization.
 
 Each run writes an independent compressed NPZ with its parameters, source hash,
 seed, raw measurements, and wall time. The manifest lists every requested run.
@@ -114,7 +128,14 @@ source hash, so changed simulations cannot silently reuse stale data.
 New plots are written as PNG and PDF under `figures/full_foam/`. Maps 2b and 2c
 show the adhesion–density plane. Map summary NPZ files include means, SD and
 valid-seed counts; `analysis.json` records fitted MSD exponents and stress-fit
-parameters. Stress fits use t >= tau_R and do not extrapolate a phase label for
-figure 4g. A single seed supplies no between-run uncertainty estimate.
+parameters. Stress fits use t >= tau_R. `--figures 4g --phase-stress` also
+measures stress at the Fig. 4d/e points. The renderer compares the fitted
+stress at 100 tau_T with the independently measured active stress. It adds
+a phase marker only when the complete requested ensemble reaches that time.
+A single seed supplies no between-run uncertainty estimate.
 The renderer also writes `fig2bc_model.npz` with the two means and the
 `WS` / `RHOS` axes expected by Claude's source-data comparison harness.
+To compare 3a, 4a and 4g directly against the publisher workbooks, install
+`openpyxl` and run `scripts/compare_active_panels.py DATA --out FIGURES
+--reference-cache CACHE`. The reference curves are dashed. Only simulated
+points within the reference range enter the reported errors.

@@ -15,6 +15,20 @@ ACTIVITY_COLORS = dict(zip([.25, .5, .75, 1., 1.25, 1.5], COLORS))
 STRESS_COLORS = {0.: '#41bcb3', .5: COLORS[1], 1.: COLORS[3], 1.5: COLORS[5]}
 
 
+def stretched(t, offset, amplitude, tau, beta):
+    return offset + amplitude * np.exp(-(t/tau)**beta)
+
+
+def fit_stress(t, stress):
+    selected = t >= 1.
+    return curve_fit(
+        stretched, t[selected], stress[selected],
+        p0=[stress[-1], max(stress[selected][0]-stress[-1], .01), 30., .5],
+        bounds=([-np.inf, 0., .005, .1], [np.inf, np.inf, 1e6, 1.]),
+        maxfev=20000,
+    )
+
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('data',type=Path);p.add_argument('--out',type=Path,default=ROOT/'figures'/'full_foam')
     a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
@@ -86,6 +100,12 @@ def main():
     if dyn:
         fig,ax=plt.subplots(figsize=(6.8,4.8))
         jobs = [j['parameters'] for j in manifest['jobs'] if j['kind'] == 'dynamics']
+        phase_runs = {}
+        for job, data in records:
+            if job['kind'] == 'phase_stress':
+                p = job['parameters']
+                phase_runs.setdefault((p['w'], p['mu']), []).append(data)
+        marker_labels = set()
         for mu in sorted({j['parameters']['mu'] for j,d in dyn}):
             ws = sorted({p['w'] for p in jobs if p['mu'] == mu})
             means, errors = [], []
@@ -97,6 +117,30 @@ def main():
             color = ACTIVITY_COLORS[mu]
             ax.plot(ws, means, 'o-', ms=3, color=color, label=f'{mu:g}')
             ax.fill_between(ws, means-errors, means+errors, color=color, alpha=.18)
+            for w, shape in zip(ws, means):
+                runs = phase_runs.get((w, mu), [])
+                if len(runs) != manifest['seeds'] or not np.isfinite(shape):
+                    continue
+                t = runs[0]['time']
+                cutoff = 1000.  # 100 tau_T, in units of tau_R
+                sigma_a = float(np.mean([d['sigma_A'] for d in runs]))
+                if t[-1] < cutoff or sigma_a <= 0:
+                    continue
+                mean_stress = np.mean([d['stress'] for d in runs], axis=0)
+                try:
+                    fit, _ = fit_stress(t, mean_stress)
+                except (ValueError, RuntimeError) as ex:
+                    notes.append(dict(quantity='phase_fit', w=w, mu=mu, error=str(ex)))
+                    continue
+                stress_at_cutoff = float(stretched(cutoff, *fit))
+                phase = 'fluid' if stress_at_cutoff <= sigma_a else 'solid'
+                notes.append(dict(quantity='phase_fit', w=w, mu=mu, phase=phase,
+                                  sigma_A=sigma_a, fit_at_cutoff=stress_at_cutoff,
+                                  cutoff_tauR=cutoff, parameters=fit.tolist()))
+                ax.scatter(w, shape, marker='s', s=17, zorder=4,
+                           color='red' if phase == 'fluid' else 'blue',
+                           label=phase if phase not in marker_labels else None)
+                marker_labels.add(phase)
         ax.axhline(3.81,color='0.5',ls='--',lw=.7,label='3.81 reference')
         ax.axvline(1., color='0.5', ls='--', lw=.7)
         ax.set(xlabel=r'$W/T_0$',ylabel=r'$\langle P/\sqrt{A}\rangle$',title=f'4g | {prefix}; ρ=1')
@@ -105,7 +149,6 @@ def main():
     if stress:
         fig,ax=plt.subplots(figsize=(6.8,4.8))
         inset = ax.inset_axes([.65, .57, .31, .36])
-        def stretched(t,offset,amp,tau,beta):return offset+amp*np.exp(-(t/tau)**beta)
         for mu in sorted({j['parameters']['mu'] for j,d in stress}):
             color = STRESS_COLORS[mu]
             ds=[d for j,d in stress if j['parameters']['mu']==mu];t=ds[0]['time'];vals=np.array([d['stress'] for d in ds]);mean=vals.mean(0);sd=vals.std(0)
@@ -119,7 +162,7 @@ def main():
                 inset.axhline(sigma_a, color=color, lw=.65, ls=':')
             if not manifest['pilot'] and mu > 0:
                 try:
-                    fit,cov=curve_fit(stretched,t[mask],mean[mask],p0=[mean[-1],max(mean[mask][0]-mean[-1],.01),30.,.5],bounds=([-np.inf,0,.005,.1],[np.inf,np.inf,1e6,1.0]),maxfev=20000)
+                    fit, cov = fit_stress(t, mean)
                     ax.semilogx(t[mask],stretched(t[mask],*fit),'k--',lw=.8)
                     fit_curve = stretched(t[mask], *fit)
                     inset.loglog(t[mask], np.where(fit_curve > 0, fit_curve, np.nan), 'k--', lw=.65)

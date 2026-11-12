@@ -357,6 +357,11 @@ class FoamTissue:
         return np.sum(np.clip(self.f_area, 0, None)) / (self.bs ** 2)
 
     def shape_factors(self):
+        if getattr(self, "accelerated", False):
+            from ._kernels import cell_perimeters
+            area = self.f_area > 1e-9
+            perimeter = cell_perimeters(*self._fast_geometry_inputs())
+            return perimeter[area] / np.sqrt(self.f_area[area])
         s = []
         for ci in range(self.nFa):
             A = self.f_area[ci]
@@ -766,16 +771,18 @@ class FoamTissue:
             return lengths(mids)
         return np.array([edge_len(m).sum() for m in self.e_mid])
 
-    def advance_scheduled(self, iteration, mu=0.0):
+    def advance_scheduled(self, iteration, mu=0.0, post_shear=False):
         """One timestep with the MATLAB 3/5-step transition cadence.
 
         Before-step lengths supply the shrinking-edge condition. Newly formed
         all-cell junctions receive spaces on the Type2 sweep. Unlike the legacy
         convenience do_transitions(), no extra triangle-annihilation rule is used.
         """
-        before = self.edge_lengths() if iteration % 3 == 0 else None
+        slot = iteration % 5
+        t1_due = iteration % 3 == 0 or (post_shear and slot in (1, 3))
+        before = self.edge_lengths() if t1_due else None
         self.step(mu)
-        if iteration % 3 == 0:
+        if t1_due:
             now = self.edge_lengths()
             threshold = .01 * 2 * np.sqrt(np.pi)
             short = np.flatnonzero(now < threshold)
@@ -796,12 +803,12 @@ class FoamTissue:
                         if self.t1_foam(int(e)):
                             changed = True
             self.resolve_space_space_edges()
-        if iteration % 5 == 1:
+        if not post_shear and slot == 1:
             self.top_transition_type3()
-        if iteration % 5 == 2:
+        if slot == 2:
             for v in self._adjacent_crossing_vertices():
                 self.t4_adjacent(v)
-        if iteration % 5 == 3:
+        if not post_shear and slot == 3:
             for v in np.flatnonzero(np.all(self.v_f != SPACE, axis=1)):
                 self.t2_reverse(int(v))
 
@@ -1611,6 +1618,11 @@ class FoamTissue:
 
     def shear_stress(self):
         """sigma_xy (paper Eq. 5)."""
+        if getattr(self, "accelerated", False):
+            from ._kernels import shear_component
+            from numba.typed import List
+            mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
+            return self.rho * shear_component(mids, self.e_t) / self.bs**2
         return self.stress_tensor()[0, 1]
 
     def apply_affine_shear(self, strain):

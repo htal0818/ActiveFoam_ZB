@@ -28,7 +28,8 @@ def task(job,out):
     stamp=time.time();kind=job['kind'];args=job['parameters']
     filename=Path(out)/f"{job['id']}.npz"
     try:
-        result={'equilibrium':equilibrium,'dynamics':dynamics,'stress':stress_relaxation}[kind](**args)
+        result={'equilibrium':equilibrium,'dynamics':dynamics,'stress':stress_relaxation,
+                'phase_stress':stress_relaxation}[kind](**args)
         result['metadata']=np.array(json.dumps(job))
         result['elapsed_seconds']=time.time()-stamp
         tmp=filename.with_suffix('.tmp.npz');np.savez_compressed(tmp,**result);tmp.replace(filename)
@@ -51,13 +52,19 @@ def main():
                    help='diagnostic parameter spacing at full simulation durations')
     p.add_argument('--map-grid', type=Path,
                    help='JSON with the explicit w and rho axes for 2b/2c')
+    p.add_argument('--phase-stress', action='store_true',
+                   help='also measure stress relaxation at the 4g phase-marker points')
+    p.add_argument('--map-prerelax-steps', type=int, default=0,
+                   help='extra confluent initialization steps for a map sensitivity check')
     p.add_argument('--out',type=Path,default=ROOT/'data'/'full_foam')
     p.add_argument('--pilot',action='store_true',help='short pipeline validation; never publication data')
     a=p.parse_args()
     if a.map_grid and (a.coarse_grid or a.pilot):
         p.error('--map-grid cannot be combined with --coarse-grid or --pilot')
-    if min(a.seeds, a.workers, a.n_side) < 1:
-        p.error('--seeds, --workers, and --n-side must be positive')
+    if a.phase_stress and ('4g' not in a.figures or a.pilot):
+        p.error('--phase-stress requires figure 4g and full simulation durations')
+    if min(a.seeds, a.workers, a.n_side) < 1 or a.map_prerelax_steps < 0:
+        p.error('--seeds, --workers, and --n-side must be positive and map prerelax nonnegative')
     a.out.mkdir(parents=True,exist_ok=True)
     version=source_hash();jobs=[];job_ids=set()
     def add(kind,params):
@@ -95,7 +102,9 @@ def main():
             map_grid_source = grid.get('source', str(a.map_grid))
         for seed in seeds:
             for rho in rhos:
-                for w in ws:add('equilibrium',dict(w=float(w),rho=float(rho),seed=seed))
+                for w in ws:
+                    add('equilibrium', dict(w=float(w), rho=float(rho), seed=seed,
+                                            prerelax_steps=a.map_prerelax_steps))
     activities=[.25,.5,.75,1.,1.25,1.5]
     if set(a.figures)&{'3a','4g'}:
         ws=np.round(np.arange(0,1.201,.1),3) if '4g' in a.figures else [1.]
@@ -105,8 +114,12 @@ def main():
             for mu in activities:
                 for w in ws:
                     add('dynamics',dict(w=float(w),mu=mu,seed=seed,
-                        burn_tauT=1. if a.pilot else 20.,
-                        duration_tauT=2. if a.pilot else (120. if w==1. else 25.)))
+                        burn_tauT=0.,
+                        duration_tauT=2. if a.pilot else (25. if a.coarse_grid and w!=1. else 120.)))
+                    if a.phase_stress and mu >= .5:
+                        # Fig. 4d/e phase grid, using tau_d = 100 tau_T.
+                        add('phase_stress', dict(w=float(w),mu=mu,seed=seed,
+                            pre_tauT=4.,relax_tauR=1000.,active_tauR=1000.))
     if '4a' in a.figures:
         for seed in seeds:
             for mu in [0.,.5,1.,1.5]:
