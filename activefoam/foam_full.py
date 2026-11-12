@@ -626,6 +626,66 @@ class FoamTissue:
             self._restore(snap)
             return False
 
+    # ------------------------------------------------------------------ #
+    #  Reference time loop (ts_simStep / ts_simDynamics / ts_simVolumeFraction):
+    #    every step        ts_iteration
+    #    itc % 3 == 0      ts_topTransitionType1  (T1 on short AND shrinking edges,
+    #                                              then T3-reverse on space-space edges)
+    #    itc % 5 == 1      ts_topTransitionType3  (non-adjacent T4)
+    #    itc % 5 == 2      ts_t4AdjacentTransition at every vertex
+    #    itc % 5 == 3      ts_topTransitionType2  (T2-reverse at every all-cell vertex)
+    #  "Shrinking" is judged against the length one step earlier (gmp.eLnc).
+    #  Deviation kept from this port: collapsed spaces are removed by
+    #  t2_annihilate_spaces, because t1_foam does not flip cell-space edges.
+    # ------------------------------------------------------------------ #
+    def _edge_lengths(self):
+        return np.array([edge_len(m).sum() for m in self.e_mid])
+
+    def advance(self, mu=0.0, nsteps=1, seed_spaces=True):
+        """Run nsteps on the reference schedule. Returns event counts."""
+        cnt = {"t1": 0, "t4": 0, "t4adj": 0, "t2rev": 0, "t2": 0}
+        thr = 0.01 * 2 * np.sqrt(np.pi)                    # gmp.shEd
+        itc = getattr(self, "_itc", 0)
+        for _ in range(nsteps):
+            before = self._edge_lengths()                  # gmp.eLnc
+            self.step(mu=mu)
+            itc += 1
+            if itc % 3 == 0:
+                lens = self._edge_lengths()
+                short = [int(i) for i in np.argsort(lens) if lens[i] < thr]
+                done = False
+                for i in short:
+                    if i >= len(self.e_v) or lens[i] >= before[i]:
+                        continue
+                    if int(self.e_f[i, 0]) != SPACE and int(self.e_f[i, 1]) != SPACE:
+                        if self.t1_foam(i):
+                            cnt["t1"] += 1; done = True
+                self.resolve_space_space_edges()
+                na = self.t2_annihilate_spaces()
+                cnt["t2"] += na
+                if done or na:
+                    self._update_faces()
+            if itc % 5 == 1:
+                cnt["t4"] += self.top_transition_type3()
+            if itc % 5 == 2:
+                k = sum(1 for v in range(len(self.vpos)) if self.t4_adjacent(v))
+                if k:
+                    self._update_faces()
+                cnt["t4adj"] += k
+            if itc % 5 == 3 and seed_spaces:
+                v = 0
+                while v < len(self.vpos):
+                    if np.all(self.v_f[v] != SPACE) and np.all(self.v_e[v] >= 0):
+                        try:
+                            self.t2_reverse(v); cnt["t2rev"] += 1
+                        except Exception:
+                            pass
+                    v += 1
+                self._update_faces()
+        self._itc = itc
+        self._prev_lens = None
+        return cnt
+
     def do_transitions(self, mu=0.0, create_spaces=False):
         """Apply T4-adjacent (untangle) + T1 + T2 annihilation (+ optional creation)."""
         # T4 (adjacent): repair curved edges that folded through each other,
