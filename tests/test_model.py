@@ -244,7 +244,11 @@ def test_t4_transition_cuts_lens():
             continue
         f1, f2 = int(ft.e_f[e1, 1]), int(ft.e_f[e2, 1])
         nE, nV = len(ft.e_v), len(ft.vpos)
-        if ft.t4_transition(e1):
+        original_candidates = ft._t4_candidates
+        ft._t4_candidates = lambda ce: [e2] if ce == e1 else original_candidates(ce)
+        accepted = ft.t4_transition(e1)
+        ft._t4_candidates = original_candidates
+        if accepted:
             assert len(ft.e_v) == nE + 3 and len(ft.vpos) == nV + 2
             assert np.sum(ft.v_e[-1] >= 0) == 3 and np.sum(ft.v_e[-2] >= 0) == 3
             assert all(len(ft.f_v[f]) >= 3 and not ft._cell_self_intersects(f)

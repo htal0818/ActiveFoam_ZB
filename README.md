@@ -1,5 +1,7 @@
 # Active Foam — Python reproduction of Kim *et al.*, *Nature Physics* (2021)
 
+Current full-foam work for Figures **2b, 2c, 3a, 4a, and 4g**, including closed-edge T4 cases, numerical acceleration, validation, and checkpointed runs, is documented in [REPRODUCTION.md](REPRODUCTION.md). The older gallery below predates these changes.
+
 Python reimplementation of the dynamic vertex ("active foam") model from
 
 > S. Kim, M. Pochitaloff, G. A. Stooke‑Vaughan & O. Campàs,
