@@ -387,14 +387,16 @@ def fig2c_map():
     axp = fig.add_subplot(1, 2, 1); _paper(axp, "crop_fig2c.png")
     ax = fig.add_subplot(1, 2, 2)
     zm = np.ma.masked_invalid(z)
-    im = ax.pcolormesh(WS, RHOS, zm, cmap="RdYlBu_r", vmin=1.5, vmax=5.5, shading="gouraud")
-    try:
-        cs = ax.contour(WS, RHOS, zm, levels=[4, 5], colors="k", linestyles="--", linewidths=1)
-        ax.clabel(cs, fmt="z=%d", fontsize=8)
-        cs6 = ax.contour(WS, RHOS, zm, levels=[5.9], colors="k", linewidths=1.2)
-        ax.clabel(cs6, fmt="z=6", fontsize=8)
-    except Exception:
-        pass
+    ax.set_facecolor("0.85")
+    im = ax.pcolormesh(WS, RHOS, zm, cmap="RdYlBu_r", vmin=1.5, vmax=5.5, shading="nearest")
+    bad = ~np.isfinite(z)
+    WW, RR = np.meshgrid(WS, RHOS)
+    ax.plot(WW[bad], RR[bad], "x", color="0.35", ms=6, label="no valid run")
+    for i in range(len(RHOS)):
+        for j in range(len(WS)):
+            if np.isfinite(z[i, j]) and z[i, j] < 5.95:
+                ax.text(WS[j], RHOS[i], f"{z[i, j]:.1f}", ha="center", va="center", fontsize=7)
+    ax.legend(fontsize=7, loc="lower right")
     fig.colorbar(im, ax=ax, label=r"$z$")
     ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"$\rho$")
     ax.set_title("This work (foam model, full T1–T4)", fontsize=11)

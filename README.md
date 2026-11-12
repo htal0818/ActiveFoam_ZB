@@ -52,12 +52,13 @@ same force law, restricted to the confluent regime.
 | Figure | Quantity | Script |
 |---|---|---|
 | **2a** | Curved‑cell configurations with extracellular spaces vs `W/T₀` | `scripts/make_fig2a_panel.py` |
-| **2b/2c** | Volume fraction `φ` and contact number `z` vs `W/T₀`, `ρ` | `scripts/run_fig2b_unified.py` |
+| **2b/2c** | Volume fraction `φ` and contact number `z` vs `W/T₀`, `ρ` | `scripts/run_fig2b_foam_full.py`, `scripts/run_fig2c_map.py` |
 | **2f** | Foam‑limit jamming: `z` vs `φ`, `φ_c≈0.83`, `z_c=4` | `scripts/run_fig2f_foam.py` |
 | **2g/4g** | Cell shape factor `s̄` vs `W/T₀` (equilibrium & dynamic) | `scripts/run_shapefactor.py` |
 | **2i** | Shear‑stress relaxation `σ_xy(t)/σ₀` vs `W/T₀` (paper Eq. 4/5) | `scripts/run_fig2i_stress_relax.py` |
 | **2j** | Yield stress `σ_Y` vs `W/T₀` (paper Eq. 4/5) | `scripts/run_fig2j_yieldstress.py` |
 | **3a** | MSD(t) vs `t/τ_T` for varying `ΔT/T₀`, and exponent `α(ΔT)` | `scripts/run_fig3_msd.py` |
+| **3c/3d** | MSD and cellular NE rate vs `W/T₀` (minimum at the structural transition) | `scripts/run_fig3cd.py`, `scripts/run_fig3cd_confluent.py` |
 | **4a** | Shear‑stress relaxation → stretched exponential | `scripts/run_fig4a_stress.py` |
 | **4d/4e** | `τ_SR` map and fluid/solid phase diagram over `(W/T₀, ΔT/T₀)` | `scripts/run_fig4de.py` |
 
@@ -72,6 +73,16 @@ curved‑edge foam model (`FoamTissue.stress_tensor`), together with the affine
 shear‑step‑and‑relax protocol (`apply_affine_shear`). Fig 2i recovers the paper's
 family exactly — largest elastic jump at `W=0`, highest residual (yield) stress at
 the structural transition `W/T₀≈0.5`, and zero stress at `W/T₀=2`.
+
+**Fig 3c/3d.** The foam model covers all adhesions but only over a 20 τ_R
+window (NE-rate floor ≈ 7×10⁻⁴, MSD lag 2 τ_T). The ΔT/T₀ = 1.0 and 1.5 curves
+show the paper's minimum near W/T₀ ≈ 0.8–0.9 and the rise on both sides with
+similar magnitudes (ΔT/T₀ = 1.5: 0.04 → 0.16; paper ≈ 0.03 → 0.15). Lower
+activities are floor-limited, so on the confluent branch (W/T₀ ≥ 0.6) the fast
+confluent model is run for 2000 τ_R, giving MSD at the paper's 10² τ_T lag and
+NE rates down to ~10⁻⁵. Its NE rate counts net contact losses between snapshots
+one τ_T apart and is 2–6× below the foam model's event count where they
+overlap, so the two sets are drawn separately rather than joined.
 
 For the **τ_SR map (4d)** and **phase diagram (4e)** the paper states that
 long‑timescale stress relaxation is driven by *actively induced NE (T1)
@@ -121,18 +132,26 @@ two spaces, so the two cells lose their contact. The unified foam model therefor
 reproduces **both φ(W/T₀) and z(W/T₀)** on its own — z rises from the foam limit
 toward 6 with adhesion, matching the paper for W/T₀ ≳ 0.5.
 
-**Known limitation — W→0 over-fragmentation.** In the pure-foam W→0 limit the
-model *over-fragments*: z falls to ≈2.8–3.7 versus the paper's ≈6 at ρ=1 (even
-*below* the isostatic value 4). This is the delicate curved-edge force balance of
-Supplementary Section 1: a corner where a cell–cell contact (tension 2−W) meets
-two free edges (tension 1 each) cannot balance by tension alone at W=0
-(2 > 1+1), so finite contacts are held open only by the free edges' Laplace
-pressure/curvature — which the refined-but-nearly-straight edges under-capture.
-The following were tested and did **not** fix it (confirming it is a
-force-calibration issue, not a transition-logic or cascade bug): gentler/zero
-annealing (z 3.4→3.7), finer edge refinement (worse), and limiting the T1
-break-rate (worse). The contact-breaking chain itself is correct and gives the
-right z(W/T₀) trend for W/T₀ ≳ 0.25.
+**W→0 over-fragmentation — reduced, not solved.** Before the non-adjacent T4
+was ported, contacts could break (T1 → T3-reverse) but never re-form, so the
+foam limit over-fragmented (z ≈ 2.8–3.2 at W=0, ρ=1). The non-adjacent T4 is the
+reference code's contact-*formation* step; with it the same point gives
+z ≈ 4.5–4.7, above the isostatic value 4. By the paper's own Fig 2f/4f that
+point sits near jamming (φ ≈ 0.83), so this is the right neighbourhood, though
+I cannot check the exact Fig 2c value (the crop lacks the ρ axis).
+
+What remains broken in the low-adhesion corner:
+
+* **Tangling.** In the (W/T₀, ρ) map (`run_fig2c_map.py`) 10 of 64 points —
+  all at W/T₀ ≤ 0.2 — produced no valid configuration (self-overlapping cells,
+  φ > 1, or a run that never finished). Under activity, W=0 runs in the Fig 3c/3d
+  sweep tangled for ΔT/T₀ = 0.5 and 1.0. These points are excluded and shown
+  as blanks, not filled in.
+* **Transient coarsening.** After spaces are opened they keep coarsening, so
+  low-adhesion NE rates and MSDs are partly non-steady-state.
+* The underlying corner force balance (a contact of tension 2−W against two
+  free edges of tension 1 each; Supplementary Section 1) is still only
+  approximately captured by the refined polyline edges.
 
 **T4 — both modes ported.** Two curved edges *sharing a vertex* that fold
 through each other are resolved by `t4_adjacent` (port of
@@ -154,9 +173,9 @@ cell degenerate or self-intersecting. Both modes are exercised by the test suite
 the MATLAB order inside `do_transitions` (T4-adjacent → T1 → T3-reverse →
 T4-non-adjacent → T2), matching the `ts_simStep` schedule.
 
-The residual W→0 over-fragmentation noted above is a curved-edge
-**force-balance** limit, not a missing-transition one, so it persists even with
-the full T4 machinery in place.
+A cut is only made for a real lens: if the two crossing points coincide (one
+crossing at a polyline node counted twice) the cut is refused, since it would
+create a zero-length bridge edge and NaN forces (`test_t4_rejects_degenerate_lens`).
 
 ## Scope & honesty about "exact"
 

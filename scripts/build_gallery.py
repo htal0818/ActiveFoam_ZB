@@ -27,12 +27,11 @@ CARDS = [
      "Unified foam model (T1 + T2 + T2-reverse + T3-reverse)", "strong",
      "φ rises from ≈ the jamming value toward 1 (confluent) as adhesion "
      "increases, with lower density giving lower φ."),
-    ("compare_fig2c_z.png", "Fig 2c", "Contact number z vs adhesion",
-     "Unified foam model (contact-breaking via T1 → T3-reverse)", "good",
-     "The single faithful model now produces z too: contacts break as spaces grow "
-     "(T1 flips a contact into a space–space edge, T3-reverse merges the spaces). "
-     "z rises to 6 with adhesion, matching for W/T₀ ≳ 0.25; the pure-foam W→0 "
-     "limit over-fragments (small-triangle stability / full T4 still to come)."),
+    ("compare_fig2c_z.png", "Fig 2c", "Contact number over adhesion and density",
+     "Foam model with full T1–T4 (contact formation via non-adjacent T4)", "good",
+     "z rises to 6 with adhesion and density. With contact formation active the "
+     "W=0, ρ=1 point gives z≈4.7 (was ≈2.8). Ten low-adhesion points (W/T₀≤0.2) "
+     "gave no valid configuration and are marked, not filled in."),
     ("compare_fig2i_stress.png", "Fig 2i", "Shear-stress relaxation vs adhesion",
      "Foam model + paper Eq. 4/5 stress + affine-shear step", "strong",
      "The paper's Methods protocol (strain step then relax): the initial elastic "
@@ -58,6 +57,17 @@ CARDS = [
      "MSD spans six decades with the correct caged → diffusive ordering in "
      "ΔT/T₀. The 36-cell system creeps a little more than the paper at low "
      "activity, so the extracted exponent α is biased high."),
+    ("compare_fig3c_msd_vs_w.png", "Fig 3c", "Cell movements vs adhesion",
+     "Foam model (all W) + confluent model (long lag)", "partial",
+     "Foam model at a 2 τ_T lag shows the dip and high-adhesion rise for "
+     "ΔT/T₀ ≥ 1; the confluent branch is shown separately at the paper's "
+     "100 τ_T lag. No single curve spans the full range at the paper's lag."),
+    ("compare_fig3d_ne_rate.png", "Fig 3d", "Neighbour-exchange rate vs adhesion",
+     "Foam model (T1 + contact changes)", "good",
+     "High-activity curves reproduce the minimum near W/T₀≈0.8–0.9 and the rise "
+     "on both sides with the paper's magnitudes. Low-activity curves hit the "
+     "20 τ_R resolution floor; dashed squares extend them on the confluent "
+     "branch with a 2000 τ_R window (different counting rule, 2–6× lower)."),
     ("compare_fig4g_shape.png", "Fig 4g", "Dynamic shape factor",
      "Confluent dynamic vertex model", "good",
      "s̄ rises with adhesion and with activity, crossing the 3.81 rigidity line; "
