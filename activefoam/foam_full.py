@@ -381,6 +381,28 @@ class FoamTissue:
         """Signed edge loop for cell ci from its vertex loop (port ts_faceEdgeId)."""
         fvr = self.f_v[ci]
         n = len(fvr)
+        if n == 2:
+            # two edges join the same vertex pair: one traversed a->b, the other
+            # b->a, ordered so the enclosed area is positive
+            a, b = fvr
+            cand = [e for e in range(len(self.e_v))
+                    if {int(self.e_v[e, 0]), int(self.e_v[e, 1])} == {a, b}
+                    and ci in (int(self.e_f[e, 0]), int(self.e_f[e, 1]))]
+            if len(cand) != 2:
+                raise ValueError("2-vertex cell needs exactly two bounding edges")
+
+            def signed(e, start):
+                return e if int(self.e_v[e, 0]) == start else -(e + 1)
+            keep = self.f_e[ci]
+            best = None
+            for c0, c1 in ((cand[0], cand[1]), (cand[1], cand[0])):
+                self.f_e[ci] = [signed(c0, a), signed(c1, b)]
+                if self.cell_area_center(ci)[0] > 0:
+                    best = self.f_e[ci]; break
+            self.f_e[ci] = keep
+            if best is None:
+                raise ValueError("2-vertex cell has no positively oriented loop")
+            return best
         fed = []
         for k in range(n):
             a, b = fvr[k], fvr[(k + 1) % n]
@@ -1206,11 +1228,46 @@ class FoamTissue:
         self.f_v[f] = fvr
         self._recompute_cell(f)
 
+    def edge_cut_single_piece(self, emdi, ept, ept2, ecmp, vId, evId):
+        """Port of ts_edgeCutSinglePiece.m.  emdi is a LOOP edge (it starts and
+        ends on the same vertex) cut at two points; of the two arcs joining the
+        cut points, keep the one whose length differs most from the bridge
+        ecmp (i.e. the outer arc, not the lens).  Returned from ept to ept2,
+        flipped if the new endpoints evId end on vId."""
+        emdc = crd_local(np.vstack([ept, ept2, emdi]), self.bs, self.sstn)
+        crp, emd = emdc[:2], emdc[2:]
+        k1 = self._cut_index(crp[0], emd)           # matlab idxAll = k + 1
+        k2 = self._cut_index(crp[1], emd)
+        if k1 < k2:
+            emd1 = np.vstack([crp[0], emd[k1 + 1:k2 + 1], crp[1]])
+            emd2 = np.vstack([crp[1], emd[k2 + 1:-1], emd[:k1 + 1], crp[0]])[::-1]
+        elif k2 < k1:
+            emd1 = np.vstack([crp[1], emd[k2 + 1:k1 + 1], crp[0]])[::-1]
+            emd2 = np.vstack([crp[0], emd[k1 + 1:-1], emd[:k2 + 1], crp[1]])
+        else:
+            emd1 = np.asarray(ecmp, float)
+            emd2 = np.vstack([crp[0], emd[k1 + 1:-1], emd[:k2 + 1], crp[1]])
+            part = emd2[[-2, -1, 0, 1]]
+            ax = 0 if part[3, 0] != part[0, 0] else 1
+            den = part[3, ax] - part[0, ax]
+            pa = ((part[2, ax] - part[0, ax]) / den, (part[1, ax] - part[0, ax]) / den)
+            if pa[1] > pa[0]:
+                emd2 = np.vstack([crp[0], emd2[1:-1][::-1], crp[1]])
+        l1, l2, l3 = (edge_len(emd1).sum(), edge_len(emd2).sum(),
+                      edge_len(np.asarray(ecmp, float)).sum())
+        emdf = emd1 if abs(l1 - l3) > abs(l2 - l3) else emd2
+        if int(evId[1]) == vId:
+            emdf = emdf[::-1]
+        return emdf
+
     def t4_transition(self, t4Id):
         """Resolve a two-point crossing (lens) between edge t4Id and a
-        non-adjacent space-bordering edge.  Port of ts_t4Transition.m
-        (general case: both edges have distinct endpoints -> 2 new vertices,
-        3 new edges).  Returns True on a committed cut."""
+        non-adjacent space-bordering edge.  Port of ts_t4Transition.m, all four
+        cases: an edge with distinct endpoints is split into two pieces at the
+        crossing points (new vertex each); a LOOP edge (a detached bubble whose
+        edge starts and ends on one vertex) keeps a single piece and its vertex
+        is moved onto a crossing point.  A bridge edge between the two cells is
+        always added.  Returns True on a committed cut."""
         if int(self.e_f[t4Id, 0]) != SPACE:
             return False
         target = None
@@ -1227,88 +1284,106 @@ class FoamTissue:
         ne, pts = target
         ePt1, ePt2 = pts[0].copy(), pts[1].copy()
         e1, e2 = t4Id, ne
-        v1a, v1b = int(self.e_v[e1, 0]), int(self.e_v[e1, 1])
-        v2a, v2b = int(self.e_v[e2, 0]), int(self.e_v[e2, 1])
-        if v1a == v1b or v2a == v2b:                        # only the general case
-            return False
+        vl = [int(self.e_v[e1, 0]), int(self.e_v[e1, 1]),
+              int(self.e_v[e2, 0]), int(self.e_v[e2, 1]), None, None]
+        loop1, loop2 = vl[0] == vl[1], vl[2] == vl[3]
         flId = [int(self.e_f[e1, 1]), int(self.e_f[e2, 1])]
         if flId[0] == SPACE or flId[1] == SPACE or flId[0] == flId[1]:
             return False                                    # need two distinct cells
 
         # orient endpoints so [vl0->ePt1] and [vl1->ePt2] don't cross (ts_lineCross)
-        vl = [v1a, v1b, v2a, v2b, None, None]
-        vr = crd_local(np.array([self.vpos[vl[0]], ePt1, self.vpos[vl[1]], ePt2]),
-                       self.bs, self.sstn)
-        if self._segs_cross(vr[0], vr[1], vr[2], vr[3]):
-            vl[0], vl[1] = vl[1], vl[0]
-        vr = crd_local(np.array([self.vpos[vl[2]], ePt1, self.vpos[vl[3]], ePt2]),
-                       self.bs, self.sstn)
-        if self._segs_cross(vr[0], vr[1], vr[2], vr[3]):
-            vl[2], vl[3] = vl[3], vl[2]
+        for a in (0, 2):
+            if vl[a] != vl[a + 1]:
+                vr = crd_local(np.array([self.vpos[vl[a]], ePt1,
+                                         self.vpos[vl[a + 1]], ePt2]), self.bs, self.sstn)
+                if self._segs_cross(vr[0], vr[1], vr[2], vr[3]):
+                    vl[a], vl[a + 1] = vl[a + 1], vl[a]
 
         snap = self._snapshot()
         t1_old, t2_old = float(self.e_t[e1]), float(self.e_t[e2])
         ft1_old, ft2_old = self.fixed_tension(e1), self.fixed_tension(e2)
-        e1f = self.e_f[e1].copy(); e2f = self.e_f[e2].copy()
-        e1_oldmid, e1_oldev = self.e_mid[e1].copy(), (v1a, v1b)
-        e2_oldmid, e2_oldev = self.e_mid[e2].copy(), (v2a, v2b)
+        e1f, e2f = self.e_f[e1].copy(), self.e_f[e2].copy()
+        mid1_old, ev1_old = self.e_mid[e1].copy(), (int(self.e_v[e1, 0]), int(self.e_v[e1, 1]))
+        mid2_old, ev2_old = self.e_mid[e2].copy(), (int(self.e_v[e2, 0]), int(self.e_v[e2, 1]))
 
-        v5 = self._add_vertex(np.mod(ePt1, self.bs))
-        v6 = self._add_vertex(np.mod(ePt2, self.bs))
+        # crossing vertices: a loop edge reuses (and moves) its own vertex
+        if loop1:
+            v5 = vl[0]; self.vpos[v5] = np.mod(ePt1, self.bs)
+        else:
+            v5 = self._add_vertex(np.mod(ePt1, self.bs))
+        if loop2:
+            v6 = vl[2]; self.vpos[v6] = np.mod(ePt2, self.bs)
+        else:
+            v6 = self._add_vertex(np.mod(ePt2, self.bs))
         vl[4], vl[5] = v5, v6
 
-        ev_e1 = self._sortf([vl[0], v5])      # elId(1): e1 first piece
-        ev_e2 = self._sortf([vl[2], v5])      # elId(2): e2 first piece
-        ev_e3 = self._sortf([vl[1], v6])      # elId(3): e1 second piece
-        ev_e4 = self._sortf([vl[3], v6])      # elId(4): e2 second piece
-        ev_e5 = self._sortf([v5, v6])         # elId(5): bridge (two cells)
+        ev_e1 = self._sortf([vl[1], v6]) if loop1 else self._sortf([vl[0], v5])
+        ev_e2 = self._sortf([vl[2], v5])
+        ev_e3 = None if loop1 else self._sortf([vl[1], v6])
+        ev_e4 = None if loop2 else self._sortf([vl[3], v6])
+        ev_e5 = self._sortf([v5, v6])
+        # bridge runs between the endpoints in stored (sorted) order
+        br = np.array([ePt1, ePt2]) if ev_e5[0] == v5 else np.array([ePt2, ePt1])
+        m5, r5 = edge_mid_vrtx_average(crd_local(br, self.bs, self.sstn), self.edpc)
 
-        m1, r1 = edge_mid_vrtx_average(crd_local(
-            self.edge_cut_piece(e1_oldmid, ePt1, e1_oldev, ev_e1, vl[0]),
-            self.bs, self.sstn), self.edpc)
-        m3, r3 = edge_mid_vrtx_average(crd_local(
-            self.edge_cut_piece(e1_oldmid, ePt2, e1_oldev, ev_e3, vl[1]),
-            self.bs, self.sstn), self.edpc)
-        m2, r2 = edge_mid_vrtx_average(crd_local(
-            self.edge_cut_piece(e2_oldmid, ePt1, e2_oldev, ev_e2, vl[2]),
-            self.bs, self.sstn), self.edpc)
-        m4, r4 = edge_mid_vrtx_average(crd_local(
-            self.edge_cut_piece(e2_oldmid, ePt2, e2_oldev, ev_e4, vl[3]),
-            self.bs, self.sstn), self.edpc)
-        m5, r5 = edge_mid_vrtx_average(crd_local(
-            np.array([ePt1, ePt2]), self.bs, self.sstn), self.edpc)
+        def refine(poly):
+            return edge_mid_vrtx_average(crd_local(poly, self.bs, self.sstn), self.edpc)
+
+        if loop1:
+            m1, r1 = refine(self.edge_cut_single_piece(mid1_old, ePt1, ePt2, m5, v5, ev_e1))
+        else:
+            m1, r1 = refine(self.edge_cut_piece(mid1_old, ePt1, ev1_old, ev_e1, vl[0]))
+            m3, r3 = refine(self.edge_cut_piece(mid1_old, ePt2, ev1_old, ev_e3, vl[1]))
+        if loop2:
+            m2, r2 = refine(self.edge_cut_single_piece(mid2_old, ePt1, ePt2, m5, v5, ev_e2))
+        else:
+            m2, r2 = refine(self.edge_cut_piece(mid2_old, ePt1, ev2_old, ev_e2, vl[2]))
+            m4, r4 = refine(self.edge_cut_piece(mid2_old, ePt2, ev2_old, ev_e4, vl[3]))
 
         # bridge tension: base average + fixed-point correction (ts_t4Transition)
         ft5 = 2.0 - self.gam                                # interior (two cells)
         t5 = 0.5 * (t1_old + t2_old) + (ft5 - 0.5 * (ft1_old + ft2_old))
 
-        # first pieces reuse e1,e2; add second pieces + bridge (order e3,e4,e5)
         self.e_v[e1] = ev_e1; self.e_mid[e1] = m1; self.e_rfn[e1] = r1
         self.e_v[e2] = ev_e2; self.e_mid[e2] = m2; self.e_rfn[e2] = r2
-        e3 = self._add_edge(ev_e3[0], ev_e3[1], int(e1f[0]), int(e1f[1]), m3, r3, t1_old)
-        e4 = self._add_edge(ev_e4[0], ev_e4[1], int(e2f[0]), int(e2f[1]), m4, r4, t2_old)
+        e3 = e1 if loop1 else self._add_edge(ev_e3[0], ev_e3[1], int(e1f[0]), int(e1f[1]),
+                                             m3, r3, t1_old)
+        e4 = e2 if loop2 else self._add_edge(ev_e4[0], ev_e4[1], int(e2f[0]), int(e2f[1]),
+                                             m4, r4, t2_old)
         fls = self._sortf(flId)
         e5 = self._add_edge(ev_e5[0], ev_e5[1], fls[0], fls[1], m5, r5, t5)
 
         # vertex incidences
-        self._replace_in_ve(vl[1], e1, e3)
-        self._replace_in_ve(vl[3], e2, e4)
+        if not loop1:
+            self._replace_in_ve(vl[1], e1, e3)
+        if not loop2:
+            self._replace_in_ve(vl[3], e2, e4)
         self.v_e[v5] = self._sortf([e1, e2, e5])
         self.v_e[v6] = self._sortf([e3, e4, e5])
         self.v_f[v5] = self._sortf([SPACE, flId[0], flId[1]])
         self.v_f[v6] = self._sortf([SPACE, flId[0], flId[1]])
 
-        # cell faces gain the two crossing vertices
-        self._t4_face_update(flId[0], vl[0], vl[1], v5, v6)
-        self._t4_face_update(flId[1], vl[2], vl[3], v5, v6)
+        # cell vertex loops
+        try:
+            if loop1:
+                self.f_v[flId[0]] = [vl[0], v6]; self._recompute_cell(flId[0])
+            else:
+                self._t4_face_update(flId[0], vl[0], vl[1], v5, v6)
+            if loop2:
+                self.f_v[flId[1]] = [vl[2], v5]; self._recompute_cell(flId[1])
+            else:
+                self._t4_face_update(flId[1], vl[2], vl[3], v5, v6)
+        except Exception:
+            self._restore(snap)
+            return False
 
         # validity guard (my curved geometry may differ from the reference)
         for f in flId:
-            if (len(self.f_v[f]) < 3 or self.f_area[f] < 1e-3
+            if (len(self.f_v[f]) < 2 or self.f_area[f] < 1e-3
                     or self._cell_self_intersects(f)):
                 self._restore(snap)
                 return False
-        if any(self._edge_degenerate(e) for e in (e1, e2, e3, e4, e5)):
+        if any(self._edge_degenerate(e) for e in {e1, e2, e3, e4, e5}):
             self._restore(snap)
             return False
         self._prev_lens = None

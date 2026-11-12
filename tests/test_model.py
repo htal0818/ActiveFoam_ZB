@@ -289,6 +289,84 @@ def test_t4_rejects_degenerate_lens():
     assert np.all(np.isfinite(ft.vpos))
 
 
+def _bubble_tissue(cells):
+    """Hand-built FoamTissue of detached cells in empty space.
+    cells: list of lists of arcs; each arc is (polyline, v_start, v_end)."""
+    import numpy as np
+    from activefoam.foam_full import FoamTissue, SPACE
+    ft = FoamTissue.__new__(FoamTissue)
+    ft.bs = 40.0; ft.sstn = 0.0; ft.edpc = 0.15; ft.lsc = 1.0; ft.A0 = 1.0
+    ft.rho = 1.0; ft.psi = 1.0; ft.P0 = 10.0; ft.gam = 0.0; ft.w = 0.0; ft.beta = 0.0
+    ft.tauT = 10.0; ft.dt = 0.005; ft.rng = np.random.default_rng(0)
+    nv = 1 + max(max(a[1], a[2]) for c in cells for a in c)
+    ft.vpos = np.zeros((nv, 2)); ft.v_e = np.full((nv, 3), -1); ft.v_f = np.full((nv, 3), -1)
+    ft.e_v, ft.e_f, ft.e_mid, ft.f_v, ft.f_e = [], [], [], [], []
+    for ci, arcs in enumerate(cells):
+        loop, fe = [], []
+        for poly, a, b in arcs:
+            e = len(ft.e_v)
+            if a <= b:
+                ft.e_v.append([a, b]); ft.e_mid.append(np.array(poly, float)); fe.append(e)
+            else:
+                ft.e_v.append([b, a]); ft.e_mid.append(np.array(poly, float)[::-1]); fe.append(-(e + 1))
+            ft.e_f.append([SPACE, ci]); loop.append(a)
+            ft.vpos[a] = poly[0]
+            for v in {a, b}:
+                row = [x for x in ft.v_e[v] if x >= 0] + [e]
+                ft.v_e[v] = sorted(([-1] * 3 + row)[-3:])
+                ft.v_f[v] = [-1, -1, ci]
+        ft.f_v.append(loop); ft.f_e.append(fe)
+    ft.e_v = np.array(ft.e_v); ft.e_f = np.array(ft.e_f)
+    ft.e_t = np.ones(len(ft.e_v)); ft.e_rfn = np.array([len(m) - 2 for m in ft.e_mid])
+    ft.nFa = len(cells); ft._update_faces()
+    return ft
+
+
+def _arc(cx, cy, r, a0, a1, n=60):
+    import numpy as np
+    t = np.linspace(a0, a1, n)
+    return np.c_[cx + r * np.cos(t), cy + r * np.sin(t)]
+
+
+def test_t4_transition_loop_cases():
+    """ts_t4Transition loop branches (ts_edgeCutSinglePiece): a detached bubble
+    whose single edge starts and ends on one vertex gains a contact."""
+    import numpy as np
+    from activefoam.foam_full import SPACE
+    pi = np.pi
+    seg = (2 * np.arccos(0.75) - np.sin(2 * np.arccos(0.75))) / 2   # circular segment
+    want = pi - seg                                                 # bubble minus half-lens
+
+    # (a) loop + loop: two unit bubbles 1.5 apart, vertices on the far sides
+    ft = _bubble_tissue([[(_arc(5, 5, 1, pi, 3 * pi), 0, 0)],
+                         [(_arc(6.5, 5, 1, 0, 2 * pi), 1, 1)]])
+    assert ft.t4_transition(0) is True
+    assert len(ft.vpos) == 2 and len(ft.e_v) == 3            # no new vertex, one bridge
+    assert sorted(ft.f_v[0]) == [0, 1] and sorted(ft.f_v[1]) == [0, 1]
+    assert sorted(map(int, ft.e_f[2])) == [0, 1]             # bridge separates the two cells
+    assert all(tuple(map(int, ft.e_v[e])) == (0, 1) for e in range(3))
+    assert np.allclose(sorted(ft.vpos[:, 1]), [5 - 0.6614, 5 + 0.6614], atol=5e-3)
+    assert np.allclose(ft.vpos[:, 0], 5.75, atol=5e-3)
+    assert np.allclose(ft.f_area, want, rtol=0.01)           # each kept its OUTER arc
+    for _ in range(20):
+        ft.step(mu=0.0)
+    assert np.all(np.isfinite(ft.vpos))
+
+    # (b) loop + ordinary edge: bubble 0 is a loop, bubble 1 has two vertices
+    ft = _bubble_tissue([[(_arc(5, 5, 1, pi, 3 * pi), 0, 0)],
+                         [(_arc(6.5, 5, 1, pi / 2, 3 * pi / 2), 1, 2),
+                          (_arc(6.5, 5, 1, 3 * pi / 2, 5 * pi / 2), 2, 1)]])
+    assert ft.t4_transition(0) is True
+    assert len(ft.vpos) == 4 and len(ft.e_v) == 5            # +1 vertex, +2 edges
+    assert len(ft.f_v[0]) == 2 and len(ft.f_v[1]) == 4
+    assert np.sum(ft.v_e[3] >= 0) == 3                       # new vertex is trivalent
+    assert int(np.sum(np.all(ft.e_f != SPACE, axis=1))) == 1   # exactly one contact
+    assert np.allclose(ft.f_area, want, rtol=0.01)
+    for _ in range(20):
+        ft.step(mu=0.0)
+    assert np.all(np.isfinite(ft.vpos))
+
+
 if __name__ == "__main__":
     test_construction_invariants()
     test_forces_match_reference()
@@ -299,4 +377,5 @@ if __name__ == "__main__":
     test_t4_reduces_folds_in_run()
     test_t4_transition_cuts_lens()
     test_t4_rejects_degenerate_lens()
+    test_t4_transition_loop_cases()
     print("all checks passed (confluent + foam transitions + full T4)")
