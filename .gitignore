@@ -2,4 +2,3 @@ __pycache__/
 *.pyc
 data/*.log
 data/paper_*
-data/fig2bc_coarse_runs.jsonl
