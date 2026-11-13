@@ -1,2 +1,54 @@
 {"w": 0.0, "rho": 0.81, "seed": 1, "status": "invalid_geometry", "seconds": 13, "steps": 400}
 {"w": 0.0, "rho": 0.9216, "seed": 1, "status": "invalid_geometry", "seconds": 31, "steps": 800}
+{"w": 0.0, "rho": 1.0, "seed": 1, "status": "invalid_geometry", "seconds": 84, "steps": 3300}
+{"w": 0.0, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 160, "steps": 8000, "phi": 0.9095159447530846, "z": 5.222222222222222, "z_edges": 5.277777777777778, "tangled": 0}
+{"w": 0.0, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 142, "steps": 8000, "phi": 0.9829505059394088, "z": 6.0, "z_edges": 6.055555555555555, "tangled": 0}
+{"w": 0.0, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 162, "steps": 8000, "phi": 0.9602918383331064, "z": 6.0, "z_edges": 6.277777777777778, "tangled": 0}
+{"w": 0.1, "rho": 0.81, "seed": 1, "status": "ok", "seconds": 164, "steps": 8000, "phi": 0.6676312094216568, "z": 3.7222222222222223, "z_edges": 4.5, "tangled": 5}
+{"w": 0.1, "rho": 0.9216, "seed": 1, "status": "invalid_geometry", "seconds": 132, "steps": 1200}
+{"w": 0.1, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 147, "steps": 8000, "phi": 0.9400452966961986, "z": 5.611111111111111, "z_edges": 5.611111111111111, "tangled": 0}
+{"w": 0.1, "rho": 1.0, "seed": 1, "status": "ok", "seconds": 151, "steps": 8000, "phi": 0.8408009706997741, "z": 4.777777777777778, "z_edges": 4.888888888888889, "tangled": 2}
+{"w": 0.2, "rho": 0.81, "seed": 1, "status": "invalid_geometry", "seconds": 16, "steps": 700}
+{"w": 0.1, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 145, "steps": 8000, "phi": 0.9813947882028258, "z": 5.944444444444445, "z_edges": 5.944444444444445, "tangled": 0}
+{"w": 0.1, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 146, "steps": 8000, "phi": 0.9927772533432877, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.2, "rho": 0.9216, "seed": 1, "status": "ok", "seconds": 156, "steps": 8000, "phi": 0.7829361527562777, "z": 5.0, "z_edges": 5.055555555555555, "tangled": 7}
+{"w": 0.2, "rho": 1.0, "seed": 1, "status": "ok", "seconds": 145, "steps": 8000, "phi": 0.8861548262419325, "z": 5.333333333333333, "z_edges": 5.333333333333333, "tangled": 0}
+{"w": 0.2, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 143, "steps": 8000, "phi": 0.9707712372959713, "z": 5.722222222222222, "z_edges": 5.722222222222222, "tangled": 0}
+{"w": 0.2, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 142, "steps": 8000, "phi": 0.9967243005426147, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.3, "rho": 0.81, "seed": 1, "status": "ok", "seconds": 136, "steps": 8000, "phi": 0.7157766240789459, "z": 4.722222222222222, "z_edges": 4.722222222222222, "tangled": 0}
+{"w": 0.2, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 153, "steps": 8000, "phi": 0.9987278374432536, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.3, "rho": 0.9216, "seed": 1, "status": "ok", "seconds": 143, "steps": 8000, "phi": 0.8368602295709923, "z": 5.222222222222222, "z_edges": 5.222222222222222, "tangled": 0}
+{"w": 0.3, "rho": 1.0, "seed": 1, "status": "ok", "seconds": 145, "steps": 8000, "phi": 0.899512784485113, "z": 5.5, "z_edges": 5.5, "tangled": 0}
+{"w": 0.3, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 150, "steps": 8000, "phi": 0.9982077923072405, "z": 5.944444444444445, "z_edges": 5.944444444444445, "tangled": 0}
+{"w": 0.3, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 150, "steps": 8000, "phi": 0.9999261655605038, "z": 6.0, "z_edges": 6.055555555555555, "tangled": 0}
+{"w": 0.3, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 150, "steps": 8000, "phi": 0.9999217136249337, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.4, "rho": 0.81, "seed": 1, "status": "ok", "seconds": 142, "steps": 8000, "phi": 0.7356716457096183, "z": 5.388888888888889, "z_edges": 5.388888888888889, "tangled": 0}
+{"w": 0.4, "rho": 0.9216, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.8391545992749673, "z": 5.5, "z_edges": 5.5, "tangled": 0}
+{"w": 0.4, "rho": 1.0, "seed": 1, "status": "ok", "seconds": 147, "steps": 8000, "phi": 0.9514592442072762, "z": 5.777777777777778, "z_edges": 5.777777777777778, "tangled": 0}
+{"w": 0.4, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 146, "steps": 8000, "phi": 0.9999360257088408, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.4, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 146, "steps": 8000, "phi": 0.999933309554858, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.4, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9999224176036735, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.5, "rho": 0.81, "seed": 1, "status": "ok", "seconds": 143, "steps": 8000, "phi": 0.7440412761168379, "z": 5.333333333333333, "z_edges": 5.333333333333333, "tangled": 0}
+{"w": 0.5, "rho": 0.9216, "seed": 1, "status": "ok", "seconds": 146, "steps": 8000, "phi": 0.8734216849784403, "z": 5.666666666666667, "z_edges": 5.666666666666667, "tangled": 0}
+{"w": 0.5, "rho": 1.0, "seed": 1, "status": "ok", "seconds": 146, "steps": 8000, "phi": 0.9568994494307625, "z": 5.833333333333333, "z_edges": 5.833333333333333, "tangled": 0}
+{"w": 0.5, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9999389729640027, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.5, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 149, "steps": 8000, "phi": 0.9999340159045735, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.5, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 149, "steps": 8000, "phi": 0.9999227788133003, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.6, "rho": 0.81, "seed": 1, "status": "ok", "seconds": 143, "steps": 8000, "phi": 0.755751883278755, "z": 5.555555555555555, "z_edges": 5.555555555555555, "tangled": 0}
+{"w": 0.6, "rho": 0.9216, "seed": 1, "status": "ok", "seconds": 147, "steps": 8000, "phi": 0.8573100582137853, "z": 5.666666666666667, "z_edges": 5.666666666666667, "tangled": 0}
+{"w": 0.6, "rho": 1.0, "seed": 1, "status": "ok", "seconds": 146, "steps": 8000, "phi": 0.9454660137347938, "z": 5.833333333333333, "z_edges": 5.833333333333333, "tangled": 0}
+{"w": 0.6, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 145, "steps": 8000, "phi": 0.9999413900923899, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.6, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 145, "steps": 8000, "phi": 0.9999344346834462, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.6, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 147, "steps": 8000, "phi": 0.9999235461043102, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.7, "rho": 0.81, "seed": 1, "status": "ok", "seconds": 143, "steps": 8000, "phi": 0.7655106925316643, "z": 5.555555555555555, "z_edges": 5.555555555555555, "tangled": 0}
+{"w": 0.7, "rho": 0.9216, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9995374139322281, "z": 5.777777777777778, "z_edges": 5.777777777777778, "tangled": 0}
+{"w": 0.7, "rho": 1.0, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9999341347983489, "z": 5.944444444444445, "z_edges": 5.944444444444445, "tangled": 0}
+{"w": 0.7, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9999331248449577, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.7, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 150, "steps": 8000, "phi": 0.9999340678270221, "z": 6.0, "z_edges": 6.055555555555555, "tangled": 0}
+{"w": 0.7, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9999237711550081, "z": 6.0, "z_edges": 6.0, "tangled": 0}
+{"w": 0.8, "rho": 0.81, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.7761944409437894, "z": 5.555555555555555, "z_edges": 5.555555555555555, "tangled": 0}
+{"w": 0.8, "rho": 0.9216, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9999432035442253, "z": 5.944444444444445, "z_edges": 5.944444444444445, "tangled": 0}
+{"w": 0.8, "rho": 1.0, "seed": 1, "status": "ok", "seconds": 147, "steps": 8000, "phi": 0.9999361508375062, "z": 5.833333333333333, "z_edges": 5.833333333333333, "tangled": 0}
+{"w": 0.8, "rho": 1.1236, "seed": 1, "status": "ok", "seconds": 146, "steps": 8000, "phi": 0.9999367252355221, "z": 5.944444444444445, "z_edges": 6.0, "tangled": 0}
+{"w": 0.8, "rho": 1.2544, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9999231411837575, "z": 5.777777777777778, "z_edges": 5.777777777777778, "tangled": 0}
+{"w": 0.8, "rho": 1.44, "seed": 1, "status": "ok", "seconds": 148, "steps": 8000, "phi": 0.9999060812475773, "z": 5.833333333333333, "z_edges": 5.833333333333333, "tangled": 0}
