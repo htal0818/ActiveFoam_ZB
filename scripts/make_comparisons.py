@@ -367,7 +367,7 @@ def fig3cd():
     ax.set_xlim(-0.05, 1.25)
     ax.set_xlabel(r"$W/T_0$"); ax.set_ylabel(r"cellular NE rate $(\tau_R^{-1})$")
     ax.legend(title=r"$\Delta T/T_0$", fontsize=8, loc="upper right", ncol=2)
-    ax.set_title("This work (foam model: T1 + contact changes)", fontsize=11)
+    ax.set_title("This work (foam model: T1 events)", fontsize=11)
     fig.suptitle(r"Fig. 3d  |  Neighbour-exchange rate vs adhesion — minimal at the "
                  r"structural transition", fontsize=12)
     fig.tight_layout(rect=[0, 0, 1, 0.95])

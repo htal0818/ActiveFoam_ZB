@@ -63,7 +63,7 @@ CARDS = [
      "ΔT/T₀ ≥ 1; the confluent branch is shown separately at the paper's "
      "100 τ_T lag. No single curve spans the full range at the paper's lag."),
     ("compare_fig3d_ne_rate.png", "Fig 3d", "Neighbour-exchange rate vs adhesion",
-     "Foam model (T1 + contact changes)", "good",
+     "Foam model (T1 events)", "good",
      "High-activity curves reproduce the minimum near W/T₀≈0.8–0.9 and the rise "
      "on both sides with the paper's magnitudes. Low-activity curves hit the "
      "20 τ_R resolution floor; dashed squares extend them on the confluent "

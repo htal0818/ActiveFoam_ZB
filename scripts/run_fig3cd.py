@@ -7,7 +7,7 @@ there.  Low W/T0 is mobile because cell contacts continually break and reform
 neighbour exchanges (confluent).
 
 Measured directly from the curved-edge foam model, which has BOTH branches:
-  * cellular NE rate k_NE = (T1 + contact-change events) per cell per tau_R  (Fig 3d, log)
+  * cellular NE rate k_NE = T1 events on cell-cell edges per cell per tau_R       (Fig 3d, log)
   * MSD of the 36 persistent cell centroids over the measurement window,
     in the tissue centre-of-mass frame, in units of L0^2                     (Fig 3c)
 
