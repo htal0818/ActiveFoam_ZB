@@ -31,7 +31,7 @@ def equilibrate(w, rho, seed):
     for it in range(350):
         ft.step(mu=0.5)               # anneal
         if it % 20 == 0:
-            ft.do_transitions()       # T1 + T2 annihilation
+            ft.do_transitions()       # T1 + T3-reverse + T4
     for it in range(700):
         ft.step(mu=0.0)               # quench
         if it % 20 == 0:

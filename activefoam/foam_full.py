@@ -660,15 +660,15 @@ class FoamTissue:
     #    itc % 5 == 2      ts_t4AdjacentTransition at every vertex
     #    itc % 5 == 3      ts_topTransitionType2  (T2-reverse at every all-cell vertex)
     #  "Shrinking" is judged against the length one step earlier (gmp.eLnc).
-    #  Deviation kept from this port: collapsed spaces are removed by
-    #  t2_annihilate_spaces, because t1_foam does not flip cell-space edges.
+    #  As in the reference code and the paper's Methods, a space is never
+    #  annihilated: a closed space persists as a tiny triangle.
     # ------------------------------------------------------------------ #
     def _edge_lengths(self):
         return np.array([edge_len(m).sum() for m in self.e_mid])
 
     def advance(self, mu=0.0, nsteps=1, seed_spaces=True):
         """Run nsteps on the reference schedule. Returns event counts."""
-        cnt = {"t1": 0, "t4": 0, "t4adj": 0, "t2rev": 0, "t2": 0}
+        cnt = {"t1": 0, "t4": 0, "t4adj": 0, "t2rev": 0}
         thr = 0.01 * 2 * np.sqrt(np.pi)                    # gmp.shEd
         itc = getattr(self, "_itc", 0)
         for _ in range(nsteps):
@@ -686,9 +686,7 @@ class FoamTissue:
                         if self.t1_foam(i):
                             cnt["t1"] += 1; done = True
                 self.resolve_space_space_edges()
-                na = self.t2_annihilate_spaces()
-                cnt["t2"] += na
-                if done or na:
+                if done:
                     self._update_faces()
             if itc % 5 == 1:
                 cnt["t4"] += self.top_transition_type3()
@@ -712,7 +710,9 @@ class FoamTissue:
         return cnt
 
     def do_transitions(self, mu=0.0, create_spaces=False):
-        """Apply T4-adjacent (untangle) + T1 + T2 annihilation (+ optional creation)."""
+        """Apply T4-adjacent (untangle) + T1 + T4 (+ optional space creation).
+
+        Returns (number of T1s, number of spaces created)."""
         # T4 (adjacent): repair curved edges that folded through each other,
         # so a genuine tangle is un-folded rather than silently committed.
         # Iterate a few sweeps: fixing one fold can expose an adjacent one.
@@ -748,8 +748,6 @@ class FoamTissue:
         self.resolve_space_space_edges()
         # T4 (non-adjacent): cut two space-bordering films that cross (lens)
         self.top_transition_type3()
-        # T2: annihilate collapsed spaces
-        na = self.t2_annihilate_spaces()
         # optional ongoing space creation at all-cell vertices (topTransitionType2)
         n2 = 0
         if create_spaces:
@@ -762,10 +760,10 @@ class FoamTissue:
         self._update_faces()
         self._prev_lens = np.array([edge_len(self.e_mid[i]).sum()
                                     for i in range(len(self.e_mid))])
-        return n1, n2, na
+        return n1, n2
 
     # ------------------------------------------------------------------ #
-    #  T2: annihilate a collapsed triangular extracellular space
+    #  Vertex/edge deletion with id remap (used by T3-reverse)
     # ------------------------------------------------------------------ #
     def _remove_ve(self, vdel, edel):
         """Delete vertices/edges and remap all ids (port of ts_newIdAssign)."""
@@ -790,109 +788,6 @@ class FoamTissue:
         self.f_v = [[vmap[v] for v in loop] for loop in self.f_v]
         for ci in range(self.nFa):
             self.f_e[ci] = self._face_edge_id(ci)
-
-    def _find_collapsible_triangle(self, area_thr):
-        """Return (a,b,c,eab,eac,ebc) of one tiny space triangle, or None."""
-        space_edges = [e for e in range(len(self.e_v))
-                       if int(self.e_f[e, 0]) == SPACE or int(self.e_f[e, 1]) == SPACE]
-        adj = {}
-        for e in space_edges:
-            a, b = int(self.e_v[e, 0]), int(self.e_v[e, 1])
-            adj.setdefault(a, {})[b] = e
-            adj.setdefault(b, {})[a] = e
-        for a in adj:
-            nbrs = list(adj[a])
-            for i in range(len(nbrs)):
-                for j in range(i + 1, len(nbrs)):
-                    b, c = nbrs[i], nbrs[j]
-                    if b in adj.get(c, {}):
-                        tri = crd_local(self.vpos[[a, b, c]], self.bs, self.sstn)
-                        if abs(poly_area_centroid(tri)[0]) < area_thr:
-                            return (a, b, c, adj[a][b], adj[a][c], adj[c][b])
-        return None
-
-    def t2_annihilate_spaces(self, area_thr=1e-5, max_events=200):
-        """Collapse fully-collapsed triangular spaces to triple junctions.
-
-        The threshold is well below the 1%-triangle area at which spaces are
-        seeded, so only genuinely closed spaces are removed (growing spaces
-        survive to set the equilibrium volume fraction).
-        """
-        removed = 0
-        for _ in range(max_events):
-            tri = self._find_collapsible_triangle(area_thr)
-            if tri is None:
-                break
-            if not self._collapse_triangle(*tri):
-                break
-            removed += 1
-        if removed:
-            self._update_faces()
-        return removed
-
-    def _collapse_triangle(self, a, b, c, eab, eac, ebc):
-        """Merge b,c into a; drop the 3 triangle edges (reverse ts_t2Reverse)."""
-        snap = self._snapshot()
-        try:
-            # outer edge of each corner (the one not on the triangle)
-            def outer(v, tri_edges):
-                for e in self.v_e[v]:
-                    if e != -1 and e not in tri_edges:
-                        return int(e)
-                return None
-            oa = outer(a, {eab, eac})
-            ob = outer(b, {eab, ebc})
-            oc = outer(c, {eac, ebc})
-            if None in (oa, ob, oc):
-                raise ValueError
-            # reconnect b's and c's outer edges to a
-            for (v, ov) in ((b, ob), (c, oc)):
-                if int(self.e_v[ov, 0]) == v:
-                    self.e_v[ov, 0] = a
-                else:
-                    self.e_v[ov, 1] = a
-            # a's incident edges: its outer + b's outer + c's outer
-            self.v_e[a] = self._sortf([oa, ob, oc])
-            # a's faces: union of the 3 corners' non-space faces
-            faces = set()
-            for v in (a, b, c):
-                for f in self.v_f[v]:
-                    if f != SPACE:
-                        faces.add(int(f))
-            faces = sorted(faces)[:3]
-            while len(faces) < 3:
-                faces.append(SPACE)
-            self.v_f[a] = self._sortf(faces)
-            # position -> triangle centroid
-            tri = crd_local(self.vpos[[a, b, c]], self.bs, self.sstn)
-            self.vpos[a] = np.mod(tri.mean(axis=0), self.bs)
-            # cells: replace b,c by a, drop duplicates
-            for ci in range(self.nFa):
-                loop = self.f_v[ci]
-                if b in loop or c in loop:
-                    new = [a if v in (b, c) else v for v in loop]
-                    dedup = [new[0]]
-                    for v in new[1:]:
-                        if v != dedup[-1]:
-                            dedup.append(v)
-                    if len(dedup) > 1 and dedup[0] == dedup[-1]:
-                        dedup.pop()
-                    self.f_v[ci] = dedup
-            # rebuild outer-edge polylines to end at a
-            for ov in (oa, ob, oc):
-                pts = crd_local(self.vpos[self.e_v[ov]], self.bs, self.sstn)
-                self.e_mid[ov], self.e_rfn[ov] = edge_mid_vrtx_average(pts, self.edpc)
-            self._remove_ve({b, c}, {eab, eac, ebc})
-            # recompute the touched cells
-            for ci in range(self.nFa):
-                self._recompute_cell(ci)
-            for ci in range(self.nFa):
-                if len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4:
-                    raise ValueError("degenerate cell after collapse")
-            return True
-        except Exception:
-            self._restore(snap)
-            return False
 
     # ------------------------------------------------------------------ #
     #  T3-reverse: remove a space-space edge, merging the two spaces

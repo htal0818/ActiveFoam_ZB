@@ -31,7 +31,7 @@ def cfg(w,rho):
     ft._update_faces()
     for it in range(350):
         ft.step(mu=0.5)
-        if it % 15 == 0: ft.do_transitions()   # T1 + T3-reverse + T2 chain
+        if it % 15 == 0: ft.do_transitions()   # T1 + T3-reverse + T4
     for it in range(700):
         ft.step(mu=0.0)
         if it % 15 == 0: ft.do_transitions()

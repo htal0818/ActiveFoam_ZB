@@ -121,7 +121,7 @@ adhesion-dependent extracellular spaces, matching Fig 2a.
 |---|---|---|
 | **T1** | neighbour exchange (edge flip) | ✅ confluent + foam model (`t1_foam`, handles adjacent spaces), validated |
 | **T2-reverse** | create a triangular extracellular space at a vertex | ✅ `ts_t2ReverseTransition` port (`t2_reverse`) |
-| **T2** | annihilate a collapsed space back to a triple junction | ✅ `t2_annihilate_spaces` (+ id remap `_remove_ve`) |
+| **T2** (space annihilation) | remove a collapsed space | — not in the model: neither the reference code nor the paper's Methods removes spaces; a closed space persists as a tiny triangle |
 | **T3-reverse** | merge two spaces across a space–space edge | ✅ `ts_t3ReverseTransition` port (`t3_reverse`) |
 | **T4 (adjacent)** | uncross two curved edges *sharing a vertex* that folded through each other | ✅ `ts_t4AdjacentTransition` + `ts_edgeCrossAdjacent` port (`t4_adjacent`), with revert guard, validated |
 | **T4 (non-adjacent)** | cut two *non-adjacent* space-bordering edges crossing at two points (a lens) and splice a bridge edge | ✅ `ts_t4Transition` + `ts_edgeCutPiece` + `ts_topTransitionType3` port (`t4_transition` / `top_transition_type3`), validated |
@@ -171,7 +171,7 @@ fixed-point averaging rule. A validity guard reverts the cut if it would leave a
 cell degenerate or self-intersecting. Both modes are exercised by the test suite
 (`test_t4_adjacent_resolves_fold`, `test_t4_transition_cuts_lens`). They run in
 the MATLAB order inside `do_transitions` (T4-adjacent → T1 → T3-reverse →
-T4-non-adjacent → T2), matching the `ts_simStep` schedule.
+T4-non-adjacent); `advance` runs them on the `ts_simStep` cadence.
 
 A cut is only made for a real lens: if the two crossing points coincide (one
 crossing at a polyline node counted twice) the cut is refused, since it would

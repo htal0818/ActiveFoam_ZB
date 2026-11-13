@@ -65,8 +65,8 @@ def measure(dt_act, w, seed=1):
     for it in range(steps):
         ft.step(mu=dt_act)
         if it % TRANS_EVERY == 0:
-            n1, n2, na = ft.do_transitions(mu=dt_act, create_spaces=False)
-            n_ev += n1 + n2 + na
+            n1, n2 = ft.do_transitions(mu=dt_act, create_spaces=False)
+            n_ev += n1 + n2
         if len(ft.vpos) > VCAP:
             frag = True
         if it % SAMPLE == 0:

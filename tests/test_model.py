@@ -101,7 +101,9 @@ def test_foam_transitions_stable():
     assert all(len(ft.f_v[c]) >= 3 and ft.f_area[c] > 1e-4 for c in range(ft.nFa))
 
 
-def test_t2_annihilation_reverses_creation():
+def test_closed_spaces_persist_as_triangles():
+    """No space annihilation (as in the reference code and the Methods):
+    at high adhesion the seeded spaces close but stay as tiny triangles."""
     import numpy as np
     from activefoam.topology import build_periodic_voronoi
     from activefoam.foam_full import FoamTissue, SPACE
@@ -113,12 +115,14 @@ def test_t2_annihilation_reverses_creation():
     for v in range(nv0):
         ft.t2_reverse(v)
     ft._update_faces()
-    for _ in range(150):
-        ft.step(mu=0.0)                                      # high W closes spaces
-    n = ft.t2_annihilate_spaces(area_thr=1e-2)               # generous -> remove all
-    assert len(ft.vpos) == nv0                               # back to confluent
-    assert int(np.sum(np.any(ft.e_f == SPACE, axis=1))) == 0
-    assert abs(ft.f_area.sum() - ft.bs ** 2) < 1e-2
+    ft.advance(mu=0.0, nsteps=300, seed_spaces=False)        # high W closes spaces
+    assert not hasattr(ft, "t2_annihilate_spaces")
+    # nothing removes a closed space; the only losses are neighbouring
+    # triangles merging (T1 -> T3-reverse, two vertices per merge)
+    assert len(ft.vpos) > 2.5 * nv0 and (3 * nv0 - len(ft.vpos)) % 2 == 0
+    assert int(np.sum(np.any(ft.e_f == SPACE, axis=1))) == len(ft.vpos)
+    assert np.all(np.isfinite(ft.vpos)) and np.all(ft.f_area > 1e-4)
+    assert abs(ft.f_area.sum() - ft.bs ** 2) < 1e-2          # but effectively confluent
 
 
 def test_t4_adjacent_resolves_fold():
@@ -372,7 +376,7 @@ if __name__ == "__main__":
     test_forces_match_reference()
     test_t1_conserves_topology()
     test_foam_transitions_stable()
-    test_t2_annihilation_reverses_creation()
+    test_closed_spaces_persist_as_triangles()
     test_t4_adjacent_resolves_fold()
     test_t4_reduces_folds_in_run()
     test_t4_transition_cuts_lens()

@@ -117,7 +117,6 @@ PARAMS = [
 TRANS = [
     ("T1", "neighbour exchange (edge flip)", "done", "confluent + foam model, validated"),
     ("T2-reverse", "create a triangular extracellular space", "done", "ts_t2ReverseTransition port"),
-    ("T2", "annihilate a collapsed space → triple junction", "done", "with id remap"),
     ("T3-reverse", "merge two spaces across a space–space edge", "done", "ts_t3ReverseTransition port"),
     ("T4 (adjacent)", "uncross two curved edges sharing a vertex", "done", "ts_t4AdjacentTransition port, revert-guarded"),
     ("T4 (non-adjacent)", "cut two crossing space films (lens) + splice a bridge", "done", "ts_t4Transition + ts_edgeCutPiece port, validated"),
