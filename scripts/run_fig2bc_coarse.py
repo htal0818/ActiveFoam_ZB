@@ -78,7 +78,14 @@ def main():
     tasks = sorted(((w, rho, s) for rho in RHOS for w in WS for s in SEEDS),
                    key=lambda a: (a[0], a[1]))
     res = []
-    with Pool(processes=4) as pool, open(RUNS, "w") as fh:
+    if "--resume" in sys.argv and os.path.exists(RUNS):      # keep finished runs
+        res = [json.loads(l) for l in open(RUNS) if l.strip()]
+        done = {(r["w"], r["rho"], r["seed"]) for r in res}
+        tasks = [a for a in tasks if a not in done]
+        print(f"resuming: {len(res)} done, {len(tasks)} to run", flush=True)
+    else:
+        open(RUNS, "w").close()
+    with Pool(processes=4) as pool, open(RUNS, "a") as fh:
         for n, r in enumerate(pool.imap_unordered(_task, tasks), 1):
             res.append(r); fh.write(json.dumps(r) + "\n"); fh.flush()
             print(f"[{n}/{len(tasks)}] {r}  [{time.time()-t0:.0f}s]", flush=True)

@@ -12,6 +12,7 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from activefoam.topology import build_periodic_voronoi
 from activefoam.foam_full import FoamTissue
+from activefoam.budget import call_with_budget, BudgetExceeded
 
 os.makedirs("data", exist_ok=True)
 
@@ -20,6 +21,7 @@ SEEDS = [1, 2]
 STRAIN = 1.0
 RELAX_TAUR = 30.0
 SAMPLE = 25
+MAX_SECONDS = 1200     # per run; a run that crawls (tangled) is recorded as invalid
 
 
 def relax_curve(w, rho=1.0, seed=1):
@@ -56,19 +58,29 @@ def main():
     for w in WS:
         stack, ts = [], None
         for s in SEEDS:
-            t, sig = relax_curve(w, seed=s)
+            try:
+                t, sig = call_with_budget(MAX_SECONDS, relax_curve, w, seed=s)
+            except (Exception, BudgetExceeded) as ex:
+                print(f"  !! W={w} seed={s} invalid: {ex!r}", flush=True)
+                t = sig = None
             if t is None:
                 continue
             ts = t
             stack.append(sig)
+        if not stack:                                # no valid run at this adhesion
+            curves[w] = None
+            print(f"W/T0={w}: no valid run  [{time.time()-t0:.0f}s]", flush=True)
+            continue
         curves[w] = (ts, np.mean(stack, axis=0), np.std(stack, axis=0))
         print(f"W/T0={w}: jump={curves[w][1][0]:.3f} "
               f"end={curves[w][1][-1]:.3f}  [{time.time()-t0:.0f}s]", flush=True)
+    ts_ref = next(c[0] for c in curves.values() if c)
+    nan = np.full(len(ts_ref), np.nan)
     np.savez("data/fig2i.npz",
              WS=np.array(WS),
-             ts=curves[WS[0]][0],
-             sig=np.array([curves[w][1] for w in WS]),
-             err=np.array([curves[w][2] for w in WS]))
+             ts=ts_ref,
+             sig=np.array([curves[w][1] if curves[w] else nan for w in WS]),
+             err=np.array([curves[w][2] if curves[w] else nan for w in WS]))
     print("saved data/fig2i.npz  total", round(time.time()-t0), "s")
 
 

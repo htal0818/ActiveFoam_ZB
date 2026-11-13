@@ -24,6 +24,7 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from activefoam.topology import build_periodic_voronoi
 from activefoam.foam_full import FoamTissue
+from activefoam.budget import call_with_budget, BudgetExceeded
 
 os.makedirs("data", exist_ok=True)
 
@@ -38,6 +39,8 @@ TRANS_EVERY = 15
 VCAP = 320           # vertex cap: fragmentation past this = fully fluid
 KNE_FLOOR = 1e-6     # tau_SR cap 1e6 tau_R (matches paper colourbar top)
 KNE_CEIL = 0.5       # tau_SR floor 2 tau_R (fully fluid)
+MAX_SECONDS = 1500   # per run; a run that crawls (tangled) is recorded as invalid
+PHI_MAX = 1.05       # phi above this means self-overlapping cells: invalid
 
 
 def measure(dt_act, w, seed=1):
@@ -82,7 +85,13 @@ def measure(dt_act, w, seed=1):
 
 def _task(arg):
     i, j, d, w, s = arg
-    k, p = measure(d, w, seed=s)
+    try:
+        k, p = call_with_budget(MAX_SECONDS, measure, d, w, seed=s)
+        if not (np.isfinite(k) and p <= PHI_MAX):
+            raise FloatingPointError(f"invalid, kNE={k}, phi={p}")
+    except (Exception, BudgetExceeded) as ex:
+        print(f"  !! dT={d} W={w} seed={s} invalid: {ex!r}", flush=True)
+        k = p = np.nan
     return i, j, k, p
 
 
@@ -101,8 +110,14 @@ def main():
             kacc[(i, j)].append(k); pacc[(i, j)].append(p)
             print(f"[{n}/{len(tasks)}] dT={DTS[i]:.2f} W={WS[j]:.1f}: "
                   f"kNE={k:.4f} phi={p:.3f}  [{time.time()-t0:.0f}s]", flush=True)
-    kne = np.array([[np.mean(kacc[(i, j)]) for j in range(nW)] for i in range(nD)])
-    phi = np.array([[np.mean(pacc[(i, j)]) for j in range(nW)] for i in range(nD)])
+    def mean(acc):                                   # over valid seeds; NaN if none
+        out = np.full((nD, nW), np.nan)
+        for (i, j), v in acc.items():
+            v = [x for x in v if np.isfinite(x)]
+            if v:
+                out[i, j] = np.mean(v)
+        return out
+    kne, phi = mean(kacc), mean(pacc)
     tauSR = 1.0 / np.clip(kne, KNE_FLOOR, None)
     np.savez("data/fig4de.npz", DTS=np.array(DTS), WS=np.array(WS),
              kne=kne, phi=phi, tauSR=tauSR)

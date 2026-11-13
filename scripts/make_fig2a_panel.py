@@ -6,6 +6,7 @@ from matplotlib.collections import PatchCollection
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from activefoam.topology import build_periodic_voronoi
 from activefoam.foam_full import FoamTissue
+from activefoam.budget import call_with_budget, BudgetExceeded
 
 SPACE_COLOR = "#d1352b"   # extracellular spaces shown in red
 
@@ -41,7 +42,14 @@ RHOS=[1.0,0.9,0.8]; WS=[0.15,0.5,1.5]
 fig,axes=plt.subplots(len(RHOS),len(WS),figsize=(9,9))
 for i,rho in enumerate(RHOS):
     for j,w in enumerate(WS):
-        ft=cfg(w,rho); draw(ft,axes[i,j])
+        try:
+            ft=call_with_budget(900,cfg,w,rho)
+            if not ft.volume_fraction()<=1.05: raise FloatingPointError("tangled")
+        except (Exception,BudgetExceeded) as ex:
+            axes[i,j].text(0.5,0.5,"no valid\nconfiguration",ha="center",va="center",transform=axes[i,j].transAxes)
+            axes[i,j].set_xticks([]);axes[i,j].set_yticks([]);axes[i,j].set_title(f"W/T0={w}, rho={rho}",fontsize=9)
+            print(f"rho={rho} W={w} invalid: {ex!r}",flush=True); continue
+        draw(ft,axes[i,j])
         axes[i,j].set_title(f"W/T0={w}, rho={rho}\nphi={ft.volume_fraction():.2f}",fontsize=9)
         print(f"rho={rho} W={w} phi={ft.volume_fraction():.3f}",flush=True)
 fig.text(0.5,0.005,"Relative adhesion  W/T0  ->",ha="center")

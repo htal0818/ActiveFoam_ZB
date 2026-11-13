@@ -420,6 +420,8 @@ def fig2i():
     wcol = {0.0: "#3b6fb6", 0.5: "#1f9e8b", 1.0: "#7a5aa8",
             1.5: "#b5a11d", 2.0: "#b95a24"}
     for i, w in enumerate(WS):
+        if not np.any(np.isfinite(sig[i])):          # no valid run at this adhesion
+            continue
         ax.semilogx(tr, sig[i], "-", lw=2,
                     color=wcol.get(round(float(w), 2), "k"), label=f"{w:.1f}")
     ax.set_xlabel(r"$t/\tau_R$"); ax.set_ylabel(r"$\sigma_{xy}(t)/\sigma_0$")
@@ -486,6 +488,9 @@ def _de_grid(ax, DTS, WS, phi, values=None, cmap=None, norm=None,
                     facecolor=green, edgecolor="none", zorder=0))
     for i, d in enumerate(DTS):
         for j, w in enumerate(WS):
+            if not np.isfinite(phi[i, j]):           # no valid run: mark, do not colour
+                ax.plot(w, d, "x", color="0.4", ms=7, mew=1.2, zorder=2)
+                continue
             if classify is not None:
                 c = classify(i, j)
             else:
