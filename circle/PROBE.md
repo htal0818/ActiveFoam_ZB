@@ -121,9 +121,9 @@ A continuous ramp was tried first and rejected: at shortening rates of 0.1, 0.05
   applies the T1 operation directly.
 - **Frozen connectivity during contraction.** Neighbouring contacts cannot rearrange
   while the probed one is shortened. A probe is marked `preempted` if a contact that
-  started above 1.5 T1 lengths reaches the T1 length first. Prepared states already
-  contain contacts below that length; counting those made 11 of 12 probes on a
-  100-cell disc `preempted` in the first, aborted pilot.
+  started above 1.5 T1 lengths reaches the T1 length first. Prepared states contain
+  contacts just above that length which cross it through drift alone; counting one such
+  contact made 11 of 12 probes on a 100-cell disc `preempted` in the first, aborted pilot.
 - **The T1 length is absolute.** In runs where cells shrink (division without growth)
   contacts approach it, and the work to reach it falls for that reason alone. Any
   before/after-division comparison has to normalise for this.
