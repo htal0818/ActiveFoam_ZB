@@ -31,7 +31,7 @@ F_wall = -max(0, F.n) n
 
 Numerically each step is: forces, trial Euler step, radial projection of any node
 outside the wall, wall records, then film remeshing. The recorded nodal reaction is
-`(x_projected - x_trial)/(psi*dt)`. Disc radius is `R_w = sqrt(N/pi)`, so the mean area
+`(x_projected - x_trial)/(psi*dt)`. Disc radius is `R_w = sqrt(N/pi)`, so the available container area
 per cell is 1 and `rho` is the preferred area, as in the periodic box.
 
 ## Files
@@ -47,6 +47,8 @@ per cell is 1 and `rho` is the preferred area, as in the periodic box.
 | `benchmarks.py` | wall benchmarks with explicit numerical parameters |
 | `scripts/wall_benchmarks.py` | regenerates `BENCHMARKS.md` |
 | `scripts/pilot_compare.py` | pilot disc vs periodic comparison and the configuration figure |
+| `sweep.py`, `scripts/parameter_sweep.py` | resumable parameter, activity and wall-curvature sweeps |
+| `scripts/plot_sweep.py` | snapshots, structure maps, exchange/shape dynamics and MSD figures |
 
 ## Use
 
@@ -187,9 +189,86 @@ Two things stand out.
   tissue presses on the wall, here from about `rho = 1.2`.
 - **Under compression the interior is close to the periodic values.** For `rho >= 1.2`
   interior contact number is 5.94–6.01 against 6.00 and interior cell area is within 3%.
-  The interior shape factor differs between the domains; interpretation must use only accepted seed pairs. Whether
-  that difference shrinks with system size has not been tested.
+  The interior shape factor differs between the domains; interpretation must use only accepted seed pairs. Exploratory size comparisons are now available in the sweep below;
+  a converged size-scaling law has not been established.
 
+
+## Parameter sweeps and wall curvature
+
+The reproducible exploratory sweep extends the planar-style packing, contact-number,
+shape-index and MSD plots to three circular containers, with matched periodic size
+controls. The tissue remains flat: the varied curvature is **wall curvature** `κ=1/R`.
+
+| Cells N | Wall radius R | Wall curvature κ |
+|---|---|---|
+| 36 | 3.385 | 0.2954 |
+| 100 | 5.642 | 0.1772 |
+| 196 | 7.899 | 0.1266 |
+
+`R=√(N/π)` preserves nominal density `ρ=N A0/(πR²)` across sizes. Curvature and
+system size are coupled in this geometry; the periodic controls help assess size
+effects but do not isolate a pure curvature response. Dimensionless wall curvature
+is `κ√A0`. Neither surface curvature nor a deformable boundary is introduced.
+
+```bash
+.venv/bin/python circle/scripts/parameter_sweep.py --workers 3
+.venv/bin/python circle/scripts/plot_sweep.py
+```
+
+The runner resumes completed tasks, including recorded failures, and refuses to mix
+simulation source hashes or task lists in one output directory. Use `--out` for a new
+experiment; `--sizes`, `--seeds`, `--duration` and `--mode` select smaller or longer
+experiments. Supply the same directory to the plotting script with `--data`.
+Snapshots and per-seed statistics are retained, so figures regenerate without reruns.
+
+The default sweep attempts three independent seeds for each of 234 runs:
+
+- Passive structure: `W/T0 ∈ {0.5,1,1.5}`, `ρ ∈ {1,1.2,1.4}`.
+- Dynamics: `W/T0=1`, `ρ=1.3`, `μ ∈ {0,0.5,1,1.5}`; after preparation,
+  10 `τR` warmup and 50 `τR` observation, sampled every 0.5 `τR` (`τT=10 τR`).
+- Both domains: `dt=0.005`, film spacing 0.15, boundary-orientation pressure normals
+  and current-step areas. Disk geometry is checked every 100 steps and at stage ends.
+
+**Neighbor exchanges:** accepted T1 events are counted directly and divided by cell
+count and observation time. The T1 counter includes boundary operations and repeated
+reversals; it is not itself a count of persistent cell-neighbor exchanges. Sampled
+contact-change rates count every lost or gained
+neighbor for each participating cell; a changed pair contributes to both cells.
+These are different observables, and sampled counts can miss short-lived contacts.
+T4 counts are also saved in each run's event dictionary.
+
+**Shape changes:** shape index is `P/√A`, using each cell's polyline perimeter and
+area. Outputs include its time mean, final-minus-initial change, wall/interior time
+traces, and a cell-level scatter against contact changes. Dynamic zones are assigned
+once after warmup (wall layer: centroid within one length unit of the wall). Cells
+and time samples are correlated; uncertainty bars use independent seed means only.
+
+**Motion:** centroid MSD is time-origin averaged and normalized by `A0`; periodic
+tracks are unwrapped before analysis. Both laboratory and center-of-mass-subtracted
+MSD are plotted. Maximum lag is one quarter of the observation window, only
+1.25 `τT` in the default run. The one-`τT` warmup does not establish stationarity;
+shape changes can include residual relaxation. These data do not establish long-time diffusion,
+a rigidity threshold, or an equilibrated phase diagram.
+
+Results and failure details: [`data/curvature_sweep/REPORT.md`](data/curvature_sweep/REPORT.md).
+Per-point means, SEM and accepted seed counts: [`summary.csv`](data/curvature_sweep/summary.csv).
+Every attempted run is listed in [`outcomes.csv`](data/curvature_sweep/outcomes.csv).
+[`paired_differences.csv`](data/curvature_sweep/paired_differences.csv) compares only
+seeds accepted in both domains, including disk-interior versus periodic metrics.
+Means are conditional on geometric acceptance. Disk and periodic geometry checks
+are not identical; the periodic code retains its original per-cell checks.
+
+Figures (PNG and PDF) are in [`figures/circle/sweep/`](../figures/circle/sweep/):
+
+- `curvature_snapshots`: common length scale, cells colored by shape index.
+- `structure` and `structure_maps`: packing, contact number and shape across adhesion,
+  density and radius; wall traction and fraction of wall-touching cells.
+- `exchange_shape`: T1 rates, sampled neighbor changes, mean shape and shape changes
+  versus activity, for every size and both domains.
+- `shape_changes`: wall/interior time traces and cell-level shape/exchange association.
+- `curvature_response`: wall/interior contact-change rates and shape index versus
+  dimensionless wall curvature, with periodic points at matched cell counts.
+- `msd`: activity- and size-dependent motion with between-seed uncertainty.
 
 ## Limits
 

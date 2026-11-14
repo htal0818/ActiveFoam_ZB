@@ -74,8 +74,9 @@ Measured results: [`BENCHMARKS.md`](BENCHMARKS.md) and the summary in [`README.m
   paired results in `BENCHMARKS.md`: two wall-aware seeds failed, leaving one
   complete pair. The old unvalidated
   raw-tiling averages have been withdrawn. The optional wall-aware mode remains off.
-- **Interior shape factor.** Size dependence is untested; compare only accepted runs
-  and report numerical convergence before interpreting differences physically.
+- **Interior shape factor.** Exploratory size comparisons are now available in
+  `data/curvature_sweep/`; compare only accepted seed pairs and report numerical
+  convergence before interpreting differences physically.
 - **No natural out-of-wall rejection** has been observed; the guard is tested with
   fixtures only.
 
@@ -87,3 +88,23 @@ production ensembles.
 Rerun outcome: 36/36 pilot runs accepted under the documented tolerance; 12 disk
 endpoints clean and six with tolerated local microfolds. Scientific convergence
 remains open. No wall-aware-default change is justified by the surviving pair.
+
+## Follow-up: parameter, activity and wall-curvature sweeps
+
+User-requested follow-up adds `sweep.py`, `scripts/parameter_sweep.py`,
+`scripts/plot_sweep.py` and measurement tests, without changing `activefoam/`.
+The grid uses N=36,100,196, three seeds, matched periodic controls, nine passive
+adhesion/density points and four activity points per size and domain (234 tasks).
+The fixed circle's curvature is 1/R with R=√(N/π); surface curvature remains zero,
+and wall curvature remains coupled to finite size.
+
+Snapshots, structure maps, MSD, accepted T1 counts, sampled neighbor-change rates,
+and shape-index trajectories/changes are exported alongside all per-run records.
+Dynamic wall/interior zones are assigned after warmup. Seed SEM, failed-run counts
+and complete-pair disk-minus-periodic contrasts prevent cell-wise pseudoreplication
+and silent substitution of zeros for failed runs. High-activity geometry failures
+remain reported; no phase boundary or long-time diffusion is inferred from the
+short 50-τR observation window. See `data/curvature_sweep/REPORT.md`.
+
+The combined regression suite passes 145 tests. The existing force law, wall
+constraint, resampling default, transition rules and planar defaults are unchanged.
