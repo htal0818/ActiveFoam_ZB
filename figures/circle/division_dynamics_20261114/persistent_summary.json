@@ -1,0 +1,392 @@
+[
+  {
+    "dwell": 0.1,
+    "rounds": [
+      {
+        "before": 1,
+        "after": 2,
+        "dwell": 0.1,
+        "divide": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 5.333737062168341e-31
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": null,
+          "final_persistent_survival": null,
+          "final_instantaneous_retention": null,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0
+        }
+      },
+      {
+        "before": 2,
+        "after": 4,
+        "dwell": 0.1,
+        "divide": {
+          "persistent_changes_first4": 1,
+          "raw_transactions_first4": 616,
+          "raw_pair_changes_first4": 616,
+          "persistent_survival_4": 0.8,
+          "final_persistent_survival": 0.8,
+          "final_instantaneous_retention": 0.8,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.004184763402160468
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 1.238698859254096e-31
+        }
+      },
+      {
+        "before": 4,
+        "after": 8,
+        "dwell": 0.1,
+        "divide": {
+          "persistent_changes_first4": 5,
+          "raw_transactions_first4": 1066,
+          "raw_pair_changes_first4": 1066,
+          "persistent_survival_4": 0.7692307692307693,
+          "final_persistent_survival": 0.7692307692307693,
+          "final_instantaneous_retention": 0.7692307692307693,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0364568595567492
+        },
+        "skip": {
+          "persistent_changes_first4": 1,
+          "raw_transactions_first4": 627,
+          "raw_pair_changes_first4": 627,
+          "persistent_survival_4": 0.8,
+          "final_persistent_survival": 0.8,
+          "final_instantaneous_retention": 0.8,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0004549615077755415
+        }
+      },
+      {
+        "before": 8,
+        "after": 16,
+        "dwell": 0.1,
+        "divide": {
+          "persistent_changes_first4": 6,
+          "raw_transactions_first4": 1934,
+          "raw_pair_changes_first4": 1934,
+          "persistent_survival_4": 0.8787878787878788,
+          "final_persistent_survival": 0.8787878787878788,
+          "final_instantaneous_retention": 0.9393939393939394,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.050545553264112114
+        },
+        "skip": {
+          "persistent_changes_first4": 1,
+          "raw_transactions_first4": 674,
+          "raw_pair_changes_first4": 674,
+          "persistent_survival_4": 0.9230769230769231,
+          "final_persistent_survival": 0.9230769230769231,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0052983769983023414
+        }
+      },
+      {
+        "before": 16,
+        "after": 32,
+        "dwell": 0.1,
+        "divide": {
+          "persistent_changes_first4": 25,
+          "raw_transactions_first4": 3450,
+          "raw_pair_changes_first4": 3450,
+          "persistent_survival_4": 0.8311688311688312,
+          "final_persistent_survival": 0.8181818181818182,
+          "final_instantaneous_retention": 0.9090909090909091,
+          "persistent_changes_last10": 0,
+          "final_residual_msd": 0.1293447119176569
+        },
+        "skip": {
+          "persistent_changes_first4": 2,
+          "raw_transactions_first4": 1640,
+          "raw_pair_changes_first4": 1640,
+          "persistent_survival_4": 0.9393939393939394,
+          "final_persistent_survival": 0.9393939393939394,
+          "final_instantaneous_retention": 0.9696969696969697,
+          "persistent_changes_last10": 0,
+          "final_residual_msd": 0.0200086006901571
+        }
+      }
+    ]
+  },
+  {
+    "dwell": 0.2,
+    "rounds": [
+      {
+        "before": 1,
+        "after": 2,
+        "dwell": 0.2,
+        "divide": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 5.333737062168341e-31
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": null,
+          "final_persistent_survival": null,
+          "final_instantaneous_retention": null,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0
+        }
+      },
+      {
+        "before": 2,
+        "after": 4,
+        "dwell": 0.2,
+        "divide": {
+          "persistent_changes_first4": 1,
+          "raw_transactions_first4": 616,
+          "raw_pair_changes_first4": 616,
+          "persistent_survival_4": 0.8,
+          "final_persistent_survival": 0.8,
+          "final_instantaneous_retention": 0.8,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.004184763402160468
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 1.238698859254096e-31
+        }
+      },
+      {
+        "before": 4,
+        "after": 8,
+        "dwell": 0.2,
+        "divide": {
+          "persistent_changes_first4": 5,
+          "raw_transactions_first4": 1066,
+          "raw_pair_changes_first4": 1066,
+          "persistent_survival_4": 0.7692307692307693,
+          "final_persistent_survival": 0.7692307692307693,
+          "final_instantaneous_retention": 0.7692307692307693,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0364568595567492
+        },
+        "skip": {
+          "persistent_changes_first4": 1,
+          "raw_transactions_first4": 627,
+          "raw_pair_changes_first4": 627,
+          "persistent_survival_4": 0.8,
+          "final_persistent_survival": 0.8,
+          "final_instantaneous_retention": 0.8,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0004549615077755415
+        }
+      },
+      {
+        "before": 8,
+        "after": 16,
+        "dwell": 0.2,
+        "divide": {
+          "persistent_changes_first4": 5,
+          "raw_transactions_first4": 1934,
+          "raw_pair_changes_first4": 1934,
+          "persistent_survival_4": 0.9090909090909091,
+          "final_persistent_survival": 0.9090909090909091,
+          "final_instantaneous_retention": 0.9393939393939394,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.050545553264112114
+        },
+        "skip": {
+          "persistent_changes_first4": 1,
+          "raw_transactions_first4": 674,
+          "raw_pair_changes_first4": 674,
+          "persistent_survival_4": 0.9230769230769231,
+          "final_persistent_survival": 0.9230769230769231,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0052983769983023414
+        }
+      },
+      {
+        "before": 16,
+        "after": 32,
+        "dwell": 0.2,
+        "divide": {
+          "persistent_changes_first4": 25,
+          "raw_transactions_first4": 3450,
+          "raw_pair_changes_first4": 3450,
+          "persistent_survival_4": 0.8311688311688312,
+          "final_persistent_survival": 0.8181818181818182,
+          "final_instantaneous_retention": 0.9090909090909091,
+          "persistent_changes_last10": 0,
+          "final_residual_msd": 0.1293447119176569
+        },
+        "skip": {
+          "persistent_changes_first4": 1,
+          "raw_transactions_first4": 1640,
+          "raw_pair_changes_first4": 1640,
+          "persistent_survival_4": 0.9696969696969697,
+          "final_persistent_survival": 0.9393939393939394,
+          "final_instantaneous_retention": 0.9696969696969697,
+          "persistent_changes_last10": 0,
+          "final_residual_msd": 0.0200086006901571
+        }
+      }
+    ]
+  },
+  {
+    "dwell": 0.5,
+    "rounds": [
+      {
+        "before": 1,
+        "after": 2,
+        "dwell": 0.5,
+        "divide": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 5.333737062168341e-31
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": null,
+          "final_persistent_survival": null,
+          "final_instantaneous_retention": null,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0
+        }
+      },
+      {
+        "before": 2,
+        "after": 4,
+        "dwell": 0.5,
+        "divide": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 616,
+          "raw_pair_changes_first4": 616,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 0.8,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.004184763402160468
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 0,
+          "raw_pair_changes_first4": 0,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 1.238698859254096e-31
+        }
+      },
+      {
+        "before": 4,
+        "after": 8,
+        "dwell": 0.5,
+        "divide": {
+          "persistent_changes_first4": 4,
+          "raw_transactions_first4": 1066,
+          "raw_pair_changes_first4": 1066,
+          "persistent_survival_4": 0.8461538461538461,
+          "final_persistent_survival": 0.8461538461538461,
+          "final_instantaneous_retention": 0.7692307692307693,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0364568595567492
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 627,
+          "raw_pair_changes_first4": 627,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 0.8,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0004549615077755415
+        }
+      },
+      {
+        "before": 8,
+        "after": 16,
+        "dwell": 0.5,
+        "divide": {
+          "persistent_changes_first4": 2,
+          "raw_transactions_first4": 1934,
+          "raw_pair_changes_first4": 1934,
+          "persistent_survival_4": 0.9696969696969697,
+          "final_persistent_survival": 0.9696969696969697,
+          "final_instantaneous_retention": 0.9393939393939394,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.050545553264112114
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 674,
+          "raw_pair_changes_first4": 674,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 1.0,
+          "final_instantaneous_retention": 1.0,
+          "persistent_changes_last10": null,
+          "final_residual_msd": 0.0052983769983023414
+        }
+      },
+      {
+        "before": 16,
+        "after": 32,
+        "dwell": 0.5,
+        "divide": {
+          "persistent_changes_first4": 16,
+          "raw_transactions_first4": 3450,
+          "raw_pair_changes_first4": 3450,
+          "persistent_survival_4": 0.8831168831168831,
+          "final_persistent_survival": 0.8571428571428571,
+          "final_instantaneous_retention": 0.9090909090909091,
+          "persistent_changes_last10": 0,
+          "final_residual_msd": 0.1293447119176569
+        },
+        "skip": {
+          "persistent_changes_first4": 0,
+          "raw_transactions_first4": 1640,
+          "raw_pair_changes_first4": 1640,
+          "persistent_survival_4": 1.0,
+          "final_persistent_survival": 0.9393939393939394,
+          "final_instantaneous_retention": 0.9696969696969697,
+          "persistent_changes_last10": 0,
+          "final_residual_msd": 0.0200086006901571
+        }
+      }
+    ]
+  }
+]
