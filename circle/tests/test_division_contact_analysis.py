@@ -3,6 +3,9 @@ import pytest
 from circle.scripts.division_contact_analysis import persistent_changes
 from circle.scripts.division_dynamics import nonaffine_msd
 import numpy as np
+from types import SimpleNamespace
+from circle.scripts.division_large import vectorized_uid_pairs
+from circle.biology_experiments import uid_pairs
 
 
 def test_short_loss_and_same_time_reversal_are_not_persistent():
@@ -29,3 +32,11 @@ def test_centroid_metric_removes_rigid_motion_and_uniform_contraction():
     assert nonaffine_msd(x,y)<1e-28
     y[-1,0]+=.1
     assert nonaffine_msd(x,y)>1e-5
+
+
+@pytest.mark.parametrize('n',[1,8,32,256])
+def test_vectorized_observer_matches_original_pairs(n):
+    rng=np.random.default_rng(n)
+    faces=rng.integers(-1,n,size=(5*n,2))
+    foam=SimpleNamespace(e_f=faces,cell_uid=rng.permutation(n)+31)
+    assert vectorized_uid_pairs(foam)==uid_pairs(foam)

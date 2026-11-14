@@ -1,0 +1,42 @@
+[
+  {
+    "n": 16,
+    "raw_transactions": 0,
+    "persistent_pair_changes": 0,
+    "rate": 0.0,
+    "contact_survival": 1.0,
+    "residual_msd": 0.006826926402037395
+  },
+  {
+    "n": 32,
+    "raw_transactions": 256,
+    "persistent_pair_changes": 0,
+    "rate": 0.0,
+    "contact_survival": 1.0,
+    "residual_msd": 0.011382431360588316
+  },
+  {
+    "n": 64,
+    "raw_transactions": 1364,
+    "persistent_pair_changes": 4,
+    "rate": 0.015625,
+    "contact_survival": 0.9813664596273292,
+    "residual_msd": 0.022292108852072168
+  },
+  {
+    "n": 128,
+    "raw_transactions": 16381,
+    "persistent_pair_changes": 42,
+    "rate": 0.08203125,
+    "contact_survival": 0.9117647058823529,
+    "residual_msd": 0.04609705808704753
+  },
+  {
+    "n": 256,
+    "raw_transactions": 35871,
+    "persistent_pair_changes": 184,
+    "rate": 0.1796875,
+    "contact_survival": 0.851063829787234,
+    "residual_msd": 0.06974378586096888
+  }
+]

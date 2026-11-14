@@ -101,13 +101,17 @@ def render(result, out):
     frames = result['frames']
     # Daughters inherit their first-generation ancestor's color; new septa are
     # visible as dark boundaries. Colors do not encode an inferred measurement.
-    ancestry = {0: 0}
+    first_count = len(frames[0]['uids'])
+    last_count = len(frames[-1]['uids'])
+    ancestry = {uid: uid for uid in frames[0]['uids']}
     for entry in result['division_log']:
         if entry['accepted']:
             for event in entry['events']:
                 for daughter in event['daughters']:
-                    ancestry[daughter] = daughter if event['parent'] == 0 else ancestry[event['parent']]
-    palette = {0: '#98cec5', 1: '#56b5ad', 2: '#eeb46b'}
+                    ancestry[daughter] = (daughter if first_count == 1 and event['parent'] == 0
+                                          else ancestry[event['parent']])
+    palette = ({0: '#98cec5', 1: '#56b5ad', 2: '#eeb46b'} if first_count == 1 else
+               {uid: plt.get_cmap('tab10')(i % 10) for i, uid in enumerate(frames[0]['uids'])})
 
     def draw(ax, frame, label=True):
         center = np.asarray(frame['center'])
@@ -126,7 +130,7 @@ def render(result, out):
 
     fig, ax = plt.subplots(figsize=(6.4, 6.8), dpi=100)
     fig.subplots_adjust(left=.03, right=.97, bottom=.1, top=.86)
-    fig.suptitle('1 → 32 cells\nSynchronous division · no growth', fontsize=17, y=.98)
+    fig.suptitle(f'{first_count} → {last_count} cells\nSynchronous division · no growth', fontsize=17, y=.98)
     footer = fig.text(.5, .045, '', ha='center', fontsize=11)
     images, durations = [], []
     for frame in frames:
@@ -138,12 +142,13 @@ def render(result, out):
             'P', palette=Image.Palette.ADAPTIVE, colors=128))
         durations.append(1000 if frame['label'] else 60)
     durations[-1] = 1800
-    images[0].save(out / 'division_1_to_32.gif', save_all=True, append_images=images[1:],
+    images[0].save(out / f'division_{first_count}_to_{last_count}.gif', save_all=True, append_images=images[1:],
                    duration=durations, loop=0, optimize=False)
     plt.close(fig)
 
+    generations = sorted({len(f['uids']) for f in frames})
     selected = [next(f for f in reversed(frames) if len(f['uids']) == n)
-                for n in [1, 2, 4, 8, 16, 32]]
+                for n in generations]
     fig, axes = plt.subplots(2, 3, figsize=(11, 7.7), constrained_layout=True)
     for ax, frame in zip(axes.flat, selected):
         draw(ax, frame)
@@ -159,7 +164,7 @@ def render(result, out):
     areas = np.array([sum(f['area']) for f in frames])
     fig, axes = plt.subplots(1, 3, figsize=(12, 3.4), constrained_layout=True)
     axes[0].step(times, counts, where='post', color='#267f7d', lw=2)
-    axes[0].set(ylabel='Cell count', yticks=[1, 2, 4, 8, 16, 32])
+    axes[0].set(ylabel='Cell count', yticks=generations)
     axes[1].plot(times, preferred / preferred[0], color='#267f7d', label='Total K / initial K')
     axes[1].plot(times, areas / areas[0], color='#d28b31', label='Total area / initial area')
     axes[1].legend(fontsize=8)
