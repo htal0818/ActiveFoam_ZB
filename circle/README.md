@@ -23,6 +23,18 @@ and a node moves by `psi*dt*f` per step (`psi = sqrt(rho)`). Tensions follow the
 Ornstein–Uhlenbeck update. Pressure normals come from the oriented cell boundary and
 areas from the current step.
 
+The pressure law is `P=K/A`, with `A0=K/P0=L0²`, hence
+`P-P0=P0*(A0/A-1)`. The Python parameter `P0=10` denotes the dimensionless
+coefficient `P0_physical*L0/T0`. Coordinates use the available area per cell as
+their area unit, so `A0=rho`, `L0=sqrt(rho)`, and the nodal pressure coefficient
+includes the `1/sqrt(rho)` factor above. Nominal density `rho=N*A0/A_T` differs
+from actual packing fraction `sum(A_i)/A_T`.
+
+Fixed-point tensions are `2-w` at cell-cell contacts and `1` at free boundaries.
+The tension noise amplitudes are `mu` and `mu/2`, respectively, consistent with
+the supplied Methods excerpt. The relation to the paper's notation is documented
+in [`NOISE_CONVENTION.md`](NOISE_CONVENTION.md).
+
 Wall, for a node at the wall with outward normal `n`:
 
 ```
