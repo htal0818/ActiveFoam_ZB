@@ -1,0 +1,236 @@
+234 tasks; 234 remaining
+1/234 disc structure N=36 W=0.5 rho=1.0 mu=0.0 seed=1: accepted
+2/234 disc structure N=36 W=0.5 rho=1.4 mu=0.0 seed=1: accepted
+3/234 disc structure N=36 W=1.0 rho=1.0 mu=0.0 seed=1: accepted
+4/234 disc structure N=36 W=0.5 rho=1.2 mu=0.0 seed=1: accepted
+5/234 disc structure N=36 W=1.0 rho=1.4 mu=0.0 seed=1: accepted
+6/234 disc structure N=36 W=1.0 rho=1.2 mu=0.0 seed=1: accepted
+7/234 disc structure N=36 W=1.5 rho=1.2 mu=0.0 seed=1: accepted
+8/234 disc structure N=36 W=1.5 rho=1.0 mu=0.0 seed=1: accepted
+9/234 disc structure N=36 W=1.5 rho=1.4 mu=0.0 seed=1: accepted
+10/234 disc dynamics N=36 W=1.0 rho=1.3 mu=0.5 seed=1: accepted
+11/234 disc dynamics N=36 W=1.0 rho=1.3 mu=0.0 seed=1: accepted
+12/234 disc dynamics N=36 W=1.0 rho=1.3 mu=1.0 seed=1: accepted
+13/234 disc dynamics N=36 W=1.0 rho=1.3 mu=1.5 seed=1: resolved boundary crossing: junction distance 0.046495
+14/234 disc structure N=36 W=0.5 rho=1.0 mu=0.0 seed=2: accepted
+15/234 disc structure N=36 W=0.5 rho=1.2 mu=0.0 seed=2: accepted
+16/234 disc structure N=36 W=0.5 rho=1.4 mu=0.0 seed=2: accepted
+17/234 disc structure N=36 W=1.0 rho=1.0 mu=0.0 seed=2: accepted
+18/234 disc structure N=36 W=1.0 rho=1.2 mu=0.0 seed=2: accepted
+19/234 disc structure N=36 W=1.0 rho=1.4 mu=0.0 seed=2: accepted
+20/234 disc structure N=36 W=1.5 rho=1.0 mu=0.0 seed=2: accepted
+21/234 disc structure N=36 W=1.5 rho=1.2 mu=0.0 seed=2: accepted
+22/234 disc structure N=36 W=1.5 rho=1.4 mu=0.0 seed=2: accepted
+23/234 disc dynamics N=36 W=1.0 rho=1.3 mu=0.0 seed=2: accepted
+24/234 disc dynamics N=36 W=1.0 rho=1.3 mu=1.5 seed=2: resolved boundary crossing: junction distance 0.0885491
+25/234 disc dynamics N=36 W=1.0 rho=1.3 mu=0.5 seed=2: accepted
+26/234 disc dynamics N=36 W=1.0 rho=1.3 mu=1.0 seed=2: accepted
+27/234 disc structure N=36 W=0.5 rho=1.0 mu=0.0 seed=3: accepted
+28/234 disc structure N=36 W=0.5 rho=1.2 mu=0.0 seed=3: accepted
+29/234 disc structure N=36 W=0.5 rho=1.4 mu=0.0 seed=3: accepted
+30/234 disc structure N=36 W=1.0 rho=1.0 mu=0.0 seed=3: accepted
+31/234 disc structure N=36 W=1.0 rho=1.2 mu=0.0 seed=3: accepted
+32/234 disc structure N=36 W=1.0 rho=1.4 mu=0.0 seed=3: accepted
+33/234 disc structure N=36 W=1.5 rho=1.0 mu=0.0 seed=3: accepted
+34/234 disc structure N=36 W=1.5 rho=1.2 mu=0.0 seed=3: accepted
+35/234 disc structure N=36 W=1.5 rho=1.4 mu=0.0 seed=3: accepted
+36/234 disc dynamics N=36 W=1.0 rho=1.3 mu=0.0 seed=3: accepted
+37/234 disc dynamics N=36 W=1.0 rho=1.3 mu=0.5 seed=3: accepted
+38/234 disc dynamics N=36 W=1.0 rho=1.3 mu=1.0 seed=3: accepted
+39/234 disc dynamics N=36 W=1.0 rho=1.3 mu=1.5 seed=3: 1 resolved film crossing(s); films 198, 199 at (15.0771, 12.3968); local-junction distance 0.0512653
+40/234 disc structure N=100 W=0.5 rho=1.0 mu=0.0 seed=1: accepted
+41/234 disc structure N=100 W=0.5 rho=1.2 mu=0.0 seed=1: accepted
+42/234 disc structure N=100 W=0.5 rho=1.4 mu=0.0 seed=1: accepted
+43/234 disc structure N=100 W=1.0 rho=1.0 mu=0.0 seed=1: accepted
+44/234 disc structure N=100 W=1.0 rho=1.2 mu=0.0 seed=1: accepted
+45/234 disc structure N=100 W=1.0 rho=1.4 mu=0.0 seed=1: accepted
+46/234 disc structure N=100 W=1.5 rho=1.0 mu=0.0 seed=1: accepted
+47/234 disc structure N=100 W=1.5 rho=1.2 mu=0.0 seed=1: accepted
+48/234 disc structure N=100 W=1.5 rho=1.4 mu=0.0 seed=1: accepted
+49/234 disc dynamics N=100 W=1.0 rho=1.3 mu=0.0 seed=1: accepted
+50/234 disc dynamics N=100 W=1.0 rho=1.3 mu=1.5 seed=1: resolved boundary crossing: junction distance 0.221593
+51/234 disc dynamics N=100 W=1.0 rho=1.3 mu=0.5 seed=1: accepted
+52/234 disc dynamics N=100 W=1.0 rho=1.3 mu=1.0 seed=1: accepted
+53/234 disc structure N=100 W=0.5 rho=1.2 mu=0.0 seed=2: accepted
+54/234 disc structure N=100 W=0.5 rho=1.0 mu=0.0 seed=2: accepted
+55/234 disc structure N=100 W=0.5 rho=1.4 mu=0.0 seed=2: accepted
+56/234 disc structure N=100 W=1.0 rho=1.0 mu=0.0 seed=2: accepted
+57/234 disc structure N=100 W=1.0 rho=1.2 mu=0.0 seed=2: accepted
+58/234 disc structure N=100 W=1.0 rho=1.4 mu=0.0 seed=2: accepted
+59/234 disc structure N=100 W=1.5 rho=1.0 mu=0.0 seed=2: accepted
+60/234 disc structure N=100 W=1.5 rho=1.2 mu=0.0 seed=2: accepted
+61/234 disc structure N=100 W=1.5 rho=1.4 mu=0.0 seed=2: accepted
+62/234 disc dynamics N=100 W=1.0 rho=1.3 mu=1.5 seed=2: resolved boundary crossing: junction distance 0.0637021
+63/234 disc dynamics N=100 W=1.0 rho=1.3 mu=0.0 seed=2: accepted
+64/234 disc dynamics N=100 W=1.0 rho=1.3 mu=0.5 seed=2: accepted
+65/234 disc structure N=100 W=0.5 rho=1.0 mu=0.0 seed=3: accepted
+66/234 disc structure N=100 W=0.5 rho=1.2 mu=0.0 seed=3: accepted
+67/234 disc dynamics N=100 W=1.0 rho=1.3 mu=1.0 seed=2: accepted
+68/234 disc structure N=100 W=0.5 rho=1.4 mu=0.0 seed=3: accepted
+69/234 disc structure N=100 W=1.0 rho=1.0 mu=0.0 seed=3: accepted
+70/234 disc structure N=100 W=1.0 rho=1.2 mu=0.0 seed=3: accepted
+71/234 disc structure N=100 W=1.0 rho=1.4 mu=0.0 seed=3: accepted
+72/234 disc structure N=100 W=1.5 rho=1.0 mu=0.0 seed=3: accepted
+73/234 disc structure N=100 W=1.5 rho=1.2 mu=0.0 seed=3: accepted
+74/234 disc structure N=100 W=1.5 rho=1.4 mu=0.0 seed=3: accepted
+75/234 disc dynamics N=100 W=1.0 rho=1.3 mu=1.5 seed=3: resolved boundary crossing: junction distance 0.251507
+76/234 disc dynamics N=100 W=1.0 rho=1.3 mu=0.0 seed=3: accepted
+77/234 disc dynamics N=100 W=1.0 rho=1.3 mu=0.5 seed=3: accepted
+78/234 disc dynamics N=100 W=1.0 rho=1.3 mu=1.0 seed=3: accepted
+79/234 disc structure N=196 W=0.5 rho=1.0 mu=0.0 seed=1: accepted
+80/234 disc structure N=196 W=0.5 rho=1.2 mu=0.0 seed=1: accepted
+81/234 disc structure N=196 W=0.5 rho=1.4 mu=0.0 seed=1: accepted
+82/234 disc structure N=196 W=1.0 rho=1.0 mu=0.0 seed=1: accepted
+83/234 disc structure N=196 W=1.0 rho=1.2 mu=0.0 seed=1: accepted
+84/234 disc structure N=196 W=1.0 rho=1.4 mu=0.0 seed=1: accepted
+85/234 disc structure N=196 W=1.5 rho=1.0 mu=0.0 seed=1: accepted
+86/234 disc structure N=196 W=1.5 rho=1.2 mu=0.0 seed=1: accepted
+87/234 disc structure N=196 W=1.5 rho=1.4 mu=0.0 seed=1: accepted
+88/234 disc dynamics N=196 W=1.0 rho=1.3 mu=1.5 seed=1: 1 resolved film crossing(s); films 1185, 1186 at (29.0389, 38.2942); local-junction distance 0.0720261
+89/234 disc dynamics N=196 W=1.0 rho=1.3 mu=0.0 seed=1: accepted
+90/234 disc dynamics N=196 W=1.0 rho=1.3 mu=0.5 seed=1: accepted
+91/234 disc dynamics N=196 W=1.0 rho=1.3 mu=1.0 seed=1: resolved boundary crossing: junction distance 0.0439866
+92/234 disc structure N=196 W=0.5 rho=1.0 mu=0.0 seed=2: accepted
+93/234 disc structure N=196 W=0.5 rho=1.2 mu=0.0 seed=2: accepted
+94/234 disc structure N=196 W=0.5 rho=1.4 mu=0.0 seed=2: accepted
+95/234 disc structure N=196 W=1.0 rho=1.0 mu=0.0 seed=2: accepted
+96/234 disc structure N=196 W=1.0 rho=1.2 mu=0.0 seed=2: accepted
+97/234 disc structure N=196 W=1.0 rho=1.4 mu=0.0 seed=2: accepted
+98/234 disc structure N=196 W=1.5 rho=1.0 mu=0.0 seed=2: accepted
+99/234 disc structure N=196 W=1.5 rho=1.2 mu=0.0 seed=2: accepted
+100/234 disc structure N=196 W=1.5 rho=1.4 mu=0.0 seed=2: accepted
+101/234 disc dynamics N=196 W=1.0 rho=1.3 mu=0.0 seed=2: accepted
+102/234 disc dynamics N=196 W=1.0 rho=1.3 mu=1.5 seed=2: resolved boundary crossing: junction distance 0.0354542
+103/234 disc dynamics N=196 W=1.0 rho=1.3 mu=0.5 seed=2: accepted
+104/234 disc structure N=196 W=0.5 rho=1.0 mu=0.0 seed=3: accepted
+105/234 disc dynamics N=196 W=1.0 rho=1.3 mu=1.0 seed=2: accepted
+106/234 disc structure N=196 W=0.5 rho=1.2 mu=0.0 seed=3: accepted
+107/234 disc structure N=196 W=0.5 rho=1.4 mu=0.0 seed=3: accepted
+108/234 disc structure N=196 W=1.0 rho=1.0 mu=0.0 seed=3: accepted
+109/234 disc structure N=196 W=1.0 rho=1.2 mu=0.0 seed=3: accepted
+110/234 disc structure N=196 W=1.0 rho=1.4 mu=0.0 seed=3: accepted
+111/234 disc structure N=196 W=1.5 rho=1.0 mu=0.0 seed=3: accepted
+112/234 disc structure N=196 W=1.5 rho=1.2 mu=0.0 seed=3: accepted
+113/234 disc structure N=196 W=1.5 rho=1.4 mu=0.0 seed=3: 3 resolved film crossing(s); films 473, 1611 at (37.1527, 28.9141); local-junction distance inf at elapsed time 7.5 tau_R
+114/234 disc dynamics N=196 W=1.0 rho=1.3 mu=1.5 seed=3: resolved boundary crossing: junction distance 0.0587572
+115/234 periodic structure N=36 W=0.5 rho=1.0 mu=0.0 seed=1: accepted
+116/234 disc dynamics N=196 W=1.0 rho=1.3 mu=0.0 seed=3: accepted
+117/234 periodic structure N=36 W=0.5 rho=1.2 mu=0.0 seed=1: accepted
+118/234 periodic structure N=36 W=0.5 rho=1.4 mu=0.0 seed=1: accepted
+119/234 disc dynamics N=196 W=1.0 rho=1.3 mu=0.5 seed=3: accepted
+120/234 periodic structure N=36 W=1.0 rho=1.0 mu=0.0 seed=1: accepted
+121/234 periodic structure N=36 W=1.0 rho=1.2 mu=0.0 seed=1: accepted
+122/234 periodic structure N=36 W=1.5 rho=1.0 mu=0.0 seed=1: accepted
+123/234 periodic structure N=36 W=1.0 rho=1.4 mu=0.0 seed=1: accepted
+124/234 periodic structure N=36 W=1.5 rho=1.2 mu=0.0 seed=1: accepted
+125/234 periodic structure N=36 W=1.5 rho=1.4 mu=0.0 seed=1: accepted
+126/234 disc dynamics N=196 W=1.0 rho=1.3 mu=1.0 seed=3: resolved boundary crossing: junction distance 0.0461247
+127/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=0.0 seed=1: accepted
+128/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=0.5 seed=1: accepted
+129/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=1.0 seed=1: resolved boundary crossing: junction distance 0.0362829
+130/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=1.5 seed=1: resolved boundary crossing: junction distance 0.054841
+131/234 periodic structure N=36 W=0.5 rho=1.0 mu=0.0 seed=2: accepted
+132/234 periodic structure N=36 W=0.5 rho=1.2 mu=0.0 seed=2: accepted
+133/234 periodic structure N=36 W=0.5 rho=1.4 mu=0.0 seed=2: accepted
+134/234 periodic structure N=36 W=1.0 rho=1.0 mu=0.0 seed=2: accepted
+135/234 periodic structure N=36 W=1.0 rho=1.2 mu=0.0 seed=2: accepted
+136/234 periodic structure N=36 W=1.0 rho=1.4 mu=0.0 seed=2: accepted
+137/234 periodic structure N=36 W=1.5 rho=1.0 mu=0.0 seed=2: accepted
+138/234 periodic structure N=36 W=1.5 rho=1.2 mu=0.0 seed=2: accepted
+139/234 periodic structure N=36 W=1.5 rho=1.4 mu=0.0 seed=2: accepted
+140/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=1.5 seed=2: resolved boundary crossing: junction distance 0.0467344
+141/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=0.0 seed=2: accepted
+142/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=0.5 seed=2: accepted
+143/234 periodic structure N=36 W=0.5 rho=1.0 mu=0.0 seed=3: accepted
+144/234 periodic structure N=36 W=0.5 rho=1.2 mu=0.0 seed=3: accepted
+145/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=1.0 seed=2: accepted
+146/234 periodic structure N=36 W=0.5 rho=1.4 mu=0.0 seed=3: accepted
+147/234 periodic structure N=36 W=1.0 rho=1.0 mu=0.0 seed=3: accepted
+148/234 periodic structure N=36 W=1.0 rho=1.2 mu=0.0 seed=3: accepted
+149/234 periodic structure N=36 W=1.0 rho=1.4 mu=0.0 seed=3: accepted
+150/234 periodic structure N=36 W=1.5 rho=1.0 mu=0.0 seed=3: accepted
+151/234 periodic structure N=36 W=1.5 rho=1.2 mu=0.0 seed=3: accepted
+152/234 periodic structure N=36 W=1.5 rho=1.4 mu=0.0 seed=3: accepted
+153/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=0.5 seed=3: accepted
+154/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=0.0 seed=3: accepted
+155/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=1.0 seed=3: accepted
+156/234 periodic dynamics N=36 W=1.0 rho=1.3 mu=1.5 seed=3: resolved boundary crossing: junction distance 0.101073
+157/234 periodic structure N=100 W=0.5 rho=1.0 mu=0.0 seed=1: accepted
+158/234 periodic structure N=100 W=0.5 rho=1.2 mu=0.0 seed=1: accepted
+159/234 periodic structure N=100 W=0.5 rho=1.4 mu=0.0 seed=1: accepted
+160/234 periodic structure N=100 W=1.0 rho=1.0 mu=0.0 seed=1: accepted
+161/234 periodic structure N=100 W=1.0 rho=1.2 mu=0.0 seed=1: accepted
+162/234 periodic structure N=100 W=1.0 rho=1.4 mu=0.0 seed=1: accepted
+163/234 periodic structure N=100 W=1.5 rho=1.0 mu=0.0 seed=1: accepted
+164/234 periodic structure N=100 W=1.5 rho=1.2 mu=0.0 seed=1: accepted
+165/234 periodic structure N=100 W=1.5 rho=1.4 mu=0.0 seed=1: accepted
+166/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=1.0 seed=1: resolved boundary crossing: junction distance 0.281394
+167/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=1.5 seed=1: resolved boundary crossing: junction distance 0.293285
+168/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=0.0 seed=1: accepted
+169/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=0.5 seed=1: accepted
+170/234 periodic structure N=100 W=0.5 rho=1.0 mu=0.0 seed=2: accepted
+171/234 periodic structure N=100 W=0.5 rho=1.2 mu=0.0 seed=2: accepted
+172/234 periodic structure N=100 W=0.5 rho=1.4 mu=0.0 seed=2: accepted
+173/234 periodic structure N=100 W=1.0 rho=1.0 mu=0.0 seed=2: accepted
+174/234 periodic structure N=100 W=1.0 rho=1.2 mu=0.0 seed=2: accepted
+175/234 periodic structure N=100 W=1.0 rho=1.4 mu=0.0 seed=2: accepted
+176/234 periodic structure N=100 W=1.5 rho=1.0 mu=0.0 seed=2: accepted
+177/234 periodic structure N=100 W=1.5 rho=1.2 mu=0.0 seed=2: accepted
+178/234 periodic structure N=100 W=1.5 rho=1.4 mu=0.0 seed=2: accepted
+179/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=1.5 seed=2: resolved boundary crossing: junction distance 0.173835
+180/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=0.0 seed=2: accepted
+181/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=0.5 seed=2: accepted
+182/234 periodic structure N=100 W=0.5 rho=1.0 mu=0.0 seed=3: accepted
+183/234 periodic structure N=100 W=0.5 rho=1.2 mu=0.0 seed=3: accepted
+184/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=1.0 seed=2: accepted
+185/234 periodic structure N=100 W=0.5 rho=1.4 mu=0.0 seed=3: accepted
+186/234 periodic structure N=100 W=1.0 rho=1.0 mu=0.0 seed=3: accepted
+187/234 periodic structure N=100 W=1.0 rho=1.2 mu=0.0 seed=3: accepted
+188/234 periodic structure N=100 W=1.0 rho=1.4 mu=0.0 seed=3: accepted
+189/234 periodic structure N=100 W=1.5 rho=1.0 mu=0.0 seed=3: accepted
+190/234 periodic structure N=100 W=1.5 rho=1.2 mu=0.0 seed=3: accepted
+191/234 periodic structure N=100 W=1.5 rho=1.4 mu=0.0 seed=3: accepted
+192/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=1.5 seed=3: resolved boundary crossing: junction distance 0.201646
+193/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=0.0 seed=3: accepted
+194/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=0.5 seed=3: accepted
+195/234 periodic dynamics N=100 W=1.0 rho=1.3 mu=1.0 seed=3: resolved boundary crossing: junction distance 0.214465
+196/234 periodic structure N=196 W=0.5 rho=1.0 mu=0.0 seed=1: accepted
+197/234 periodic structure N=196 W=0.5 rho=1.2 mu=0.0 seed=1: accepted
+198/234 periodic structure N=196 W=0.5 rho=1.4 mu=0.0 seed=1: accepted
+199/234 periodic structure N=196 W=1.0 rho=1.0 mu=0.0 seed=1: accepted
+200/234 periodic structure N=196 W=1.0 rho=1.2 mu=0.0 seed=1: accepted
+201/234 periodic structure N=196 W=1.0 rho=1.4 mu=0.0 seed=1: accepted
+202/234 periodic structure N=196 W=1.5 rho=1.0 mu=0.0 seed=1: accepted
+203/234 periodic structure N=196 W=1.5 rho=1.2 mu=0.0 seed=1: accepted
+204/234 periodic structure N=196 W=1.5 rho=1.4 mu=0.0 seed=1: accepted
+205/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=1.5 seed=1: resolved boundary crossing: junction distance 0.052371
+206/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=0.0 seed=1: accepted
+207/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=0.5 seed=1: accepted
+208/234 periodic structure N=196 W=0.5 rho=1.0 mu=0.0 seed=2: accepted
+209/234 periodic structure N=196 W=0.5 rho=1.2 mu=0.0 seed=2: accepted
+210/234 periodic structure N=196 W=0.5 rho=1.4 mu=0.0 seed=2: accepted
+211/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=1.0 seed=1: accepted
+212/234 periodic structure N=196 W=1.0 rho=1.0 mu=0.0 seed=2: accepted
+213/234 periodic structure N=196 W=1.0 rho=1.2 mu=0.0 seed=2: accepted
+214/234 periodic structure N=196 W=1.0 rho=1.4 mu=0.0 seed=2: accepted
+215/234 periodic structure N=196 W=1.5 rho=1.0 mu=0.0 seed=2: accepted
+216/234 periodic structure N=196 W=1.5 rho=1.2 mu=0.0 seed=2: accepted
+217/234 periodic structure N=196 W=1.5 rho=1.4 mu=0.0 seed=2: accepted
+218/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=1.5 seed=2: resolved boundary crossing: junction distance 0.039085
+219/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=1.0 seed=2: resolved boundary crossing: junction distance 0.0449
+220/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=0.0 seed=2: accepted
+221/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=0.5 seed=2: accepted
+222/234 periodic structure N=196 W=0.5 rho=1.0 mu=0.0 seed=3: accepted
+223/234 periodic structure N=196 W=0.5 rho=1.4 mu=0.0 seed=3: accepted
+224/234 periodic structure N=196 W=0.5 rho=1.2 mu=0.0 seed=3: accepted
+225/234 periodic structure N=196 W=1.0 rho=1.0 mu=0.0 seed=3: accepted
+226/234 periodic structure N=196 W=1.0 rho=1.2 mu=0.0 seed=3: accepted
+227/234 periodic structure N=196 W=1.0 rho=1.4 mu=0.0 seed=3: accepted
+228/234 periodic structure N=196 W=1.5 rho=1.0 mu=0.0 seed=3: accepted
+229/234 periodic structure N=196 W=1.5 rho=1.2 mu=0.0 seed=3: accepted
+230/234 periodic structure N=196 W=1.5 rho=1.4 mu=0.0 seed=3: accepted
+231/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=1.0 seed=3: resolved boundary crossing: junction distance 0.248227
+232/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=1.5 seed=3: resolved boundary crossing: junction distance 0.0768919
+233/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=0.0 seed=3: accepted
+234/234 periodic dynamics N=196 W=1.0 rho=1.3 mu=0.5 seed=3: accepted
+Finished: 208/234 accepted

@@ -108,3 +108,23 @@ short 50-τR observation window. See `data/curvature_sweep/REPORT.md`.
 
 The combined regression suite passes 145 tests. The existing force law, wall
 constraint, resampling default, transition rules and planar defaults are unchanged.
+
+## Follow-up: exact rerun and response-map measurements
+
+- Freshly recomputed the original 234 tasks in `curvature_sweep_rerun_20261114`: all
+  scientific record fields match exactly except execution time. Acceptance remains
+  208/234, and all seven PNGs match byte for byte. Original results are preserved.
+- Added read-only active contact-number, packing and mean-area measurements to
+  `sweep.py`; preparation contact counts are not used as active observables.
+- Ran 144 disk tasks over four densities, four activity levels, three sizes and
+  three seeds at W/T0=1. Geometry checks accepted 91. All 36 shared rho=1.3 records
+  reproduce the original observables exactly after removing the newly added fields.
+- Produced 11 figure sets: the four requested contact/shape maps, density and packing
+  views, neighbor-exchange maps and an overview. Failed regions remain unclassified.
+  Figures and data distinguish nominal density from measured area fraction and
+  document coupling of wall curvature to size and to the choice of length unit.
+- Added two regressions preventing substitution of passive preparation values in
+  active maps. The combined suite passes 147 tests. The force/tension law and
+  topology implementation are unchanged.
+- `NEXT_EXPERIMENTS.md` proposes event-resolved dynamics measurements and controlled
+  extensions. Those follow-up experiments are not claimed as completed.

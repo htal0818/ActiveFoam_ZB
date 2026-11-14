@@ -1,0 +1,145 @@
+domain,mode,n,w,rho,mu,seed,accepted,stage,seconds,error
+disc,dynamics,36,1.0,1.0,0.0,1,True,complete,10.299,
+disc,dynamics,36,1.0,1.0,0.0,2,True,complete,9.379,
+disc,dynamics,36,1.0,1.0,0.0,3,True,complete,9.711,
+disc,dynamics,36,1.0,1.0,0.5,1,True,complete,9.735,
+disc,dynamics,36,1.0,1.0,0.5,2,True,complete,8.081,
+disc,dynamics,36,1.0,1.0,0.5,3,True,complete,9.429,
+disc,dynamics,36,1.0,1.0,1.0,1,False,measurement,6.214,resolved boundary crossing: junction distance 0.243511
+disc,dynamics,36,1.0,1.0,1.0,2,True,complete,9.404,
+disc,dynamics,36,1.0,1.0,1.0,3,True,complete,8.345,
+disc,dynamics,36,1.0,1.0,1.5,1,False,measurement,5.369,resolved boundary crossing: junction distance 0.038827
+disc,dynamics,36,1.0,1.0,1.5,2,False,measurement,6.879,resolved boundary crossing: junction distance 0.0406312
+disc,dynamics,36,1.0,1.0,1.5,3,False,measurement,6.863,resolved boundary crossing: junction distance 0.221681
+disc,dynamics,36,1.0,1.2,0.0,1,True,complete,8.521,
+disc,dynamics,36,1.0,1.2,0.0,2,True,complete,8.2,
+disc,dynamics,36,1.0,1.2,0.0,3,True,complete,8.864,
+disc,dynamics,36,1.0,1.2,0.5,1,True,complete,8.396,
+disc,dynamics,36,1.0,1.2,0.5,2,True,complete,8.566,
+disc,dynamics,36,1.0,1.2,0.5,3,True,complete,8.63,
+disc,dynamics,36,1.0,1.2,1.0,1,False,measurement,5.35,resolved boundary crossing: junction distance 0.254374
+disc,dynamics,36,1.0,1.2,1.0,2,True,complete,8.611,
+disc,dynamics,36,1.0,1.2,1.0,3,True,complete,8.803,
+disc,dynamics,36,1.0,1.2,1.5,1,False,measurement,5.091,resolved boundary crossing: junction distance 0.0396197
+disc,dynamics,36,1.0,1.2,1.5,2,False,measurement,4.727,resolved boundary crossing: junction distance 0.225881
+disc,dynamics,36,1.0,1.2,1.5,3,False,measurement,5.546,resolved boundary crossing: junction distance 0.309845
+disc,dynamics,36,1.0,1.3,0.0,1,True,complete,8.274,
+disc,dynamics,36,1.0,1.3,0.0,2,True,complete,8.733,
+disc,dynamics,36,1.0,1.3,0.0,3,True,complete,8.435,
+disc,dynamics,36,1.0,1.3,0.5,1,True,complete,8.153,
+disc,dynamics,36,1.0,1.3,0.5,2,True,complete,8.173,
+disc,dynamics,36,1.0,1.3,0.5,3,True,complete,9.305,
+disc,dynamics,36,1.0,1.3,1.0,1,True,complete,9.187,
+disc,dynamics,36,1.0,1.3,1.0,2,True,complete,8.347,
+disc,dynamics,36,1.0,1.3,1.0,3,True,complete,9.115,
+disc,dynamics,36,1.0,1.3,1.5,1,False,measurement,7.9,resolved boundary crossing: junction distance 0.046495
+disc,dynamics,36,1.0,1.3,1.5,2,False,measurement,5.56,resolved boundary crossing: junction distance 0.0885491
+disc,dynamics,36,1.0,1.3,1.5,3,False,measurement,8.79,"1 resolved film crossing(s); films 198, 199 at (15.0771, 12.3968); local-junction distance 0.0512653"
+disc,dynamics,36,1.0,1.4,0.0,1,True,complete,8.106,
+disc,dynamics,36,1.0,1.4,0.0,2,True,complete,9.136,
+disc,dynamics,36,1.0,1.4,0.0,3,True,complete,8.298,
+disc,dynamics,36,1.0,1.4,0.5,1,True,complete,8.606,
+disc,dynamics,36,1.0,1.4,0.5,2,True,complete,8.561,
+disc,dynamics,36,1.0,1.4,0.5,3,True,complete,8.548,
+disc,dynamics,36,1.0,1.4,1.0,1,False,measurement,5.507,resolved boundary crossing: junction distance 0.185699
+disc,dynamics,36,1.0,1.4,1.0,2,True,complete,8.803,
+disc,dynamics,36,1.0,1.4,1.0,3,False,measurement,7.681,resolved boundary crossing: junction distance 0.0828754
+disc,dynamics,36,1.0,1.4,1.5,1,False,warmup,4.011,resolved boundary crossing: junction distance 0.0923832
+disc,dynamics,36,1.0,1.4,1.5,2,False,measurement,4.653,resolved boundary crossing: junction distance 0.058841
+disc,dynamics,36,1.0,1.4,1.5,3,False,warmup,4.014,resolved boundary crossing: junction distance 0.383036
+disc,dynamics,100,1.0,1.0,0.0,1,True,complete,21.155,
+disc,dynamics,100,1.0,1.0,0.0,2,True,complete,21.27,
+disc,dynamics,100,1.0,1.0,0.0,3,True,complete,20.265,
+disc,dynamics,100,1.0,1.0,0.5,1,True,complete,20.69,
+disc,dynamics,100,1.0,1.0,0.5,2,True,complete,18.511,
+disc,dynamics,100,1.0,1.0,0.5,3,True,complete,17.745,
+disc,dynamics,100,1.0,1.0,1.0,1,True,complete,20.057,
+disc,dynamics,100,1.0,1.0,1.0,2,True,complete,20.844,
+disc,dynamics,100,1.0,1.0,1.0,3,True,complete,21.029,
+disc,dynamics,100,1.0,1.0,1.5,1,False,measurement,12.334,"1 resolved film crossing(s); films 280, 281 at (23.6709, 19.222); local-junction distance 0.063587"
+disc,dynamics,100,1.0,1.0,1.5,2,False,warmup,10.328,resolved boundary crossing: junction distance 0.292373
+disc,dynamics,100,1.0,1.0,1.5,3,False,measurement,12.341,resolved boundary crossing: junction distance 0.037947
+disc,dynamics,100,1.0,1.2,0.0,1,True,complete,18.959,
+disc,dynamics,100,1.0,1.2,0.0,2,True,complete,19.764,
+disc,dynamics,100,1.0,1.2,0.0,3,True,complete,18.423,
+disc,dynamics,100,1.0,1.2,0.5,1,True,complete,18.655,
+disc,dynamics,100,1.0,1.2,0.5,2,True,complete,18.775,
+disc,dynamics,100,1.0,1.2,0.5,3,True,complete,19.037,
+disc,dynamics,100,1.0,1.2,1.0,1,False,measurement,20.439,resolved boundary crossing: junction distance 0.199637
+disc,dynamics,100,1.0,1.2,1.0,2,False,measurement,13.476,resolved boundary crossing: junction distance 0.16045
+disc,dynamics,100,1.0,1.2,1.0,3,False,measurement,12.138,resolved boundary crossing: junction distance 0.191246
+disc,dynamics,100,1.0,1.2,1.5,1,False,measurement,10.729,resolved boundary crossing: junction distance 0.0511708
+disc,dynamics,100,1.0,1.2,1.5,2,False,warmup,9.279,resolved boundary crossing: junction distance 0.177021
+disc,dynamics,100,1.0,1.2,1.5,3,False,measurement,10.914,resolved boundary crossing: junction distance 0.0460146
+disc,dynamics,100,1.0,1.3,0.0,1,True,complete,18.62,
+disc,dynamics,100,1.0,1.3,0.0,2,True,complete,18.598,
+disc,dynamics,100,1.0,1.3,0.0,3,True,complete,18.468,
+disc,dynamics,100,1.0,1.3,0.5,1,True,complete,19.007,
+disc,dynamics,100,1.0,1.3,0.5,2,True,complete,18.351,
+disc,dynamics,100,1.0,1.3,0.5,3,True,complete,19.178,
+disc,dynamics,100,1.0,1.3,1.0,1,True,complete,21.647,
+disc,dynamics,100,1.0,1.3,1.0,2,True,complete,22.607,
+disc,dynamics,100,1.0,1.3,1.0,3,True,complete,22.61,
+disc,dynamics,100,1.0,1.3,1.5,1,False,measurement,11.211,resolved boundary crossing: junction distance 0.221593
+disc,dynamics,100,1.0,1.3,1.5,2,False,warmup,10.095,resolved boundary crossing: junction distance 0.0637021
+disc,dynamics,100,1.0,1.3,1.5,3,False,warmup,10.336,resolved boundary crossing: junction distance 0.251507
+disc,dynamics,100,1.0,1.4,0.0,1,True,complete,18.26,
+disc,dynamics,100,1.0,1.4,0.0,2,True,complete,18.328,
+disc,dynamics,100,1.0,1.4,0.0,3,True,complete,18.009,
+disc,dynamics,100,1.0,1.4,0.5,1,True,complete,18.557,
+disc,dynamics,100,1.0,1.4,0.5,2,True,complete,18.657,
+disc,dynamics,100,1.0,1.4,0.5,3,True,complete,19.672,
+disc,dynamics,100,1.0,1.4,1.0,1,False,measurement,20.541,resolved boundary crossing: junction distance 0.225264
+disc,dynamics,100,1.0,1.4,1.0,2,False,measurement,17.239,resolved boundary crossing: junction distance 0.0441041
+disc,dynamics,100,1.0,1.4,1.0,3,True,complete,21.506,
+disc,dynamics,100,1.0,1.4,1.5,1,False,warmup,9.287,resolved boundary crossing: junction distance 0.349409
+disc,dynamics,100,1.0,1.4,1.5,2,False,warmup,10.709,resolved boundary crossing: junction distance 0.190859
+disc,dynamics,100,1.0,1.4,1.5,3,False,warmup,9.765,"1 resolved film crossing(s); films 52, 53 at (25.5635, 25.8303); local-junction distance 0.0356853"
+disc,dynamics,196,1.0,1.0,0.0,1,True,complete,38.172,
+disc,dynamics,196,1.0,1.0,0.0,2,True,complete,37.811,
+disc,dynamics,196,1.0,1.0,0.0,3,True,complete,38.343,
+disc,dynamics,196,1.0,1.0,0.5,1,True,complete,38.315,
+disc,dynamics,196,1.0,1.0,0.5,2,True,complete,40.18,
+disc,dynamics,196,1.0,1.0,0.5,3,True,complete,40.303,
+disc,dynamics,196,1.0,1.0,1.0,1,True,complete,45.928,
+disc,dynamics,196,1.0,1.0,1.0,2,False,measurement,44.707,resolved boundary crossing: junction distance 0.0497092
+disc,dynamics,196,1.0,1.0,1.0,3,True,complete,49.337,
+disc,dynamics,196,1.0,1.0,1.5,1,False,warmup,23.473,resolved boundary crossing: junction distance 0.154879
+disc,dynamics,196,1.0,1.0,1.5,2,False,measurement,24.741,resolved boundary crossing: junction distance 0.0673679
+disc,dynamics,196,1.0,1.0,1.5,3,False,warmup,18.992,resolved boundary crossing: junction distance 0.041007
+disc,dynamics,196,1.0,1.2,0.0,1,True,complete,38.845,
+disc,dynamics,196,1.0,1.2,0.0,2,True,complete,39.998,
+disc,dynamics,196,1.0,1.2,0.0,3,True,complete,39.469,
+disc,dynamics,196,1.0,1.2,0.5,1,True,complete,40.648,
+disc,dynamics,196,1.0,1.2,0.5,2,True,complete,41.553,
+disc,dynamics,196,1.0,1.2,0.5,3,True,complete,41.35,
+disc,dynamics,196,1.0,1.2,1.0,1,False,measurement,24.082,resolved boundary crossing: junction distance 0.0371607
+disc,dynamics,196,1.0,1.2,1.0,2,True,complete,55.603,
+disc,dynamics,196,1.0,1.2,1.0,3,False,measurement,31.723,resolved boundary crossing: junction distance 0.0451378
+disc,dynamics,196,1.0,1.2,1.5,1,False,warmup,19.819,resolved boundary crossing: junction distance 0.153042
+disc,dynamics,196,1.0,1.2,1.5,2,False,warmup,21.614,resolved boundary crossing: junction distance 0.0373946
+disc,dynamics,196,1.0,1.2,1.5,3,False,warmup,23.675,resolved boundary crossing: junction distance 0.0443479
+disc,dynamics,196,1.0,1.3,0.0,1,True,complete,39.235,
+disc,dynamics,196,1.0,1.3,0.0,2,True,complete,39.229,
+disc,dynamics,196,1.0,1.3,0.0,3,True,complete,39.568,
+disc,dynamics,196,1.0,1.3,0.5,1,True,complete,40.23,
+disc,dynamics,196,1.0,1.3,0.5,2,True,complete,46.191,
+disc,dynamics,196,1.0,1.3,0.5,3,True,complete,41.067,
+disc,dynamics,196,1.0,1.3,1.0,1,False,measurement,44.399,resolved boundary crossing: junction distance 0.0439866
+disc,dynamics,196,1.0,1.3,1.0,2,True,complete,55.477,
+disc,dynamics,196,1.0,1.3,1.0,3,False,measurement,49.067,resolved boundary crossing: junction distance 0.0461247
+disc,dynamics,196,1.0,1.3,1.5,1,False,warmup,23.793,"1 resolved film crossing(s); films 1185, 1186 at (29.0389, 38.2942); local-junction distance 0.0720261"
+disc,dynamics,196,1.0,1.3,1.5,2,False,measurement,30.451,resolved boundary crossing: junction distance 0.0354542
+disc,dynamics,196,1.0,1.3,1.5,3,False,measurement,26.01,resolved boundary crossing: junction distance 0.0587572
+disc,dynamics,196,1.0,1.4,0.0,1,True,complete,40.175,
+disc,dynamics,196,1.0,1.4,0.0,2,True,complete,38.412,
+disc,dynamics,196,1.0,1.4,0.0,3,True,complete,40.059,
+disc,dynamics,196,1.0,1.4,0.5,1,True,complete,40.918,
+disc,dynamics,196,1.0,1.4,0.5,2,True,complete,45.007,
+disc,dynamics,196,1.0,1.4,0.5,3,True,complete,42.16,
+disc,dynamics,196,1.0,1.4,1.0,1,False,measurement,32.752,resolved boundary crossing: junction distance 0.064472
+disc,dynamics,196,1.0,1.4,1.0,2,False,measurement,31.372,resolved boundary crossing: junction distance 0.183543
+disc,dynamics,196,1.0,1.4,1.0,3,False,measurement,47.469,resolved boundary crossing: junction distance 0.19999
+disc,dynamics,196,1.0,1.4,1.5,1,False,warmup,19.158,resolved boundary crossing: junction distance 0.244173
+disc,dynamics,196,1.0,1.4,1.5,2,False,measurement,27.373,resolved boundary crossing: junction distance 0.0456288
+disc,dynamics,196,1.0,1.4,1.5,3,False,warmup,22.081,resolved boundary crossing: junction distance 0.215847

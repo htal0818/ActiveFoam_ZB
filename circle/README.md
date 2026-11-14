@@ -229,8 +229,8 @@ effects but do not isolate a pure curvature response. Dimensionless wall curvatu
 is `κ√A0`. Neither surface curvature nor a deformable boundary is introduced.
 
 ```bash
-.venv/bin/python circle/scripts/parameter_sweep.py --workers 3
-.venv/bin/python circle/scripts/plot_sweep.py
+.venv/bin/python circle/scripts/parameter_sweep.py --workers 3 --out circle/data/curvature_sweep_new
+.venv/bin/python circle/scripts/plot_sweep.py --data circle/data/curvature_sweep_new --out figures/circle/sweep_new
 ```
 
 The runner resumes completed tasks, including recorded failures, and refuses to mix
@@ -287,6 +287,48 @@ Figures (PNG and PDF) are in [`figures/circle/sweep/`](../figures/circle/sweep/)
 - `curvature_response`: wall/interior contact-change rates and shape index versus
   dimensionless wall curvature, with periodic points at matched cell counts.
 - `msd`: activity- and size-dependent motion with between-seed uncertainty.
+
+## Curvature–adhesion–activity response maps
+
+The fresh rerun of the original 234 tasks is in
+[`data/curvature_sweep_rerun_20261114/`](data/curvature_sweep_rerun_20261114/).
+Its [reproducibility record](data/curvature_sweep_rerun_20261114/reproducibility.json)
+compares every scientific field, excluding execution time: all 234 records match,
+including the 208 accepted runs and 26 failures. All seven regenerated PNGs match.
+The original result set is preserved. Active observables were extended after this
+exact rerun, so the older source hashes intentionally prevent resuming either old
+folder with the current measurement code. Choose a fresh output directory to
+repeat the original grid with the additional measurements; the commands above do
+so. Historical records and figures can still be read or compared directly.
+
+The additional active density grid uses 144 disk runs: N={36,100,196},
+ρ={1,1.2,1.3,1.4}, μ={0,0.5,1,1.5}, three seeds, at W/T0=1. Active contact number
+and packing fraction are sampled during the observation window, alongside shape
+and rearrangements; passive preparation values are not substituted for active
+measurements. This adds measurements without changing the force or tension update.
+Of 144 active runs, 91 passed the geometry checks. All 36 shared rho=1.3 records
+exactly reproduce the previous observables; no duplicate seeds are pooled.
+The combined regression suite passes 147 tests.
+
+```bash
+.venv/bin/python circle/scripts/phase_sweep.py --workers 4
+.venv/bin/python circle/scripts/audit_phase_sweep.py
+.venv/bin/python circle/scripts/phase_maps.py
+```
+
+The [figure gallery](../figures/circle/phase_maps_20261114/index.html) includes the
+four requested contact/shape maps against curvature and adhesion or fluctuations,
+whole-tissue versus interior views, density slices, area-fraction maps, and plots
+against measured packing. PNG and PDF exports, seed SEM, accepted counts and all
+failures are retained. Colors represent continuous observables on a sampled grid,
+not inferred fluid/solid phases. Curvature is wall curvature, coupled to cell count;
+area fraction is a measured outcome, whereas nominal density is controlled.
+
+The extended measurements are checked against the shared rho=1.3 trajectories in
+[`measurement_validation.json`](data/phase_sweep_20261114/measurement_validation.json).
+For possible follow-up dynamics, see [`NEXT_EXPERIMENTS.md`](NEXT_EXPERIMENTS.md):
+persistent neighbor changes, event cascades, longer-time motion, persistence sweeps
+and patterned activity. These follow-up experiments have not been run here.
 
 ## Limits
 

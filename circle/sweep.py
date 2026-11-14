@@ -172,6 +172,9 @@ def _simulate(task,out):
     frames=[centers()];pairs=neighbor_pairs(foam);changes=np.zeros(task.n)
     loads=[];shapes=[np.asarray(foam.shape_factors()).copy()];events=Counter()
     contact_steps=[]
+    neighbors=[foam.neighbor_number().copy()]
+    packing=[float(foam.volume_fraction())]
+    cell_areas=[foam.f_area.copy()]
     stride=round(task.sample/foam.dt)
     steps=round(task.duration/foam.dt)
     if stride<1 or steps%stride or not np.isclose(stride*foam.dt,task.sample):
@@ -187,6 +190,9 @@ def _simulate(task,out):
         contact_steps.append(step_changes)
         pairs=current
         shapes.append(np.asarray(foam.shape_factors()).copy())
+        neighbors.append(foam.neighbor_number().copy())
+        packing.append(float(foam.volume_fraction()))
+        cell_areas.append(foam.f_area.copy())
         if disc: loads.append(wall_load(foam.wall)['total'])
     def event(iteration,kind,current):events[kind]+=1
     evolve_steps(steps,sample,event)
@@ -195,8 +201,18 @@ def _simulate(task,out):
     relative=track-track.mean(axis=1,keepdims=True)
     shape_track=np.asarray(shapes)
     step_changes=np.asarray(contact_steps)
+    neighbor_track=np.asarray(neighbors)
+    area_track=np.asarray(cell_areas)
     out['dynamics']=dict(duration=steps*foam.dt,sample_interval=stride*foam.dt,
         tauT=foam.tauT,shape_mean=float(np.mean(shape_track[1:])),events=dict(events),
+        neighbor_mean={name:float(neighbor_track[1:,mask].mean()) if mask.any() else None
+                       for name,mask in masks.items()},
+        neighbor_series={name:neighbor_track[:,mask].mean(axis=1) if mask.any() else np.full(len(neighbor_track),np.nan)
+                         for name,mask in masks.items()},
+        cell_neighbors_initial=neighbor_track[0],cell_neighbors_final=neighbor_track[-1],
+        packing_mean=float(np.mean(packing[1:])),packing_series=np.asarray(packing),
+        area_mean={name:float(area_track[1:,mask].mean()) if mask.any() else None
+                   for name,mask in masks.items()},
         shape_time=np.arange(len(shape_track))*task.sample,
         shape_series={name:shape_track[:,mask].mean(axis=1) if mask.any() else np.full(len(shape_track),np.nan)
                       for name,mask in masks.items()},
