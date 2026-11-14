@@ -157,3 +157,27 @@ def test_invalid_targets_are_refused(disc):
         probe.shift_junction(disc, int(disc.e_v[e, 0]), np.array([10.0 * disc.radius, 0.0]))
     assert state.differences(disc, before) == []
     assert all(disc.e_f[c, 0] >= 0 and disc.e_f[c, 1] >= 0 for c in probe.contacts(disc))
+
+
+def test_agrees_with_the_independent_force_probe_implementation(disc, disc_curve):
+    """``circle.force_probe`` was written separately; both must trace the same curve.
+
+    Its default convergence gate is tighter than the noise of the holding force
+    on this prepared state, so a looser gate is passed here and only the levels
+    it completes are compared.
+    """
+    from circle import force_probe
+    config = force_probe.ProbeConfig(increments=24, min_hold=2.0, max_hold=60.0,
+                                     force_atol=1e-3, force_rtol=1e-3, stable_windows=3,
+                                     apply_t1=False)
+    other = force_probe.probe(disc, disc_curve["edge"], config)
+    separation = np.array([row["separation"] for row in other["curve"]])
+    force = np.array([row["force"] for row in other["curve"]])
+    force = force - force[0]
+    assert len(separation) >= 8
+    shortening = disc_curve["d0"] - separation
+    here = np.interp(shortening, disc_curve["d0"] - disc_curve["separation"], disc_curve["force"])
+    compare = shortening > 0.08 * disc_curve["d0"]         # past the first, noisiest levels
+    worst = np.abs(here[compare] / force[compare] - 1).max()
+    print(f"{int(compare.sum())} common levels, largest relative difference {worst:.4f}")
+    assert worst < 0.03
