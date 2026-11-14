@@ -20,7 +20,7 @@ def main():
             row[metric+'_seed_sd']=float(np.std(values,ddof=1)) if len(values)>1 else None
         rows.append(row)
     with (out/'group_summary.csv').open('w',newline='') as f:
-        writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
+        writer=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)
     pulse=[]
     for n in (36,100):
         shams={r['task']['seed']:r for r in records if r['task']['family']=='pulse' and r['task']['pattern']=='uniform' and r['task']['n']==n and r['accepted']}
@@ -69,7 +69,7 @@ def main():
         '- A useful next experiment is a refined-mesh, multi-seed confirmation of the paired pulse response and fixed-variance persistence trend, while diagnosing the first crossing events in the saved failed configurations. Expanding the high-activity grid before fixing this would chiefly map numerical failure.',
         '',
         'See [the figure gallery](index.html), [methods and acceptance counts](REPORT.md), [per-run summaries](summary.csv), [group means and seed SD](group_summary.csv), and [contact reversals](contact_reversals.csv). Raw compressed trajectories and event catalogs are in `circle/data/experiments_20261114/runs/`.']
-    (out/'FINDINGS.md').write_text('\n'.join(report)+'\n')
+    (out/'FINDINGS.md').write_text('\n'.join(report).rstrip()+'\n')
     print(json.dumps(pulse,indent=2))
 
 

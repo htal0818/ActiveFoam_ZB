@@ -112,4 +112,3 @@ N=36, ρ=1.2, μ=0.5. Left: initial-neighbor overlap minus unbroken survival ide
 ![Where deformation and neighbor changes occur](13_boundary_profiles.png)
 
 W=1, ρ=1.2, μ=0.5; mean ± seed SD. Event participation counts each affected cell once per contact-changing transaction and divides by observed cell-time in the distance bin. Bins use the preceding stored cell centroids (0.5 τR resolution). The CSV also separates cells with and without any free film: distance from the container wall alone does not identify tissue interior.
-

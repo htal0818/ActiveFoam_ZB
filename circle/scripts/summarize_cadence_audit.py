@@ -21,7 +21,7 @@ def main():
             every_step_checks_passed=r['accepted'],stage=r['stage'],elapsed=r.get('elapsed'),
             common_samples_identical=common,error=r.get('error','')))
     with (directory/'outcomes.csv').open('w',newline='') as f:
-        writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
+        writer=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)
     result=dict(completed=sum(r['accepted'] for r in audit),attempted=len(audit),core_source_hash=manifest['source_hash'],
         matching_prefixes_verified=True,
         interpretation='This audit strengthens the selected controls only. It does not validate all seeds, all other protocols, or between-check preparation geometry. The existing local microfold tolerance remains in effect.',rows=rows)

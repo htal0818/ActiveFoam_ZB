@@ -202,7 +202,7 @@ def geometry(records,out,gallery):
          'Centroids within L₀ of the wall. First average cell-frames within each seed and curvature bin; error bars are SD across seeds. Curvature is that of the nearest sampled wall point; markers use the seed-averaged curvature within each bin. Global shape, wall orientation and local curvature covary; this association alone does not establish causality.',gallery)
     if localrows:
         with (out/'local_curvature.csv').open('w',newline='') as f:
-            writer=csv.DictWriter(f,fieldnames=list(localrows[0]));writer.writeheader();writer.writerows(localrows)
+            writer=csv.DictWriter(f,fieldnames=list(localrows[0]),lineterminator='\n');writer.writeheader();writer.writerows(localrows)
 
 
 def spaces(records,out,gallery):
@@ -356,7 +356,7 @@ def contact_and_wall(records,out,gallery):
     for name,data in (('contact_reversals.csv',rows),('wall_contact_residences.csv',residences)):
         if data:
             with (out/name).open('w',newline='') as f:
-                writer=csv.DictWriter(f,fieldnames=list(data[0]));writer.writeheader();writer.writerows(data)
+                writer=csv.DictWriter(f,fieldnames=list(data[0]),lineterminator='\n');writer.writeheader();writer.writerows(data)
 
 
 def boundary_profiles(records,out,gallery):
@@ -405,7 +405,7 @@ def boundary_profiles(records,out,gallery):
     for name,data in (('boundary_profiles.csv',rows),('transition_kinds.csv',kindrows)):
         if data:
             with (out/name).open('w',newline='') as f:
-                writer=csv.DictWriter(f,fieldnames=list(data[0]));writer.writeheader();writer.writerows(data)
+                writer=csv.DictWriter(f,fieldnames=list(data[0]),lineterminator='\n');writer.writeheader();writer.writerows(data)
 
 
 def main():
@@ -418,7 +418,7 @@ def main():
             row[key]=scalar(r,key) if r['accepted'] else ''
         rows.append(row)
     with (a.out/'summary.csv').open('w',newline='') as f:
-        writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
+        writer=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)
     response_maps(records,a.out,gallery);persistence(records,a.out,gallery);long_dynamics(records,a.out,gallery)
     paircounts=pulse_response(records,a.out,gallery);geometry(records,a.out,gallery);spaces(records,a.out,gallery)
     event_diagnostics(records,a.out,gallery);refinement(records,a.out,gallery);correlations(records,a.out,gallery);contact_and_wall(records,a.out,gallery);boundary_profiles(records,a.out,gallery)
@@ -438,7 +438,7 @@ def main():
              'Contact-specific tension–length lag correlations need persistent film lineage IDs across transitions and remain deferred. Current tension correlations are cell-averaged. Mechanosensitive feedback, spatially correlated noise, growth/division and osmotic forcing remain separate extensions.','',
              f"Core source SHA256: `{manifest['source_hash']}`.",'','## Figures','']
     for item in gallery:report+=['### '+item['title'],'',f"![{item['title']}]({item['name']}.png)",'',item['caption'],'']
-    (a.out/'REPORT.md').write_text('\n'.join(report)+'\n')
+    (a.out/'REPORT.md').write_text('\n'.join(report).rstrip()+'\n')
     content=['<!doctype html><meta charset="utf-8"><title>Active foam dynamics experiments</title><style>body{max-width:1250px;margin:35px auto;padding:0 24px;font:17px/1.5 system-ui;color:#20303d}img{width:100%}section{margin:45px 0}p{max-width:1000px}a{color:#176b94}</style><h1>Active foam: exploratory dynamics experiments</h1>',f'<p>{sum(r["accepted"] for r in records)} / {len(records)} completed runs. Fixed walls; original force law. Shading/error bars show seed SD. Missing runs are not physical phases.</p><p><a href="FINDINGS.md">Main findings</a> · <a href="REPORT.md">Methods and limitations</a> · <a href="summary.csv">Run summary CSV</a></p>']
     for item in gallery:content.append(f'<section><h2>{html.escape(item["title"])}</h2><a href="{item["name"]}.pdf">PDF</a><img src="{item["name"]}.png"><p>{html.escape(item["caption"])}</p></section>')
     (a.out/'index.html').write_text('\n'.join(content));print('\n'.join(report[:16]))
