@@ -284,7 +284,7 @@ def report(records,out,manifest):
         writer.writeheader();writer.writerows(paired)
     lines=['# Circular-wall parameter sweeps','',
            f"{sum(r['accepted'] for r in records)} of {len(records)} attempted runs passed their domain-specific geometry checks.", '',
-           '**Activity normalization under review:** μ is the implemented noise input; its mapping to the paper’s ΔT/T0 has not been verified against the original equation and noise covariance. See [NOISE_CONVENTION.md](../../NOISE_CONVENTION.md).', '',
+           '**Activity convention:** the interior-contact update matches the original equation supplied by the user. μ=ΔT/T0 assumes unit white-noise covariance in code time units; an explicit covariance has not been supplied. ΔT is the forcing amplitude, not automatically the stationary RMS. See [NOISE_CONVENTION.md](../../NOISE_CONVENTION.md).', '',
            'The tissue surface is flat. κ=1/R is wall curvature. R=√(N/π), so nominal density stays fixed across sizes; curvature and finite size cannot be separated by this disk sweep alone.',
            '', f'{len(SEEDS)} independent seeds are attempted at each point. Error bars are seed SEM, not cell-wise uncertainty. Means exclude failed runs and are conditional on acceptance. Local microfolds remain tolerated and counted. Periodic runs retain their original per-cell geometry checks.',
            '', 'Structure: W={0.5,1,1.5}, ρ={1,1.2,1.4}, μ=0 after standard preparation.',

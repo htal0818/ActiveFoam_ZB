@@ -2,7 +2,7 @@
 
 208 of 234 attempted runs passed their domain-specific geometry checks.
 
-**Activity normalization under review:** μ is the implemented noise input; its mapping to the paper’s ΔT/T0 has not been verified against the original equation and noise covariance. See [NOISE_CONVENTION.md](../../NOISE_CONVENTION.md).
+**Activity convention:** the interior-contact update matches the original equation supplied by the user. μ=ΔT/T0 assumes unit white-noise covariance in code time units; an explicit covariance has not been supplied. ΔT is the forcing amplitude, not automatically the stationary RMS. See [NOISE_CONVENTION.md](../../NOISE_CONVENTION.md).
 
 The tissue surface is flat. κ=1/R is wall curvature. R=√(N/π), so nominal density stays fixed across sizes; curvature and finite size cannot be separated by this disk sweep alone.
 

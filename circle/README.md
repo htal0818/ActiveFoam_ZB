@@ -195,10 +195,11 @@ Two things stand out.
 
 ## Parameter sweeps and wall curvature
 
-**Activity normalization under review:** `μ` is the implemented OU noise input.
-Its mapping to the paper’s `ΔT/T0` is not verified; see
-[`NOISE_CONVENTION.md`](NOISE_CONVENTION.md). Existing sweep values remain labeled
-`μ` and should not yet be read as calibrated paper activity values.
+**Activity convention:** the interior-contact update matches the original equation
+provided by the user. `μ=ΔT/T0` when white noise has unit covariance in code time
+units; the explicit covariance normalization has not been supplied. `ΔT` is the
+forcing amplitude, not automatically the stationary RMS fluctuation. See
+[`NOISE_CONVENTION.md`](NOISE_CONVENTION.md). Sweep values remain labeled `μ`.
 
 The reproducible exploratory sweep extends the planar-style packing, contact-number,
 shape-index and MSD plots to three circular containers, with matched periodic size
