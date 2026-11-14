@@ -335,6 +335,25 @@ persistent neighbor changes, event cascades, longer-time motion, persistence swe
 and patterned activity. The first execution of these experiments is documented in
 [`EXPERIMENTS.md`](EXPERIMENTS.md), with an [figure gallery](../figures/circle/experiments_20261114/index.html).
 
+## Delayed feedback and synchronous division
+
+The new [`BiologyFoam`](biology.py) extension adds delayed contact-stretch feedback,
+per-cell preferred areas and growth. [`division.py`](division.py) divides all current
+mothers in a single atomic round, retaining the rigid circular wall and conserving
+total K during cleavage. It records persistent parent/daughter identities and
+restores the entire round if any cut fails.
+
+The first pilots include 39 feedback runs, 12 growth/division controls, seven
+longer/refined/audited cases and three combined cases. All synchronous-division
+controls completed. Moderate delayed feedback sustains shape oscillations with no
+ongoing tension noise; fluctuation amplitudes and rearrangement rates still need
+further quantitative convergence. The combined regression suite passes 170 tests.
+
+See [`BIOLOGY.md`](BIOLOGY.md), the
+[figure/animation gallery](../figures/circle/biology_20261114/index.html), and the
+[measured findings](../figures/circle/biology_20261114/FINDINGS.md). The feedback law
+and division process are explicit model extensions; `activefoam/` is unchanged.
+
 ## Limits
 
 - Films are polylines. At full wall coverage the cells fall short of the disc area by

@@ -1,0 +1,13 @@
+{
+  "reference_key": "594878d983499d51cf6a",
+  "exact_replay": true,
+  "frames": 122,
+  "verified_fields": [
+    "samples",
+    "events",
+    "division_log",
+    "frames",
+    "summary"
+  ],
+  "note": "Numbers label persistent cell IDs; colors show shape index on the fixed range 3.5\u20134.7. Longer pauses around division are for display only."
+}

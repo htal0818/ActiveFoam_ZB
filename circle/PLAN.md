@@ -158,3 +158,32 @@ constraint, resampling default, transition rules and planar defaults are unchang
   IDs. Correlated noise, osmotic forcing, mechanosensitive feedback and growth are
   deferred. Numerical failures must be resolved before extending the high-activity
   grid or assigning phase boundaries. See `EXPERIMENTS.md` and the linked findings.
+
+## Follow-up: delayed mechanosensing and synchronous divisions
+
+- Added an explicit bounded contact-strain feedback term with a stored delay to
+  the tension drift. Persistent cell-pair IDs distinguish contact history from
+  mutable film indices. New/reformed contacts have fresh references and zero
+  prehistory. Disabling the extension reproduces the original dynamics exactly.
+- Generalized osmotic pressure to per-cell K through preferred areas, while keeping
+  founding-cell units and the wall fixed. Growth changes K separately from division.
+- Implemented equal-area cleavage of every current mother in one atomic synchronous
+  round. No mechanics or random draws occur between splits. Daughters partition K,
+  inherit the mother's instantaneous pressure, receive persistent lineage IDs and
+  share a birth time. Failed rounds restore the full state, including N and memories.
+- Extended state classification to explicit subclass fields and made N physical
+  state. Added 12 regression cases; all 170 combined tests pass. `activefoam/` and
+  the original circular integration kernel remain unchanged.
+- Ran 51 main pilots (36 complete), seven extended/refined/audited cases (all complete)
+  and three combined feedback/growth/division cases (all complete). All 15 failures
+  were stronger-feedback geometries and remain excluded from physical averages.
+- The moderate-delay cases maintain shape oscillations without ongoing tension
+  noise. Qualitative persistence survives joint refinement; amplitudes and especially
+  event counts are not quantitatively converged. A selected every-step geometry
+  audit reproduces the matching ordinary trajectory exactly.
+- All six main synchronous-division runs and three combined runs conserve K, retain
+  a fixed wall and double N=16→32 at t=20τR. Two animations replay the stored runs
+  exactly. Plots distinguish cleavage from subsequent neighbor-changing events.
+- The pilot resolves geometric cleavage, not mitotic rounding or a contractile ring.
+  Multiple synchronous rounds are tested, but the scientific growth pilot uses one
+  cycle. See `BIOLOGY.md` and the linked findings for assumptions and limitations.

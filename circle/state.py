@@ -24,10 +24,10 @@ from activefoam._kernels import copy_polylines
 
 PARAMETERS = frozenset({
     "accelerated", "reference_pressure_lag", "pressure_normals", "bs", "sstn", "rho", "psi",
-    "lsc", "A0", "P0", "w", "beta", "gam", "tauT", "dt", "edpc", "nFa", "radius", "center",
+    "lsc", "A0", "P0", "w", "beta", "gam", "tauT", "dt", "edpc", "radius", "center",
     "aspect", "wall_tol", "delta_max", "audit", "remesh", "wall_resample", "geometry_policy", "_measure_vertex_force",
 })
-PHYSICAL = ("vpos", "v_e", "v_f", "e_v", "e_f", "e_t", "e_rfn", "e_mid", "f_v", "f_e",
+PHYSICAL = ("nFa", "vpos", "v_e", "v_f", "e_v", "e_f", "e_t", "e_rfn", "e_mid", "f_v", "f_e",
             "f_area", "f_center", "_pressure_geometry")
 RNG = "rng"
 STATE_CACHES = ("_t4_boxes", "_prev_lens", "_adjacent_revision")
@@ -41,9 +41,15 @@ _ABSENT = object()
 
 def unclassified(foam):
     """Instance attributes that no table accounts for."""
-    known = (PARAMETERS | set(PHYSICAL) | {RNG} | set(STATE_CACHES) | set(KEYED_CACHES)
-             | DIAGNOSTICS)
+    known = (PARAMETERS | set(physical_fields(foam)) | {RNG} | set(STATE_CACHES) | set(KEYED_CACHES)
+             | DIAGNOSTICS | set(getattr(foam, "STATE_PARAMETERS", ()))
+             | set(getattr(foam, "STATE_DIAGNOSTICS", ())))
     return sorted(set(vars(foam)) - known)
+
+
+def physical_fields(foam):
+    """Base fields plus explicitly declared extension state."""
+    return PHYSICAL + tuple(getattr(foam, "STATE_PHYSICAL", ()))
 
 
 def _copy(value):
@@ -80,7 +86,7 @@ class Snapshot:
     __slots__ = ("physical", "rng", "caches")
 
     def __init__(self, foam):
-        self.physical = {name: _copy(getattr(foam, name)) for name in PHYSICAL}
+        self.physical = {name: _copy(getattr(foam, name)) for name in physical_fields(foam)}
         self.rng = copy.deepcopy(foam.rng.bit_generator.state)
         self.caches = {name: _copy(getattr(foam, name, _ABSENT)) for name in STATE_CACHES}
 
@@ -107,7 +113,7 @@ def restore(foam, snap):
 
 def differences(foam, snap):
     """Names of physical fields, generator state or state caches that differ from ``snap``."""
-    changed = [name for name in PHYSICAL if not _same(getattr(foam, name), snap.physical[name])]
+    changed = [name for name in physical_fields(foam) if not _same(getattr(foam, name), snap.physical[name])]
     if foam.rng.bit_generator.state != snap.rng:
         changed.append(RNG)
     changed += [name for name in STATE_CACHES

@@ -1,0 +1,52 @@
+family,seed,gain,delay,growth,divide,accepted,stage,elapsed,seconds,error
+feedback,1,0.0,0.0,False,False,True,complete,150.0,24.59295056499832,
+feedback,1,0.5,0.0,False,False,True,complete,150.0,44.47965843499696,
+feedback,1,0.5,2.0,False,False,True,complete,150.0,44.51685849000205,
+feedback,1,0.5,10.0,False,False,True,complete,150.0,46.5933868409993,
+feedback,1,1.0,0.0,False,False,True,complete,150.0,37.00124278400472,
+feedback,1,1.0,2.0,False,False,True,complete,150.0,38.55487045599875,
+feedback,1,1.0,10.0,False,False,False,evolution,46.300000000000004,14.105466491004336,resolved boundary crossing: junction distance 0.0451153
+feedback,1,2.0,0.0,False,False,True,complete,150.0,37.20511461299611,
+feedback,1,2.0,2.0,False,False,False,evolution,54.6,15.147742471999663,"1 resolved film crossing(s); films 64, 74 at (9.86874, 9.06782); local-junction distance 0.0371881"
+feedback,1,2.0,10.0,False,False,False,evolution,20.5,6.601830596002401,"1 resolved film crossing(s); films 21, 24 at (10.2945, 9.71708); local-junction distance 0.0362281"
+feedback,1,4.0,0.0,False,False,True,complete,150.0,38.36762689200259,
+feedback,1,4.0,2.0,False,False,False,evolution,9.4,3.840636037006334,"1 resolved film crossing(s); films 79, 95 at (10.0831, 8.71613); local-junction distance 0.100747"
+feedback,1,4.0,10.0,False,False,False,evolution,15.4,5.5956821119980305,"3 resolved film crossing(s); films 23, 84 at (9.47948, 9.21907); local-junction distance inf"
+division,1,0.0,0.0,False,False,True,complete,60.0,7.892237949999981,
+division,1,0.0,0.0,False,True,True,complete,60.0,12.782476178996149,
+division,1,0.0,0.0,True,False,True,complete,60.0,8.363398462002806,
+division,1,0.0,0.0,True,True,True,complete,60.0,12.960617830998672,
+feedback,2,0.0,0.0,False,False,True,complete,150.0,18.693362731006346,
+feedback,2,0.5,0.0,False,False,True,complete,150.0,37.843172177999804,
+feedback,2,0.5,2.0,False,False,True,complete,150.0,38.53614142099832,
+feedback,2,0.5,10.0,False,False,True,complete,150.0,39.39870334599982,
+feedback,2,1.0,0.0,False,False,True,complete,150.0,38.43108510100137,
+feedback,2,1.0,2.0,False,False,True,complete,150.0,38.765900423997664,
+feedback,2,1.0,10.0,False,False,False,evolution,21.900000000000002,7.435920119998627,resolved boundary crossing: junction distance 0.11274
+feedback,2,2.0,0.0,False,False,True,complete,150.0,39.95694447099959,
+feedback,2,2.0,2.0,False,False,False,evolution,46.4,13.712547546994756,"1 resolved film crossing(s); films 86, 87 at (9.73876, 10.0796); local-junction distance 0.047303"
+feedback,2,2.0,10.0,False,False,False,evolution,17.0,5.854858417005744,resolved boundary crossing: junction distance 0.0374012
+feedback,2,4.0,0.0,False,False,True,complete,150.0,41.78506108700094,
+feedback,2,4.0,2.0,False,False,False,evolution,8.5,3.7526323060010327,"6 resolved film crossing(s); films 10, 16 at (8.33817, 8.1357); local-junction distance inf"
+feedback,2,4.0,10.0,False,False,False,evolution,14.700000000000001,5.148115472002246,resolved boundary crossing: junction distance 0.165149
+division,2,0.0,0.0,False,False,True,complete,60.0,8.88869653900474,
+division,2,0.0,0.0,False,True,True,complete,60.0,14.35654019300273,
+division,2,0.0,0.0,True,False,True,complete,60.0,11.037496937999094,
+division,2,0.0,0.0,True,True,True,complete,60.0,31.96951722400263,
+feedback,3,0.0,0.0,False,False,True,complete,150.0,26.008603030000813,
+feedback,3,0.5,0.0,False,False,True,complete,150.0,50.4253597479983,
+feedback,3,0.5,2.0,False,False,True,complete,150.0,50.52074596699822,
+feedback,3,0.5,10.0,False,False,True,complete,150.0,50.558317066999734,
+feedback,3,1.0,0.0,False,False,True,complete,150.0,80.22583357300027,
+feedback,3,1.0,2.0,False,False,True,complete,150.0,50.51740623599471,
+feedback,3,1.0,10.0,False,False,False,evolution,48.300000000000004,17.79293889600376,resolved boundary crossing: junction distance 0.106491
+feedback,3,2.0,0.0,False,False,True,complete,150.0,68.92353226699925,
+feedback,3,2.0,2.0,False,False,False,evolution,30.1,11.621451227998477,"1 resolved film crossing(s); films 51, 93 at (9.24361, 8.93675); local-junction distance 0.0863064"
+feedback,3,2.0,10.0,False,False,False,evolution,16.0,6.990008435001073,resolved boundary crossing: junction distance 0.11706
+feedback,3,4.0,0.0,False,False,True,complete,150.0,48.61912453400146,
+feedback,3,4.0,2.0,False,False,False,evolution,9.700000000000001,5.115760915003193,"2 resolved film crossing(s); films 6, 78 at (9.33643, 8.9379); local-junction distance inf"
+feedback,3,4.0,10.0,False,False,False,evolution,13.6,6.051308553003764,resolved boundary crossing: junction distance 0.157274
+division,3,0.0,0.0,False,False,True,complete,60.0,9.565078595995146,
+division,3,0.0,0.0,False,True,True,complete,60.0,14.730538105999585,
+division,3,0.0,0.0,True,False,True,complete,60.0,10.060908175000804,
+division,3,0.0,0.0,True,True,True,complete,60.0,15.831750062003266,

@@ -1,0 +1,9 @@
+{
+  "tasks": [
+    "e08f49bbf0e08c00663a",
+    "5070edd58e13404d870e",
+    "fd16736f565fe69a259b"
+  ],
+  "source_hash": "acf54bc462e7a5fae11c6dd99c8d1273a869a1529a53886de2a5938e8eb90503",
+  "note": "Same growth/division protocol and seeds as the main pilot, adding g=0.5 and delay=2. No deterministic kick; mu=0.05 as in matched division controls. Selected after the component pilots."
+}

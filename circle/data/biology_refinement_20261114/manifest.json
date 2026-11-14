@@ -1,0 +1,14 @@
+{
+  "tasks": [
+    "3e29b797c13dcad1ba19",
+    "81badd8d9738b23eff5e",
+    "1afde313a3732d12878c",
+    "06e3530cb020cb577969",
+    "3b6d4f4df82ffa48d61a",
+    "c019ddd29147177e209d",
+    "82a69843f35c33092e03"
+  ],
+  "source_hash": "acf54bc462e7a5fae11c6dd99c8d1273a869a1529a53886de2a5938e8eb90503",
+  "script_hash": "935d66f1ad7487510afd956cd3b09a67fa7c08af8f049ed2a1a2c611912db4c6",
+  "note": "Selected from the seed-1 pilot. Full preparation is repeated at each dt/spacing, so trajectories need not match pointwise. Refine dt, film spacing and history sampling jointly. The every-step run adds validation only and should reproduce its matching pilot."
+}

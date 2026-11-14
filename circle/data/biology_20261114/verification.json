@@ -1,0 +1,12 @@
+{
+  "main_completed": 36,
+  "main_attempted": 51,
+  "combined_completed": 3,
+  "combined_attempted": 3,
+  "refinement_completed": 7,
+  "refinement_attempted": 7,
+  "synchronous_rounds_verified": 9,
+  "matching_feedback_prefixes": 4,
+  "every_step_audit_exact_match": true,
+  "source_hash": "acf54bc462e7a5fae11c6dd99c8d1273a869a1529a53886de2a5938e8eb90503"
+}
