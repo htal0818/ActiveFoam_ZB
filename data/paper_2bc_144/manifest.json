@@ -1,0 +1,2931 @@
+{
+  "panels": [
+    "2b",
+    "2c"
+  ],
+  "jobs": [
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_db47f4de1a68b02c"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_951a2e59e009407b"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_891e725ce438bf3f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_f8215d829f1fbd74"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_4786e8e906e2ed15"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_01ee82d2dcdf7a50"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_960da8ad410ca43e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_2915c9b2ab524c5d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_efcc4dec80f27464"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_ba1259ba8d56e68e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_665a878b366447bb"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_7c7206c53a4f6544"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_1819c9f062fb76b4"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_7d8e010e3365fc81"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_76a45c6429b79d3d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_737eef0a2f8d47ed"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_3eb2720cd4413290"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_0501e8e121ccf93e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_e1c9c42df7d7d122"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_ea6e026eacf9a066"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_b6bb71f04f518895"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a8cdda06b508e85a"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_f0455b4ea9c89f1a"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_47145a2ad4df5a4d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_f0aa3e81cde479cb"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_bd8e03c4cd882bd5"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_855417b6c121e334"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_6ccfc5d23b3c8cef"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_0c818f5af109761d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_55cba6f90b3ac522"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_826fd40a11abbfce"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_e22373272203f553"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_1a28e85d5b496f31"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_be5b928f13911aec"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a75e03e06abec466"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_3cc8267dd8e60219"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a3ddb20e522787f6"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_5ae33f0dc20f8890"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_ea6aa065263415c4"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_9e843fa8bfcb653e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_5b8c3a8d7fb49a64"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_99fbb7dfc3f1d07e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_deab80058b873c9e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_922f9282e7d96b11"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_cae5e24dbb4e4cd4"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_8b82af40921d579f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_2ee19e5265ad9157"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_2b63ea2799d111cb"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_b1a9eb848cfcfa2a"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_fe51fd3daf98ae25"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_aede6cb113ebbf50"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_117b1458b35d8073"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_075783f42ab7874d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_7262c6492b498660"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_67b0834afbd67c7e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_f5b185f70db79802"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_06b7b4c1685eb023"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_98ae6c09bd71c610"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_ebd0cee94f8c54ec"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_cd4656027b01153a"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_5a90e20a1079f432"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_e0744d093ea88d34"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_36a5fdbbb66c09e2"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_bcfe61a72cbc7bf4"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a2c3524ebfbd20b0"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_2131ea6c90830706"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_cf96a5ec338cdc22"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_04b95a1260e78545"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_ad25dcf7b63a3aff"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_5d2d24c8c4619365"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a59d076390ce8a7a"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_c6c5f4adfd280ad4"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_fd45caee64a7f7a9"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_b4ac53e8646b87de"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_0f7c650807d80ea0"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_3f0737cdd27149fb"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_824d159d957839ad"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_92d4a0a055289d93"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_32ee063f1eb31052"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_bdb8b073f4fdcb09"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_0c7ff4a24b103468"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_f7d2ccb5fa90d1c1"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_afbb0c456c31c45d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_1ffa3366aa5ae874"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_7fd0e3f8c4dc9784"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_c211977b4e6bad4b"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_df15ec5ddb812d85"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_e31b44936581be01"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a0f9627f392d50b7"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_7ff2ee1b682069c9"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_8a7282166cce1c76"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_9ce9aee34231c058"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_f0bc3ab4f69f0adf"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_c8140e60bcf9cea2"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_cf2bb64249d5e3ee"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_7d1da64428e70494"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_966a22254f23b15e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_c0410af1ea626aea"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_88a906aa7899611b"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_931995467c545b77"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_49680c26c97254b0"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_274b66e3b6db1369"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_b3a81c2939cb7fe1"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_61835053924cf7b8"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_263acd2f5db2efd2"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_db424dd61dd25e52"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_10a2166bf2c032af"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_51756a1d42eddd2f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_ea16b1588c73af39"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_e058a1d97c612a94"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_e1d5c879ea407b6c"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_ae28643ac8922a42"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_f2697d5c61201193"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_4a3e56ff85cc2174"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_c6b560d9578b7c8d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_1f0f9d710ae2be0b"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_b8001ab5867e2c81"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_8fdd12fae319478d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_032b18e32fa4d7c0"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_dd2fdd0d2e7c0eb1"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_9b1a2c72b1e4c1b7"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_f4a7e2f1714c59fd"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_1602fbfd24cd2c89"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_5c0444327a2d6f20"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_93328bc13d3e5567"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_7543a91832676239"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_181a65ba721f02a9"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_fe61afabd79d4d09"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 0.81,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_160fb2001ab3bdc8"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 0.8464,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_bf8c81878f67ffee"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 0.8836,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a46255df99dca233"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 0.9216,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a4a9db062108ef09"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 0.9604,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_9665e900b56724e4"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_83e48a4d2faf3d66"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0404,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_b00eb3f9aff7e373"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0816,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_0d886a1c40dc726f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.1236,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_596d7720df88384d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.1664,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_5adcd57b65d3e39f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.21,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_093472783f3e0968"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.2544,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_d87cbd8cb52088ae"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.2996,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_55a881f3121041a7"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.3456,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_a0bec97a7b9e6a5f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.3924,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_c5e7bfafe98c29d6"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.44,
+        "record_space": false,
+        "record_snapshot": false,
+        "extra_relaxation_tauT": 0.0,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2b",
+        "2c"
+      ],
+      "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2",
+      "profile": "full",
+      "id": "equilibrium_000c98506c2fbc1d"
+    }
+  ],
+  "grid": {
+    "densities": [
+      0.81,
+      0.8464,
+      0.8836,
+      0.9216,
+      0.9604,
+      1.0,
+      1.0404,
+      1.0816,
+      1.1236,
+      1.1664,
+      1.21,
+      1.2544,
+      1.2996,
+      1.3456,
+      1.3924,
+      1.44
+    ],
+    "adhesions": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8
+    ]
+  },
+  "limitations": {
+    "2b": "All 16 published densities and nine of the 41 adhesion values.",
+    "2c": "All 16 published densities and nine of the 41 adhesion values."
+  },
+  "paper": "10.1038/s41567-021-01215-1",
+  "model": "FoamTissue (Numba)",
+  "replicates_per_setting": 1,
+  "profile": "full",
+  "n_side": 10,
+  "geometry_policy": "reference",
+  "pressure_normals": "reference",
+  "source_hash": "99c383c6f6019404ffb4166da530bf5401cba7676a41177ea386330b89d1cad2"
+}

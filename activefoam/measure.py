@@ -34,7 +34,7 @@ def run_msd(dT, w=1.0, rho=1.0, n_side=6, t_max_tauT=100.0, burn_tauT=20.0,
         af.step()
         if it % t1_every == 0:
             n_t1 += af.do_t1_transitions()
-        if it % sample_every == 0:
+        if (it + 1) % sample_every == 0:
             cur = af.cell_centroids()
             d = cur - prev
             d -= L * np.round(d / L)
@@ -44,7 +44,7 @@ def run_msd(dT, w=1.0, rho=1.0, n_side=6, t_max_tauT=100.0, burn_tauT=20.0,
             times.append(af.time)
     traj = np.asarray(traj)
     times = np.asarray(times)
-    dt_s = sample_every * af.dt          # regular sample spacing (not the 1st gap)
+    dt_s = sample_every * af.dt          # all samples include full intervals
     # measure displacements in the tissue centre-of-mass frame
     traj = traj - traj.mean(axis=1, keepdims=True)
 
@@ -53,7 +53,7 @@ def run_msd(dT, w=1.0, rho=1.0, n_side=6, t_max_tauT=100.0, burn_tauT=20.0,
     msd = np.empty(len(lags))
     for i, lag in enumerate(lags):
         disp = traj[lag:] - traj[:-lag]
-        msd[i] = np.mean(np.sum(disp ** 2, axis=2))
+        msd[i] = np.mean(np.sum(disp ** 2, axis=2)) / af.A0
     tlag = dt_s * lags / af.tauT
     ne_rate = n_t1 / af.n_cells / (steps * af.dt)   # per cell per tau_R
     return tlag, msd, ne_rate
@@ -89,7 +89,7 @@ def run_stress_relaxation(dT, w=1.0, rho=1.0, n_side=6, strain=0.5,
         af.step()
         if it % t1_every == 0:
             af.do_t1_transitions()
-        if it % sample_every == 0:
+        if (it + 1) % sample_every == 0:
             pre.append(af.shear_stress())
     sigma_A = np.std(pre)
 
@@ -106,7 +106,7 @@ def run_stress_relaxation(dT, w=1.0, rho=1.0, n_side=6, strain=0.5,
         af.step()
         if it % t1_every == 0:
             af.do_t1_transitions()
-        if it % sample_every == 0:
+        if (it + 1) % sample_every == 0:
             ts.append(af.time)
             sig.append(af.shear_stress())
     ts = np.asarray(ts)

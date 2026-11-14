@@ -46,7 +46,9 @@ def equilibrate(w, rho, seed):
     ft._update_faces()
     status = "ok"
     for blk in range((ANNEAL + QUENCH) // BLOCK):
-        ft.advance(mu=0.5 if blk * BLOCK < ANNEAL else 0.0, nsteps=BLOCK, seed_spaces=True)
+        activity = 0.5 if blk * BLOCK < ANNEAL else 0.0
+        for step in range(blk * BLOCK + 1, (blk + 1) * BLOCK + 1):
+            ft.advance_scheduled(step, mu=activity)
         phi = ft.volume_fraction()
         if not np.isfinite(phi) or phi > 1.05:
             status = "invalid_geometry"; break

@@ -1,0 +1,326 @@
+[
+  {
+    "id": "equilibrium_c54b49ebc67c25ef",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_53e2b49c098df5cc",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_fb5882954e33dadc",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_9ea3e98b6bbc9a6b",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_282afa6d4035297e",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_e94240786336d033",
+    "checks": 83,
+    "microfold_checks": 7,
+    "max_crossing_depth": 0.0009510968513321256
+  },
+  {
+    "id": "equilibrium_c2790800fc549214",
+    "checks": 83,
+    "microfold_checks": 54,
+    "max_crossing_depth": 0.001721046164911168
+  },
+  {
+    "id": "equilibrium_11697c59ad5086bf",
+    "checks": 83,
+    "microfold_checks": 70,
+    "max_crossing_depth": 0.00220113812881592
+  },
+  {
+    "id": "equilibrium_1f56c2707d4bcc94",
+    "checks": 83,
+    "microfold_checks": 34,
+    "max_crossing_depth": 0.002652609278727164
+  },
+  {
+    "id": "equilibrium_92b6c6ac6d7f8fbc",
+    "checks": 83,
+    "microfold_checks": 4,
+    "max_crossing_depth": 0.004325951843444816
+  },
+  {
+    "id": "equilibrium_0a763fe7074d7df1",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_8a11413d12d78c0f",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_ea9b27589ac4db2f",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_282b6332c3b960ba",
+    "checks": 83,
+    "microfold_checks": 1,
+    "max_crossing_depth": 0.00022955975222399498
+  },
+  {
+    "id": "equilibrium_b51ee3463fd6cc98",
+    "checks": 83,
+    "microfold_checks": 6,
+    "max_crossing_depth": 0.0015175569476706678
+  },
+  {
+    "id": "equilibrium_93ae960f162af14a",
+    "checks": 83,
+    "microfold_checks": 44,
+    "max_crossing_depth": 0.0016424726223749657
+  },
+  {
+    "id": "equilibrium_30e449cccc211c71",
+    "checks": 83,
+    "microfold_checks": 43,
+    "max_crossing_depth": 0.0025274238939056557
+  },
+  {
+    "id": "equilibrium_2b34e69b529515f2",
+    "checks": 83,
+    "microfold_checks": 30,
+    "max_crossing_depth": 0.0025195988979710535
+  },
+  {
+    "id": "equilibrium_ad1bd4eb5c9358a7",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_ba0052fe75a9b4dd",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_1b5c0bc6d906b48f",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_7aaadaf881520952",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_9383c7faab6240d7",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_05870e7817d436dd",
+    "checks": 83,
+    "microfold_checks": 4,
+    "max_crossing_depth": 0.0007219063391296916
+  },
+  {
+    "id": "equilibrium_0d4e46190e48600c",
+    "checks": 83,
+    "microfold_checks": 55,
+    "max_crossing_depth": 0.0019664250525746893
+  },
+  {
+    "id": "equilibrium_1c65341ba300e3b1",
+    "checks": 83,
+    "microfold_checks": 44,
+    "max_crossing_depth": 0.002765885032668592
+  },
+  {
+    "id": "equilibrium_9c7f233334475e34",
+    "checks": 83,
+    "microfold_checks": 42,
+    "max_crossing_depth": 0.0027310674710962018
+  },
+  {
+    "id": "equilibrium_eda7c9357edc20ee",
+    "checks": 83,
+    "microfold_checks": 1,
+    "max_crossing_depth": 2.7319115909004942e-05
+  },
+  {
+    "id": "equilibrium_5b82733e0ae028f1",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_408bb698da31239e",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_eae8f18cdfa55cd3",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_f5c40211a91e9abd",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_208953fdf5908c45",
+    "checks": 83,
+    "microfold_checks": 6,
+    "max_crossing_depth": 0.0013834948252640523
+  },
+  {
+    "id": "equilibrium_13a30dae3a1be100",
+    "checks": 83,
+    "microfold_checks": 40,
+    "max_crossing_depth": 0.0027125920900314578
+  },
+  {
+    "id": "equilibrium_98eb0f75adf331eb",
+    "checks": 83,
+    "microfold_checks": 37,
+    "max_crossing_depth": 0.002264346299265226
+  },
+  {
+    "id": "equilibrium_d5d5e0dc4f4aeb34",
+    "checks": 83,
+    "microfold_checks": 34,
+    "max_crossing_depth": 0.0032111509338095213
+  },
+  {
+    "id": "equilibrium_4fdead71460f537d",
+    "checks": 83,
+    "microfold_checks": 1,
+    "max_crossing_depth": 0.004635263425224003
+  },
+  {
+    "id": "equilibrium_e04282ee3202215c",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_9fc46965a944db09",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_6b7887a37b9f0d62",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_0a3ebfffe8e5c582",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_503bfca6335b460e",
+    "checks": 83,
+    "microfold_checks": 11,
+    "max_crossing_depth": 0.0016367746306859743
+  },
+  {
+    "id": "equilibrium_9c51745c13626a4d",
+    "checks": 83,
+    "microfold_checks": 30,
+    "max_crossing_depth": 0.002725739824947552
+  },
+  {
+    "id": "equilibrium_0847a74302cd3d88",
+    "checks": 83,
+    "microfold_checks": 26,
+    "max_crossing_depth": 0.00260632839380011
+  },
+  {
+    "id": "equilibrium_4b4d9bac0224ba08",
+    "checks": 83,
+    "microfold_checks": 19,
+    "max_crossing_depth": 0.0039305550341989
+  },
+  {
+    "id": "equilibrium_ad3fa5efc5b007d4",
+    "checks": 83,
+    "microfold_checks": 1,
+    "max_crossing_depth": 0.00020572813525997368
+  },
+  {
+    "id": "equilibrium_01d45e62c0d58f3b",
+    "checks": 83,
+    "microfold_checks": 10,
+    "max_crossing_depth": 0.0029087765142760936
+  },
+  {
+    "id": "equilibrium_329baf6abec380c2",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_9c78095d2b682b1c",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_324b983282491c57",
+    "checks": 83,
+    "microfold_checks": 0,
+    "max_crossing_depth": 0.0
+  },
+  {
+    "id": "equilibrium_8ca7d210ae005030",
+    "checks": 83,
+    "microfold_checks": 6,
+    "max_crossing_depth": 0.0010797180171449466
+  },
+  {
+    "id": "equilibrium_780c9f47b74bd8f2",
+    "checks": 83,
+    "microfold_checks": 14,
+    "max_crossing_depth": 0.002094171143842283
+  },
+  {
+    "id": "equilibrium_466310dd8196c367",
+    "checks": 83,
+    "microfold_checks": 44,
+    "max_crossing_depth": 0.003573903760281672
+  },
+  {
+    "id": "equilibrium_ab56b1247eee20b3",
+    "checks": 83,
+    "microfold_checks": 14,
+    "max_crossing_depth": 0.00444531337650037
+  }
+]

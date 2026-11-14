@@ -1,0 +1,272 @@
+{
+  "paper": "10.1038/s41567-021-01215-1",
+  "model": "FoamTissue (Numba)",
+  "profile": "spot",
+  "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+  "n_side": 10,
+  "geometry_policy": "reference",
+  "panels": [
+    "2d"
+  ],
+  "limitations": {
+    "1f": "Dimensionless junction example. The published workbook gives only the experimental length trace.",
+    "3d": "Rate curves and event logs. Published example panels lack the original local trajectories.",
+    "4c": "Illustration of the shear and tension-fluctuation mechanisms.",
+    "5j": "The MPZ/PSM simulation parameter sets and overlay time intervals were not identified.",
+    "S1": "Analytical force-balance illustration."
+  },
+  "jobs": [
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 0.81,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_0b804d307a1ae7d8"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 0.81,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_d4e35a3a18f75cc6"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 0.81,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_4954c0ba2929e530"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 0.81,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_ee6683b34ae04760"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_1c7442559646bdbf"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.0,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_298d7dabf91aded8"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.0,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_88815bafacd2cd56"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_e5be0ff392c85748"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_9455daeafa8791d7"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.44,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_b0bb2bcace2d309c"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.44,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_654d0cf68542a119"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.44,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_78b731bb1f9ac1d4"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.44,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_9e14dd1bb37ff185"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.44,
+        "record_space": true,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2d"
+      ],
+      "source_hash": "31ad485f6dd9d9afb14c9db72ad75cb5615f03f51e855538d1c70dd08c1fc5fd",
+      "profile": "spot",
+      "id": "equilibrium_b9262dd34a60be05"
+    }
+  ]
+}

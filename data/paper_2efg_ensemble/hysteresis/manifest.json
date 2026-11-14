@@ -1,0 +1,1042 @@
+{
+  "paper": "10.1038/s41567-021-01215-1",
+  "model": "FoamTissue (Numba)",
+  "profile": "full",
+  "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+  "n_side": 10,
+  "geometry_policy": "reference",
+  "pressure_normals": "reference",
+  "panels": [
+    "2e",
+    "2f",
+    "2g"
+  ],
+  "limitations": {
+    "1f": "Dimensionless junction example. The published workbook gives only the experimental length trace.",
+    "3d": "The event images show local reruns. Published example frames are unavailable.",
+    "4c": "Illustration of the shear and tension-fluctuation mechanisms.",
+    "S1": "Analytical force-balance illustration."
+  },
+  "jobs": [
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_e2eddbeee61cfbbe"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 2,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_9c7f7e841a8d26f6"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 3,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_e2efec55afaa778c"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 4,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_f4f4cc26398c2985"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 5,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_5e183271c2c334f4"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 6,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_424df302504f438e"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 7,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_c594655a71af10d2"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 8,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_8e5f30bea18768f1"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 9,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_6a064a7c55c0c077"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "up",
+        "pilot": false,
+        "seed": 10,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_23f85fd96fe9689c"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_0d6b18014272cd27"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 2,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_e60ddc17fafbaed8"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 3,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_e60ea69404946266"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 4,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_c7b49129f0a5520b"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 5,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_f86266b3aa4b9b42"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 6,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_9ff90e95b79082b4"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 7,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_663e2df44b273a5a"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 8,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_a2bc1cb1784c12bf"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 9,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_77ab9c477a58b0c5"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 0.81,
+        "direction": "down",
+        "pilot": false,
+        "seed": 10,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_487211aa3414acc1"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_58871a8b300cc88d"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 2,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_f2618fd064ffb25b"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 3,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_42742f001260b525"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 4,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_025a64bffda82d69"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 5,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_6a8727772a443d9f"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 6,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_f2dda9a4e498ebda"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 7,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_fed0014488f6d021"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 8,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_e517f5b10a67953b"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 9,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_7ca38ec5a477036c"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "up",
+        "pilot": false,
+        "seed": 10,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_5bf239fe4fa18426"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_b7cac72ae3f18020"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 2,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_34eb3db98cb7030a"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 3,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_cbdebc5072ff15b9"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 4,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_f9896150c8ec17b6"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 5,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_65f66a0b653ac09b"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 6,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_4340470fd1a62259"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 7,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_f398ebe2a024d189"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 8,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_b0b01115db179181"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 9,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_a7cd213a58773f90"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.0,
+        "direction": "down",
+        "pilot": false,
+        "seed": 10,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_dd0dd5342a807be9"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_011aa2a6a2a966ec"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 2,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_a831a99ae0cf9d93"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 3,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_aef266371e96dc6d"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 4,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_400a2e9ffcd64af0"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 5,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_cf1c89decd65ef70"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 6,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_677f7453be63c3d3"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 7,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_8f4e77828d61b1b5"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 8,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_c24df80a0d02f7f5"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 9,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_7775da9b7c88e5e5"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "up",
+        "pilot": false,
+        "seed": 10,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_4abed7f465b9aa10"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_f09909ba1eb9cb7a"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 2,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_ad001997f3af36c9"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 3,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_5d45ed95f868669b"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 4,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_fb792038e1f3b6bb"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 5,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_009aabf11947d197"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 6,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_7ad360fc2e0417e3"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 7,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_875e117e33b9dcb1"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 8,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_424593e683064cc0"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 9,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_d5d8b2542a614df7"
+    },
+    {
+      "kind": "hysteresis",
+      "parameters": {
+        "rho": 1.44,
+        "direction": "down",
+        "pilot": false,
+        "seed": 10,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "2e"
+      ],
+      "source_hash": "e4b422f9c93a5138241934740cd0fc28a9217ccf18363c8074dde54f1072c65e",
+      "profile": "full",
+      "id": "hysteresis_35e65e54aff540ef"
+    }
+  ]
+}

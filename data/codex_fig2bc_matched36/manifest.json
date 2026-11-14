@@ -1,0 +1,664 @@
+{
+  "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+  "model": "FoamTissue",
+  "pilot": false,
+  "n_side": 6,
+  "seeds": 1,
+  "dt": 0.005,
+  "edpc": 0.15,
+  "figures": [
+    "2b",
+    "2c"
+  ],
+  "map_grid_source": "matched to run_fig2bc_coarse.py",
+  "jobs": [
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_c54b49ebc67c25ef"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_53e2b49c098df5cc"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_fb5882954e33dadc"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_9ea3e98b6bbc9a6b"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_282afa6d4035297e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_e94240786336d033"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_c2790800fc549214"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_11697c59ad5086bf"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 0.81,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_1f56c2707d4bcc94"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_92b6c6ac6d7f8fbc"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_0a763fe7074d7df1"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_8a11413d12d78c0f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_ea9b27589ac4db2f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_282b6332c3b960ba"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_b51ee3463fd6cc98"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_93ae960f162af14a"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_30e449cccc211c71"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 0.9216,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_2b34e69b529515f2"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_ad1bd4eb5c9358a7"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_ba0052fe75a9b4dd"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_1b5c0bc6d906b48f"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_7aaadaf881520952"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_9383c7faab6240d7"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_05870e7817d436dd"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_0d4e46190e48600c"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_1c65341ba300e3b1"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_9c7f233334475e34"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_eda7c9357edc20ee"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_5b82733e0ae028f1"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_408bb698da31239e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_eae8f18cdfa55cd3"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_f5c40211a91e9abd"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_208953fdf5908c45"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_13a30dae3a1be100"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_98eb0f75adf331eb"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.1236,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_d5d5e0dc4f4aeb34"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_4fdead71460f537d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_e04282ee3202215c"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_9fc46965a944db09"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_6b7887a37b9f0d62"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_0a3ebfffe8e5c582"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_503bfca6335b460e"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_9c51745c13626a4d"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_0847a74302cd3d88"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.2544,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_4b4d9bac0224ba08"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_ad3fa5efc5b007d4"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.1,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_01d45e62c0d58f3b"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.2,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_329baf6abec380c2"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_9c78095d2b682b1c"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.4,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_324b983282491c57"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_8ca7d210ae005030"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.6,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_780c9f47b74bd8f2"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.7,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_466310dd8196c367"
+    },
+    {
+      "kind": "equilibrium",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.44,
+        "seed": 1,
+        "n_side": 6
+      },
+      "source_hash": "8be088056a45eab55774a6f6c43da74635f39fa1fb02c9949bc15bcb670ac687",
+      "pilot": false,
+      "id": "equilibrium_ab56b1247eee20b3"
+    }
+  ]
+}

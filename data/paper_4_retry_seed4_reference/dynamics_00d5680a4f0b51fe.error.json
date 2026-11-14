@@ -1,0 +1,28 @@
+{
+  "job": {
+    "kind": "dynamics",
+    "parameters": {
+      "w": 1.2,
+      "rho": 1.0,
+      "mu": 1.5,
+      "duration_tauT": 120.0,
+      "record_msd": false,
+      "record_snapshot": false,
+      "record_junction": false,
+      "example": null,
+      "seed": 4,
+      "n_side": 10,
+      "geometry_policy": "reference"
+    },
+    "panels": [
+      "4d",
+      "4e",
+      "4f",
+      "4g"
+    ],
+    "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+    "profile": "full",
+    "id": "dynamics_00d5680a4f0b51fe"
+  },
+  "elapsed_seconds": 143.2369441986084
+}

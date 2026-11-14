@@ -1,4 +1,10 @@
 __pycache__/
 *.pyc
 data/*.log
-data/paper_*
+
+.venv/
+.pytest_cache/
+.mplconfig/
+
+.venv-native/
+data/paper_*/

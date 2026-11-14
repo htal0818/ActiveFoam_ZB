@@ -6,6 +6,7 @@ tissue and that the vectorised forces match a direct reference implementation.
 """
 import os, sys
 import numpy as np
+import pytest
 from collections import Counter
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -101,9 +102,31 @@ def test_foam_transitions_stable():
     assert all(len(ft.f_v[c]) >= 3 and ft.f_area[c] > 1e-4 for c in range(ft.nFa))
 
 
-def test_closed_spaces_persist_as_triangles():
-    """No space annihilation (as in the reference code and the Methods):
-    at high adhesion the seeded spaces close but stay as tiny triangles."""
+def test_boundary_pressure_normal_on_concave_cell():
+    pytest.importorskip("numba")
+    from activefoam.foam_full import FoamTissue
+    from activefoam.topology import Tissue
+
+    positions = np.array([[1., 1.], [3., 1.], [3., 3.], [2.6, 3.],
+                          [2.6, 1.4], [1.4, 1.4], [1.4, 3.], [1., 3.]])
+    base = Tissue(6., positions, [list(range(len(positions)))])
+    reference = FoamTissue(base, rho=3., dt=1e-4)
+    boundary = FoamTissue(base, rho=3., dt=1e-4, pressure_normals="boundary")
+    accelerated = FoamTissue(base, rho=3., dt=1e-4, pressure_normals="boundary",
+                             accelerated=True)
+    edge = np.flatnonzero(np.all(boundary.e_v == [4, 5], axis=1)).item()
+    for foam in (reference, boundary, accelerated):
+        foam.e_t[:] = 0.
+        foam.step()
+
+    # The centroid lies above the reentrant film, which also bounds the space above it.
+    assert reference.e_mid[edge][1, 1] < 1.4 < boundary.e_mid[edge][1, 1]
+    np.testing.assert_allclose(accelerated.vpos, boundary.vpos, rtol=0, atol=1e-12)
+    for fast_film, film in zip(accelerated.e_mid, boundary.e_mid):
+        np.testing.assert_allclose(fast_film, film, rtol=0, atol=1e-12)
+
+
+def test_t2_annihilation_reverses_creation():
     import numpy as np
     from activefoam.topology import build_periodic_voronoi
     from activefoam.foam_full import FoamTissue, SPACE
@@ -115,14 +138,12 @@ def test_closed_spaces_persist_as_triangles():
     for v in range(nv0):
         ft.t2_reverse(v)
     ft._update_faces()
-    ft.advance(mu=0.0, nsteps=300, seed_spaces=False)        # high W closes spaces
-    assert not hasattr(ft, "t2_annihilate_spaces")
-    # nothing removes a closed space; the only losses are neighbouring
-    # triangles merging (T1 -> T3-reverse, two vertices per merge)
-    assert len(ft.vpos) > 2.5 * nv0 and (3 * nv0 - len(ft.vpos)) % 2 == 0
-    assert int(np.sum(np.any(ft.e_f == SPACE, axis=1))) == len(ft.vpos)
-    assert np.all(np.isfinite(ft.vpos)) and np.all(ft.f_area > 1e-4)
-    assert abs(ft.f_area.sum() - ft.bs ** 2) < 1e-2          # but effectively confluent
+    for _ in range(150):
+        ft.step(mu=0.0)                                      # high W closes spaces
+    n = ft.t2_annihilate_spaces(area_thr=1e-2)               # generous -> remove all
+    assert len(ft.vpos) == nv0                               # back to confluent
+    assert int(np.sum(np.any(ft.e_f == SPACE, axis=1))) == 0
+    assert abs(ft.f_area.sum() - ft.bs ** 2) < 1e-2
 
 
 def test_t4_adjacent_resolves_fold():
@@ -144,6 +165,49 @@ def test_t4_adjacent_resolves_fold():
     assert n2 == 0                                          # fold resolved
     assert edge_len(ft.e_mid[0]).sum() > 0
     assert np.allclose(ft.e_mid[0][0], pt) and np.allclose(ft.e_mid[1][0], pt)
+
+
+@pytest.mark.parametrize("diagonal_end", [2.5, 1.92])
+def test_adjacent_t4_sweeps_remaining_pairs(diagonal_end, monkeypatch):
+    from activefoam.foam_full import FoamTissue, SPACE
+
+    ft = FoamTissue.__new__(FoamTissue)
+    ft.bs, ft.sstn, ft.edpc = 100., 0., .15
+    ft.e_mid = [
+        np.array([[0., 0.], [1., 2.], [3., 0.]]),
+        np.array([[0., 0.], [diagonal_end, diagonal_end]]),
+        np.array([[0., 0.], [2., 1.6], [1.8, 2.3]]),
+    ]
+    ft.vpos = np.array([[0., 0.], *(film[-1] for film in ft.e_mid)])
+    ft.e_v = np.array([[0, 1], [0, 2], [0, 3]])
+    ft.v_e = np.array([[0, 1, 2], [0, -1, -1], [1, -1, -1], [2, -1, -1]])
+    ft.v_f = np.full((4, 3), SPACE)
+    ft.e_f = np.full((3, 2), SPACE)
+    ft.e_t = np.ones(3)
+    ft.e_rfn = np.array([1, 0, 1])
+    ft.f_v, ft.f_e = [], []
+    ft.f_area, ft.f_center = np.empty(0), np.empty((0, 2))
+
+    restores = []
+    restore = ft._restore
+
+    def record_restore(snapshot):
+        restores.append(snapshot)
+        restore(snapshot)
+
+    monkeypatch.setattr(ft, "_restore", record_restore)
+    assert ft.t4_adjacent(0)
+    assert ft._edge_cross_adjacent(0, 1, 0)[0] == 0
+    np.testing.assert_allclose([film[0] for film in ft.e_mid], np.tile(ft.vpos[0], (3, 1)))
+    if diagonal_end > 2.:
+        assert not restores
+        assert ft._edge_cross_adjacent(1, 2, 0)[0] == 0
+        assert ft.vpos[0, 0] > 1.8
+    else:
+        # The second trim would retain less than 5% of the diagonal film.
+        assert len(restores) == 1
+        np.testing.assert_allclose(ft.vpos[0], [1.5, 1.5])
+        assert ft._edge_cross_adjacent(1, 2, 0)[0] == 1
 
 
 def test_t4_reduces_folds_in_run():
@@ -248,7 +312,11 @@ def test_t4_transition_cuts_lens():
             continue
         f1, f2 = int(ft.e_f[e1, 1]), int(ft.e_f[e2, 1])
         nE, nV = len(ft.e_v), len(ft.vpos)
-        if ft.t4_transition(e1):
+        original_candidates = ft._t4_candidates
+        ft._t4_candidates = lambda ce: [e2] if ce == e1 else original_candidates(ce)
+        accepted = ft.t4_transition(e1)
+        ft._t4_candidates = original_candidates
+        if accepted:
             assert len(ft.e_v) == nE + 3 and len(ft.vpos) == nV + 2
             assert np.sum(ft.v_e[-1] >= 0) == 3 and np.sum(ft.v_e[-2] >= 0) == 3
             assert all(len(ft.f_v[f]) >= 3 and not ft._cell_self_intersects(f)
@@ -291,6 +359,84 @@ def test_t4_rejects_degenerate_lens():
     for _ in range(20):                                  # still finite afterwards
         ft.step(mu=0.5)
     assert np.all(np.isfinite(ft.vpos))
+
+
+def test_exterior_space_count_respects_periodic_background_and_seed_cutoff():
+    from activefoam.foam_full import FoamTissue
+    from activefoam.paper_measure import exterior_spaces
+    from activefoam.topology import Tissue
+
+    # An isolated cell spans the horizontal seam. The exterior is one
+    # connected space with area L² minus the cell area.
+    isolated = Tissue(4., np.array([[3.5, 1.], [.5, 1.], [.5, 2.], [3.5, 2.]]),
+                      [[0, 1, 2, 3]])
+    assert exterior_spaces(FoamTissue(isolated)) == pytest.approx((1, 15.))
+
+    foam = FoamTissue(build_periodic_voronoi(4, np.random.default_rng(0)))
+    assert exterior_spaces(foam) == (0, 0.)
+    vertices = len(foam.vpos)
+    foam.t2_reverse(0)
+    assert len(foam.vpos) == vertices + 2
+    count, area = exterior_spaces(foam, min_area_fraction=0.)
+    assert count == 1
+    assert area == pytest.approx(foam.bs**2 - foam.f_area.sum())
+    assert exterior_spaces(foam, min_area_fraction=2.*area / foam.A0) == (0, 0.)
+
+
+@pytest.mark.parametrize("w,rho,steps", [(0., 1., 1000), (.2, .81, 1800)])
+def test_t4_contacts_are_oppositely_oriented_at_low_adhesion(w, rho, steps):
+    from activefoam.foam_measure import initialize
+
+    foam = initialize(w, rho, 1, 4, anneal_tauT=0., geometry_policy='reference')
+
+    def check_contacts(_, transition, state):
+        if transition == 'T4':
+            for e in np.flatnonzero(state.e_f[:, 0] >= 0):
+                assert state._opposed_contact(int(e))
+
+    for i in range(1, steps + 1):
+        foam.advance_scheduled(i, .5, contact_observer=check_contacts)
+
+
+def test_neighbor_exchange_records_distinct_cell_pairs():
+    from types import SimpleNamespace
+
+    from activefoam.paper_measure import ContactEvents
+
+    foam = SimpleNamespace(e_f=np.array([[0, 1], [0, 1], [2, 3], [-1, 0]]), dt=.005)
+    record = ContactEvents(foam, start=10)
+    foam.e_f = foam.e_f[1:]  # Removing a duplicate film leaves the cell contact.
+    record(11, 'T1', foam)
+    assert not record.rows
+    foam.e_f = np.array([[0, 2], [2, 3], [-1, 0]])
+    record(12, 'T1', foam)
+    foam.e_f = np.array([[0, 2], [2, 3], [1, 3]])
+    record(12, 'T4', foam)
+    assert record.array() == pytest.approx(np.array([
+        [.01, 0, 1, -1, 1],
+        [.01, 0, 2, 1, 1],
+        [.01, 1, 3, 1, 0],
+    ]))
+
+
+def test_sampled_neighbor_changes_cancel_within_matlab_frame():
+    from activefoam.paper_measure import sampled_neighbor_changes
+
+    events = np.array([
+        [.010, 0, 1, 1, 0],  # Before the first saved frame.
+        [.020, 1, 2, 1, 0],
+        [.060, 1, 2, -1, 0],  # Same sampled interval, so no net change.
+        [.065, 0, 1, -1, 0],  # The event on the sampled step is included.
+        [.070, 0, 1, 1, 0],
+        [.120, 1, 2, 1, 0],  # No subsequent saved frame in this window.
+    ])
+    times, counts, duration = sampled_neighbor_changes(events, 0., .125)
+    assert times == pytest.approx([.065, .115])
+    assert counts == pytest.approx([2., 2.])
+    assert duration == pytest.approx(.1)
+    times, counts, duration = sampled_neighbor_changes(events, 0., .125, stride=20)
+    assert times.size == counts.size == 0
+    assert duration == pytest.approx(.1)
 
 
 def _bubble_tissue(cells):
@@ -376,10 +522,9 @@ if __name__ == "__main__":
     test_forces_match_reference()
     test_t1_conserves_topology()
     test_foam_transitions_stable()
-    test_closed_spaces_persist_as_triangles()
+    test_t2_annihilation_reverses_creation()
     test_t4_adjacent_resolves_fold()
     test_t4_reduces_folds_in_run()
     test_t4_transition_cuts_lens()
     test_t4_rejects_degenerate_lens()
-    test_t4_transition_loop_cases()
     print("all checks passed (confluent + foam transitions + full T4)")
