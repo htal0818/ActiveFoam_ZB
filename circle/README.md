@@ -195,6 +195,11 @@ Two things stand out.
 
 ## Parameter sweeps and wall curvature
 
+**Activity normalization under review:** `μ` is the implemented OU noise input.
+Its mapping to the paper’s `ΔT/T0` is not verified; see
+[`NOISE_CONVENTION.md`](NOISE_CONVENTION.md). Existing sweep values remain labeled
+`μ` and should not yet be read as calibrated paper activity values.
+
 The reproducible exploratory sweep extends the planar-style packing, contact-number,
 shape-index and MSD plots to three circular containers, with matched periodic size
 controls. The tissue remains flat: the varied curvature is **wall curvature** `κ=1/R`.
