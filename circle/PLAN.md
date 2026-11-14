@@ -1,6 +1,6 @@
 # Shared plan: active foam inside a rigid circular wall
 
-Branch: `claude/sharp-mendel-6bax2h`. All disc code lives in `circle/`; nothing in
+Implementation continued from `e306dbe` on `codex/circular-wall-validation`. All disc code lives in `circle/`; nothing in
 `activefoam/` is edited. If a planar edit proves necessary it is raised first.
 
 ## Model
@@ -40,41 +40,42 @@ Each step's tests and the 42 planar tests must pass before the next step.
 | 3 | Transition guards and rollback (`state.py`, `disc.py`) | `tests/test_transitions.py` | Claude | done |
 | 4 | Active-run audit, box independence, overlap diagnostics | `tests/test_consistency.py` | Claude | done |
 | 5 | Measurements (`measure.py`) | `tests/test_measure.py` | Claude | done |
-| 6 | Compiled vs pure-Python kernel; then disc vs matched periodic | `tests/test_acceleration.py`, `scripts/pilot_compare.py` | Claude | kernel check done; pilot comparison only (2 seeds), ensembles deferred |
-| R | Independent review of each pushed step | — | ChatGPT | steps 1–2 reviewed at `cb24540`; three findings fixed |
+| 6 | Compiled vs pure-Python kernel; then disc vs matched periodic | `tests/test_disc_acceleration.py`, `scripts/pilot_compare.py` | Claude | kernel check done; pilot comparison only (2 seeds), ensembles deferred |
+| R | Independent review of each pushed step | — | ChatGPT | reviewed through `e306dbe`; validation and benchmark follow-up implemented by Codex |
 
 Measured results: [`BENCHMARKS.md`](BENCHMARKS.md) and the summary in [`README.md`](README.md).
 
-## Working together
+## Follow-up after independent review
 
-- Run the gates:
-
-  ```bash
-  python -m pytest tests -q
-  ```
-
-  ```bash
-  python -m pytest circle/tests -q
-  ```
-
-- Hand changes back as patches against a named commit of this branch, with the test output.
-- Disagreements about the model or a test criterion go in this file under "Open points",
-  not into the code.
+- Strict validation now enforces inter-film crossings, with explicit topology and
+  distance witnesses for tolerated local folds at collapsed spaces. Unrelated
+  overlapping circles are rejected even when both cells are individually simple.
+- Preparation remains at W=0, rho=1. A previously accepted high-activity preparation
+  develops a resolved crossing; it is now a rejection regression rather than a
+  successful measurement fixture.
+- Active resampling comparisons use corrected preparation and checked trajectories;
+  averages use only complete valid seed pairs, with failures and paired differences
+  retained in JSON. Wall-aware resampling stays off by default.
+- The finest-level comparison uses scale 8 on both sides. Duplicate test module
+  names were removed, so `python -m pytest tests circle/tests -q` works.
+- Disk evolution continues the transition cadence across successive calls.
 
 ## Open points
 
 - **`rho = 1` is not a matched comparison point.** The periodic box holds the tissue in
   tension at cell area 1; a nonadhesive wall cannot, so the disc tissue shrinks to cell
   areas of 0.86–0.93 and leaves the wall. Ensembles should compare at matched interior
-  cell area or pressure, or stay at `rho >= 1.2`, where the tissue presses on the wall.
+  cell area or pressure, or begin with compressed points such as `rho >= 1.2` in this pilot. Verify contact
+  at each point; this is not a universal threshold.
 - **Partial-contact traction converges slowly.** About 9% high at spacing 0.15 for three
   cells; 0.5% between the two finest levels. Wall reaction in ensembles needs a spacing
   study at the cell numbers used.
-- **Remeshing and contact.** Instantaneous reaction dips as low as 48% of its mean after
-  resampling; no resolved bias in the time average (21.6 ± 0.1 vs 21.8 ± 0.1). Wall-aware
-  resampling exists as an option and is off by default. Decide whether to turn it on.
-- **Interior shape factor** is 0.03–0.05 above the periodic value at every pilot point.
-  Size dependence untested.
+- **Remeshing and contact.** Instantaneous loads depend on sampling. Use the regenerated
+  paired results in `BENCHMARKS.md`: two wall-aware seeds failed, leaving one
+  complete pair. The old unvalidated
+  raw-tiling averages have been withdrawn. The optional wall-aware mode remains off.
+- **Interior shape factor.** Size dependence is untested; compare only accepted runs
+  and report numerical convergence before interpreting differences physically.
 - **No natural out-of-wall rejection** has been observed; the guard is tested with
   fixtures only.
 
@@ -82,3 +83,7 @@ Measured results: [`BENCHMARKS.md`](BENCHMARKS.md) and the summary in [`README.m
 
 Sphere and ring models, wall adhesion, exact circular-arc contact segments, shear rheology,
 production ensembles.
+
+Rerun outcome: 36/36 pilot runs accepted under the documented tolerance; 12 disk
+endpoints clean and six with tolerated local microfolds. Scientific convergence
+remains open. No wall-aware-default change is justified by the surviving pair.

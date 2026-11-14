@@ -38,9 +38,12 @@ def run(task):
     try:
         if kind == "disc":
             foam = call_with_budget(BUDGET, protocol.equilibrated, N_CELLS, w, rho, seed)
-            report = protocol.validate(foam, strict=False)
+            report = protocol.validate(foam)
             out.update(zone_statistics(foam))
             out.update(film_crossings=report["film_crossings"], nested=report["nested"],
+                       resolved_film_crossings=report["resolved_film_crossings"],
+                       local_film_microfolds=report["local_film_microfolds"],
+                       geometry_status=report["geometry_status"],
                        microfold_checks=int(report["microfold_checks"]),
                        wall_load=wall_load(foam.wall)["total"],
                        accepted=foam.log.counts(), rejected=foam.log.counts("rejected"))

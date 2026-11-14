@@ -76,12 +76,14 @@ def test_zone_statistics_partition_the_cells():
 
 
 def test_dynamics_recorder_splits_motion_and_exchange_by_zone():
-    foam = protocol.initialize(16, 0.5, 1.2, seed=1, anneal_mu=1.0)
+    # The old high-activity preparation has a resolved overlap and now has a
+    # separate rejection regression. Exercise the recorder on a validated state.
+    foam = protocol.equilibrated(36, 1.0, 1.3, seed=1)
     recorder = DynamicsRecorder(foam)
-    protocol.evolve(foam, 10.0, 1.0, sample_every=20, observer=recorder)
+    protocol.evolve(foam, 1.0, 0.2, sample_every=20, observer=recorder)
     out = recorder.results()
-    assert out["n_wall"] + out["n_interior"] == 16
-    assert out["duration"] == pytest.approx(10.0)
+    assert out["n_wall"] + out["n_interior"] == 36
+    assert out["duration"] == pytest.approx(1.0)
     for name in ("wall", "interior"):
         assert np.all(np.isfinite(out[f"msd_{name}"])) and np.all(out[f"msd_{name}"] >= 0)
         assert out[f"exchange_rate_{name}"] >= 0
@@ -93,3 +95,9 @@ def test_dynamics_recorder_splits_motion_and_exchange_by_zone():
     quiet(0.1, still)                                      # no step taken: nothing moved
     result = quiet.results()
     assert result["exchange_rate_wall"] == 0 and np.all(result["msd_interior"] == 0)
+
+
+def test_old_high_activity_preparation_rejects_resolved_overlap():
+    # Previously accepted because film_crossings was only reported, not enforced.
+    with pytest.raises(ValueError, match="resolved film crossing"):
+        protocol.initialize(16, 0.5, 1.2, seed=1, anneal_mu=1.0)

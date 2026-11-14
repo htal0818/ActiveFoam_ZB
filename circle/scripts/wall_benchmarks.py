@@ -6,6 +6,7 @@ Every table states the time step, film spacing, run duration, equilibrium
 criterion and measured error.  Fixed-mesh results and results with remeshing
 enabled are reported separately.
 """
+import json
 import sys
 import time
 from pathlib import Path
@@ -18,6 +19,8 @@ OUT = Path(__file__).resolve().parents[1] / "BENCHMARKS.md"
 
 
 def fmt(value):
+    if value is None:
+        return "n/a"
     if isinstance(value, bool):
         return "yes" if value else "no"
     if isinstance(value, float):
@@ -117,8 +120,8 @@ def main():
             "The reaction in partial contact therefore converges more slowly than in full",
             "contact: at the default spacing 0.15 it is about 9% above the finest level.", ""]
 
-    aware = b.three_cell_refinement(scales=(4,), wall_resample=True)["rows"][0]
-    plain = three["rows"][2]
+    aware = b.three_cell_refinement(scales=(8,), wall_resample=True)["rows"][0]
+    plain = three["rows"][-1]
     active = b.resampling_effect_active()
     out += ["## Effect of resampling on wall contact", "",
             "A node created by resampling a wall-following film starts on the chord, slightly",
@@ -132,9 +135,19 @@ def main():
             f"mu = {active['mu']}), time-averaged reaction:", "",
             table(active["rows"], [("wall-aware", "wall_resample"), ("dt", "dt"),
                                    ("spacing", "spacing"), ("duration", "duration"),
-                                   ("seeds", "seeds"), ("mean reaction", "mean"),
+                                   ("valid paired seeds", "seeds"), ("mean reaction", "mean"),
                                    ("standard error", "standard_error"),
                                    ("arrivals per step", "arrivals_per_step")]), ""]
+
+    out += ["Preparation uses W=0, rho=1 before switching parameters. Invalid runs are excluded",
+            "from both members of a seed pair. Geometry checks distinguish tolerated local",
+            "microfolds from resolved crossings; no absence of bias is inferred from three seeds.", "",
+            "| seed | wall-aware | valid | error |", "|---|---|---|---|"]
+    for run in active["runs"]:
+        out.append(f"| {run['seed']} | {fmt(run['wall_resample'])} | {fmt(run['valid'])} | {run.get('error', '')} |")
+    out += ["", table(active["paired_differences"], [("seed", "seed"), ("wall-aware minus plain", "difference")]),
+            "", f"Paired mean difference: {fmt(active['paired_mean'])}; standard error: {fmt(active['paired_standard_error'])}.", ""]
+    (OUT.parent / "data" / "resampling_comparison.json").write_text(json.dumps(active, indent=2, allow_nan=False)+"\n")
 
     chord = b.chord_deficit()
     out += ["## Chord-area deficit of the initial tiling", "",

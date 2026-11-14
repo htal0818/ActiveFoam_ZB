@@ -86,7 +86,7 @@ measured error.
 | `test_transitions.py` | attribute classification, snapshot completeness, rejection and rollback for every transition kind, wall-adjacent accepted events, determinism |
 | `test_consistency.py` | crossing and nesting diagnostics, Euclidean audit, box independence over an active run |
 | `test_measure.py` | node counting, traction units, zones, dynamics recorder |
-| `test_acceleration.py` | compiled kernel against its pure-Python execution |
+| `test_disc_acceleration.py` | compiled kernel against its pure-Python execution |
 
 ## What the checks show
 
@@ -113,12 +113,14 @@ step and spacing. At the default spacing it is about 9% above the finest level.
 `(x_projected - x_trial)/(M dt)` differs from `max(0, f.n)` by 7e-8, 3e-8 and 2e-8 at
 `dt`, `dt/2` and `dt/4` (first order).
 
-**Remeshing and contact.** A freshly resampled node of a wall-following film starts
-slightly inside the wall. In the three-cell case the instantaneous reaction dips as low as 48%
-of its mean while films are being resampled; the equilibrium value is unaffected. In an
-active 16-cell tissue the time-averaged reaction is 21.6 ± 0.1 with plain resampling and
-21.8 ± 0.1 with the optional wall-aware resampling (three seeds), not a resolved
-difference. Wall-aware resampling stays off by default.
+**Remeshing and contact.** Plain resampling can temporarily remove wall contact;
+wall-aware resampling remains optional and off by default. The regenerated comparison
+uses corrected preparation, geometry checks every 100 steps and at the end, and paired
+seed differences. See `BENCHMARKS.md` and `data/resampling_comparison.json` for valid and
+failed runs. The earlier raw-tiling averages are superseded; they were not validated.
+All three plain runs completed; two wall-aware runs failed geometry checks,
+leaving one valid pair (21.50 versus 21.67, difference 0.1733). There is no estimable
+between-seed uncertainty for one pair. No equivalence or absence of bias is inferred.
 
 **Transitions.** All five transition kinds occur within one cell length of the wall
 and are accepted. No transition left the disc naturally in these runs; rejection and
@@ -128,11 +130,39 @@ the physical state and the random generator exactly, and consumes no random draw
 **Auxiliary box.** Audit mode finds no periodic shift in active runs, and runs in boxes
 of 8, 16 and 1000 `R_w` at fixed absolute coordinates are bitwise identical.
 
+## Geometry acceptance and continuation
+
+`protocol.validate(..., strict=True)` rejects resolved film crossings, nesting,
+nonfinite geometry, excessive area and wall penetration. Crossing diagnostics cover
+self-crossings and crossings between films, including films sharing a junction.
+A local fold is tolerated only when the crossing is within `0.01*2*sqrt(pi)` of both
+participating endpoints, and those endpoints are identical or connected by free films
+shorter than that threshold (the split junctions around a collapsed space). Nearby
+unrelated vertices do not provide an exemption. Accepted microfolds remain explicitly
+reported as `geometry_status="tolerated_microfolds"`; this is a numerical tolerance,
+not a demonstration of physical validity or convergence. Checks count proper segment
+crossings; the pilot checks geometry every 100 steps and at each stage end.
+
+`strict=False` reports resolved crossings instead of rejecting them. It is for diagnosis,
+not accepting scientific runs. The periodic comparator retains its original per-cell
+geometry checks; it does not acquire the disk's extra inter-film diagnostic.
+
+Successive calls to `protocol.evolve` on a disk now continue its transition cadence by
+default. Observer times remain relative to each call. An explicit `start` overrides the
+cadence index. The two suites can also be collected together:
+
+```bash
+python -m pytest tests circle/tests -q
+```
+
 ## Pilot comparison with the periodic box
 
 Two seeds per point, 100 cells, equilibrated at zero activity
-(`scripts/pilot_compare.py`; data in `data/pilot_compare.json`). This is a pilot, not an
-ensemble.
+(`scripts/pilot_compare.py`; data in `data/pilot_compare.json`). All 36 runs passed
+on rerun. Among the 18 disk endpoints, 12 were clean and six had tolerated local
+microfolds. Acceptance is conditional on the stated geometric tolerance and sampled
+check cadence, not a claim of overlap-free trajectories at every instant. This is a
+pilot, not a production ensemble.
 
 ![disc configurations](../figures/circle/disc_configs.png)
 
@@ -157,7 +187,7 @@ Two things stand out.
   tissue presses on the wall, here from about `rho = 1.2`.
 - **Under compression the interior is close to the periodic values.** For `rho >= 1.2`
   interior contact number is 5.94–6.01 against 6.00 and interior cell area is within 3%.
-  The interior shape factor is 0.03–0.05 higher in the disc at every point. Whether
+  The interior shape factor differs between the domains; interpretation must use only accepted seed pairs. Whether
   that difference shrinks with system size has not been tested.
 
 
@@ -168,9 +198,9 @@ Two things stand out.
 - Total wall reaction in partial contact converges more slowly than in full contact;
   see the three-cell table in `BENCHMARKS.md`.
 - No shear protocol: a frictionless wall cannot impose shear.
-- Under compression, collapsed extracellular spaces persist as sub-threshold folds, as
-  in the planar model. `protocol.validate` reports them (`film_crossings`,
-  `microfold_checks`): 17–20 crossings remain at `W/T0 = 1.5`, `rho >= 1.2` in 100 cells.
+- Under compression, collapsed extracellular spaces can persist as local microfolds.
+  They are reported separately from clean geometry and require timestep and spacing
+  convergence before quantitative claims. Resolved crossings abort strict runs.
 - Adhesions below `W/T0 = 0.5`, where the planar model tangles, have not been run in
   the disc beyond the transition tests.
 - The preparation relaxes the tiling at `W = 0`, `rho = 1` before switching to the target

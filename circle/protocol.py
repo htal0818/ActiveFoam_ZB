@@ -14,7 +14,7 @@ from activefoam.topology import build_periodic_voronoi
 
 from . import state
 from .disc import DiscFoam
-from .kernels import contained_cells, film_crossings
+from .kernels import contained_cells, crossing_details, local_junction_groups
 
 SHORT_EDGE = 0.001 * 2 * np.sqrt(np.pi)
 FOLD_DEPTH = 0.01 * 2 * np.sqrt(np.pi)
@@ -28,8 +28,11 @@ def validate(foam, strict=True):
 
     The packing fraction is a necessary check only: overlapping cells can sum to
     less than the disc area.  Overlap is tested explicitly through per-cell
-    self-crossings (planar report), crossings between films that share no
-    junction, and cells nested inside other cells.
+    self-crossings (planar report), crossings between all films, including those sharing a
+    junction, and cells nested inside other cells. Strict mode rejects every
+    crossing except those within FOLD_DEPTH of a physical junction shared by
+    both films, including endpoints linked by sub-threshold free films (or a self-crossing near that film's endpoint). These tolerated
+    microfolds remain reported; acceptance does not certify convergence.
     """
     foam.geometry_policy = "strict" if strict else "reference"
     foam_measure.validate(foam)                 # finite, positive areas, self-crossings
@@ -40,17 +43,34 @@ def validate(foam, strict=True):
     if packing > 1 + 1e-9:
         raise ValueError(f"cell area exceeds the disc area: packing fraction {packing:.6g}")
     mids, loops = foam._fast_geometry_inputs()
-    crossings = int(film_crossings(mids, foam.e_v))
+    groups = local_junction_groups(mids, foam.e_v, foam.e_f, len(foam.vpos), FOLD_DEPTH)
+    details = crossing_details(mids, foam.e_v, foam.vpos, groups)
+    crossings = len(details)
+    microfolds = int(np.sum(details[:, 4] <= FOLD_DEPTH))
+    resolved = crossings - microfolds
+    if strict and resolved:
+        first = details[np.flatnonzero(details[:, 4] > FOLD_DEPTH)[0]]
+        raise ValueError(f"{resolved} resolved film crossing(s); films {int(first[0])}, "
+                         f"{int(first[1])} at ({first[2]:.6g}, {first[3]:.6g}); "
+                         f"local-junction distance {first[4]:.6g}")
     nested = int(contained_cells(mids, loops, foam.e_f))
     if strict and nested:
         raise ValueError(f"{nested} cell(s) nested inside another cell")
-    return dict(packing=packing, max_radius=radius, film_crossings=crossings, nested=nested,
+    return dict(packing=packing, max_radius=radius, film_crossings=crossings,
+                local_film_microfolds=microfolds, resolved_film_crossings=resolved,
+                geometry_status=("invalid_crossings" if resolved else "invalid_nesting" if nested else
+                                 "tolerated_microfolds" if microfolds else "clean"),
+                nested=nested,
                 **foam_measure.quality(foam))
 
 
-def evolve(foam, duration, mu, start=0, sample_every=0, observer=None, check_every=100,
+def evolve(foam, duration, mu, start=None, sample_every=0, observer=None, check_every=100,
            strict=True):
     """Advance by ``duration`` (units of tau_R) on the planar transition cadence."""
+    if duration < 0 or not np.isfinite(duration):
+        raise ValueError("duration must be finite and nonnegative")
+    if start is None:
+        start = max(0, foam.log.iteration) if isinstance(foam, DiscFoam) else 0
     count = int(round(duration / foam.dt))
     check = validate if isinstance(foam, DiscFoam) else (lambda f, strict=True: foam_measure.validate(f))
     k = 0
@@ -150,7 +170,7 @@ def equilibrated(n_cells, w, rho, seed, quench_tauT=3.0, strict=True, **kwargs):
     """Anneal, reset tensions to their fixed points, then relax at zero activity."""
     foam = initialize(n_cells, w, rho, seed, strict=strict, **kwargs)
     foam.e_t = np.array([foam.fixed_tension(e) for e in range(len(foam.e_v))])
-    evolve(foam, quench_tauT * foam.tauT, 0.0, start=round(foam.tauT / foam.dt), strict=strict)
+    evolve(foam, quench_tauT * foam.tauT, 0.0, start=round(kwargs.get("anneal_tauT", 1.0) * foam.tauT / foam.dt), strict=strict)
     return foam
 
 
@@ -178,7 +198,7 @@ def periodic_initialize(n_side, w, rho, seed, anneal_mu=0.5, anneal_tauT=1.0,
 def periodic_equilibrated(n_side, w, rho, seed, quench_tauT=3.0, strict=True, **kwargs):
     foam = periodic_initialize(n_side, w, rho, seed, strict=strict, **kwargs)
     foam.e_t = np.array([foam.fixed_tension(e) for e in range(len(foam.e_v))])
-    evolve(foam, quench_tauT * foam.tauT, 0.0, start=round(foam.tauT / foam.dt), strict=strict)
+    evolve(foam, quench_tauT * foam.tauT, 0.0, start=round(kwargs.get("anneal_tauT", 1.0) * foam.tauT / foam.dt), strict=strict)
     return foam
 
 

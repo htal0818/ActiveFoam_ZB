@@ -102,15 +102,34 @@ Three cells, finest level above:
 
 | resampling | mean reaction | transient dip | window sd / mean |
 |---|---|---|---|
-| plain | 0.3792 | 0.5845 | 4.737e-06 |
-| wall-aware | 0.3792 | 0.9456 | 4.741e-06 |
+| plain | 0.3773 | 0.4761 | 2.076e-05 |
+| wall-aware | 0.3773 | 0.7848 | 2.076e-05 |
 
 Active tissue (16 cells, W = 1.0, rho = 1.3, mu = 1.0), time-averaged reaction:
 
-| wall-aware | dt | spacing | duration | seeds | mean reaction | standard error | arrivals per step |
+| wall-aware | dt | spacing | duration | valid paired seeds | mean reaction | standard error | arrivals per step |
 |---|---|---|---|---|---|---|---|
-| no | 0.005 | 0.15 | 150 | 3 | 21.64 | 0.1187 | 0.1031 |
-| yes | 0.005 | 0.15 | 150 | 3 | 21.8 | 0.147 | 0.03039 |
+| no | 0.005 | 0.15 | 150 | 1 | 21.5 | n/a | 0.1013 |
+| yes | 0.005 | 0.15 | 150 | 1 | 21.67 | n/a | 0.02854 |
+
+Preparation uses W=0, rho=1 before switching parameters. Invalid runs are excluded
+from both members of a seed pair. Geometry checks distinguish tolerated local
+microfolds from resolved crossings; no absence of bias is inferred from three seeds.
+
+| seed | wall-aware | valid | error |
+|---|---|---|---|
+| 1 | no | yes |  |
+| 2 | no | yes |  |
+| 3 | no | yes |  |
+| 1 | yes | yes |  |
+| 2 | yes | no | active evolution (completed active time 33.5): resolved boundary crossing: junction distance 0.0359081 at elapsed time 0.5 tau_R |
+| 3 | yes | no | active evolution (completed active time 110): resolved boundary crossing: junction distance 0.0394492 at elapsed time 0.5 tau_R |
+
+| seed | wall-aware minus plain |
+|---|---|
+| 1 | 0.1733 |
+
+Paired mean difference: 0.1733; standard error: n/a.
 
 ## Chord-area deficit of the initial tiling
 

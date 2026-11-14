@@ -229,30 +229,71 @@ def three_cell_refinement(scales=(1, 2, 4), duration=150.0, w=1.0, seed=0,
 
 
 def resampling_effect_active(n_cells=16, w=1.0, rho=1.3, mu=1.0, duration=150.0,
-                             seeds=(1, 2, 3)):
-    """Time-averaged wall reaction of an active tissue, plain vs wall-aware resampling."""
-    rows = []
+                             seeds=(1, 2, 3), check_every=100):
+    """Paired comparison after corrected preparation, with explicit validity.
+
+    Invalid runs retain their seed and error and never contribute to averages.
+    Both mode averages use the same complete seed pairs. Geometry is checked
+    during preparation, every check_every steps, and at the final state.
+    """
+    from . import protocol
+    if duration <= 0 or check_every < 1:
+        raise ValueError("positive duration and check interval required")
+    runs = []
     for wall_resample in (False, True):
-        means, arrivals = [], []
         for seed in seeds:
-            foam = DiscFoam.random(n_cells, seed=seed, w=w, rho=rho,
-                                   wall_resample=wall_resample)
-            steps = int(round(duration / foam.dt))
-            loads, arrived = [], 0
-            for k in range(1, steps + 1):
-                foam.advance_scheduled(k, mu)
-                if k > steps // 5:
-                    load = wall_load(foam.wall)
-                    loads.append(load["total"])
-                    arrived += load["arrivals"]
-            means.append(float(np.mean(loads)))
-            arrivals.append(arrived / len(loads))
-        rows.append(dict(wall_resample=wall_resample, dt=DT, spacing=0.15, duration=duration,
-                         seeds=len(seeds), mean=float(np.mean(means)),
-                         standard_error=float(np.std(means, ddof=1) / np.sqrt(len(means))),
-                         arrivals_per_step=float(np.mean(arrivals))))
-    return dict(name="active tissue, time-averaged reaction", n_cells=n_cells, w=w, rho=rho,
-                mu=mu, criterion="first fifth of the run discarded", rows=rows)
+            record = dict(seed=int(seed), wall_resample=wall_resample, valid=False)
+            phase, elapsed = "preparation", 0.0
+            try:
+                foam = protocol.initialize(n_cells, w, rho, seed,
+                                           wall_resample=wall_resample)
+                phase = "active evolution"
+                loads, arrivals = [], []
+                geometry = dict(checks=0, microfold_checks=0, max_microfolds=0)
+                def observe(elapsed, current):
+                    if elapsed > duration/5:
+                        load = wall_load(current.wall)
+                        loads.append(load["total"]); arrivals.append(load["arrivals"])
+                # Chunks retain the transition cadence; every chunk is validated.
+                steps = int(round(duration/foam.dt))
+                for first in range(0, steps, check_every):
+                    elapsed = first*foam.dt
+                    count = min(check_every, steps-first)
+                    def shifted(t, current): observe(first*foam.dt+t, current)
+                    protocol.evolve(foam, count*foam.dt, mu, sample_every=1,
+                                    observer=shifted, check_every=0)
+                    report = protocol.validate(foam)
+                    geometry["checks"] += 1
+                    geometry["microfold_checks"] += int(report["local_film_microfolds"] > 0)
+                    geometry["max_microfolds"] = max(geometry["max_microfolds"], report["local_film_microfolds"])
+                if not loads:
+                    raise ValueError("no measured samples")
+                record.update(valid=True, mean=float(np.mean(loads)),
+                              arrivals_per_step=float(np.mean(arrivals)), geometry=geometry)
+            except ValueError as exc:
+                record["error"] = f"{phase} (completed active time {elapsed:g}): {exc}"
+            runs.append(record)
+    paired_seeds = [int(seed) for seed in seeds
+                    if sum(r["valid"] for r in runs if r["seed"] == seed) == 2]
+    rows = []
+    for mode in (False, True):
+        selected = [r for r in runs if r["wall_resample"] == mode and r["seed"] in paired_seeds]
+        means = [r["mean"] for r in selected]
+        rows.append(dict(wall_resample=mode, dt=DT, spacing=.15, duration=duration,
+                         seeds=len(means), attempted_seeds=len(seeds),
+                         mean=float(np.mean(means)) if means else None,
+                         standard_error=float(np.std(means, ddof=1)/np.sqrt(len(means))) if len(means)>1 else None,
+                         arrivals_per_step=float(np.mean([r["arrivals_per_step"] for r in selected])) if selected else None))
+    differences = []
+    for seed in paired_seeds:
+        pair = {r["wall_resample"]:r["mean"] for r in runs if r["seed"]==seed}
+        differences.append(dict(seed=seed, difference=pair[True]-pair[False]))
+    values = [r["difference"] for r in differences]
+    return dict(name="active tissue, paired time-averaged reaction", n_cells=n_cells, w=w, rho=rho,
+                mu=mu, criterion="corrected preparation; first fifth discarded; classified geometry checks",
+                check_every=check_every, rows=rows, runs=runs, paired_differences=differences,
+                paired_mean=float(np.mean(values)) if values else None,
+                paired_standard_error=float(np.std(values,ddof=1)/np.sqrt(len(values))) if len(values)>1 else None)
 
 
 def chord_deficit(spacings=(0.2, 0.1, 0.05), n_cells=36, seed=2):

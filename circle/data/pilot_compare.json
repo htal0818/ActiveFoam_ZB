@@ -17,6 +17,9 @@
   "area_interior": 0.8622723695960022,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 16,
   "wall_load": 1.738312502115498,
   "accepted": {
@@ -29,7 +32,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 12.0
+  "seconds": 10.5
  },
  {
   "kind": "disc",
@@ -49,6 +52,9 @@
   "area_interior": 0.8595293914107258,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 19,
   "wall_load": 1.7918540977896387,
   "accepted": {
@@ -56,7 +62,7 @@
    "T1": 1
   },
   "rejected": {},
-  "seconds": 11.9
+  "seconds": 9.8
  },
  {
   "kind": "disc",
@@ -76,6 +82,9 @@
   "area_interior": 0.9745457946021934,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 14,
   "wall_load": 21.39985846997938,
   "accepted": {
@@ -90,7 +99,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 12.3
+  "seconds": 10.0
  },
  {
   "kind": "disc",
@@ -110,6 +119,9 @@
   "area_interior": 0.9715176837522409,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 10,
   "wall_load": 21.99935525799973,
   "accepted": {
@@ -118,7 +130,7 @@
    "T4a": 1
   },
   "rejected": {},
-  "seconds": 11.3
+  "seconds": 7.7
  },
  {
   "kind": "disc",
@@ -138,6 +150,9 @@
   "area_interior": 0.9961482482380948,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 9,
   "wall_load": 69.00355169075009,
   "accepted": {
@@ -153,7 +168,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 11.2
+  "seconds": 8.0
  },
  {
   "kind": "disc",
@@ -173,6 +188,9 @@
   "area_interior": 0.9911659761436304,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 17,
   "wall_load": 69.0220037028117,
   "accepted": {
@@ -182,7 +200,7 @@
    "T3r": 4
   },
   "rejected": {},
-  "seconds": 11.7
+  "seconds": 7.9
  },
  {
   "kind": "disc",
@@ -202,6 +220,9 @@
   "area_interior": 0.8998357488291459,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 33,
   "wall_load": 1.695047145698109,
   "accepted": {
@@ -214,7 +235,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 11.0
+  "seconds": 7.9
  },
  {
   "kind": "disc",
@@ -234,6 +255,9 @@
   "area_interior": 0.8954961813296751,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 36,
   "wall_load": 2.346189528162467,
   "accepted": {
@@ -241,7 +265,7 @@
    "T1": 1
   },
   "rejected": {},
-  "seconds": 11.1
+  "seconds": 7.8
  },
  {
   "kind": "disc",
@@ -261,6 +285,9 @@
   "area_interior": 0.99507636383448,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 29,
   "wall_load": 29.42974355275294,
   "accepted": {
@@ -273,7 +300,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 11.2
+  "seconds": 7.5
  },
  {
   "kind": "disc",
@@ -293,6 +320,9 @@
   "area_interior": 0.9928709173270948,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 12,
   "wall_load": 29.82664741554983,
   "accepted": {
@@ -301,7 +331,7 @@
    "T4a": 1
   },
   "rejected": {},
-  "seconds": 10.9
+  "seconds": 7.8
  },
  {
   "kind": "disc",
@@ -321,6 +351,9 @@
   "area_interior": 0.9998767823291186,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 13,
   "wall_load": 82.95047495903982,
   "accepted": {
@@ -334,7 +367,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 11.0
+  "seconds": 7.6
  },
  {
   "kind": "disc",
@@ -354,6 +387,9 @@
   "area_interior": 0.9972570624391357,
   "film_crossings": 0,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 0,
+  "geometry_status": "clean",
   "microfold_checks": 8,
   "wall_load": 82.90546751051568,
   "accepted": {
@@ -363,7 +399,7 @@
    "T3r": 13
   },
   "rejected": {},
-  "seconds": 11.4
+  "seconds": 8.0
  },
  {
   "kind": "disc",
@@ -383,6 +419,9 @@
   "area_interior": 0.9374365453886931,
   "film_crossings": 24,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 24,
+  "geometry_status": "tolerated_microfolds",
   "microfold_checks": 21,
   "wall_load": 1.6513543510734303,
   "accepted": {
@@ -396,7 +435,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 11.0
+  "seconds": 8.1
  },
  {
   "kind": "disc",
@@ -416,6 +455,9 @@
   "area_interior": 0.9315569097944861,
   "film_crossings": 31,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 31,
+  "geometry_status": "tolerated_microfolds",
   "microfold_checks": 39,
   "wall_load": 3.253804837601126,
   "accepted": {
@@ -423,7 +465,7 @@
    "T1": 1
   },
   "rejected": {},
-  "seconds": 11.1
+  "seconds": 7.4
  },
  {
   "kind": "disc",
@@ -443,6 +485,9 @@
   "area_interior": 1.0011810992805121,
   "film_crossings": 20,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 20,
+  "geometry_status": "tolerated_microfolds",
   "microfold_checks": 48,
   "wall_load": 43.166008876368274,
   "accepted": {
@@ -456,7 +501,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 11.8
+  "seconds": 8.4
  },
  {
   "kind": "disc",
@@ -476,6 +521,9 @@
   "area_interior": 0.9995405297573587,
   "film_crossings": 12,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 12,
+  "geometry_status": "tolerated_microfolds",
   "microfold_checks": 23,
   "wall_load": 43.13366514778087,
   "accepted": {
@@ -484,7 +532,7 @@
    "T3r": 62
   },
   "rejected": {},
-  "seconds": 12.4
+  "seconds": 8.5
  },
  {
   "kind": "disc",
@@ -504,6 +552,9 @@
   "area_interior": 1.0003656412896704,
   "film_crossings": 17,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 17,
+  "geometry_status": "tolerated_microfolds",
   "microfold_checks": 18,
   "wall_load": 97.83296668975112,
   "accepted": {
@@ -517,7 +568,7 @@
    22.56758334191025
   ],
   "radius": 5.641895835477563,
-  "seconds": 11.7
+  "seconds": 8.0
  },
  {
   "kind": "disc",
@@ -537,6 +588,9 @@
   "area_interior": 0.9996216335022752,
   "film_crossings": 17,
   "nested": 0,
+  "resolved_film_crossings": 0,
+  "local_film_microfolds": 17,
+  "geometry_status": "tolerated_microfolds",
   "microfold_checks": 21,
   "wall_load": 98.06949472207087,
   "accepted": {
@@ -546,7 +600,7 @@
    "T3r": 22
   },
   "rejected": {},
-  "seconds": 11.7
+  "seconds": 8.1
  },
  {
   "kind": "periodic",
@@ -558,7 +612,7 @@
   "z": 6.0,
   "shape": 3.778924934517732,
   "area": 0.9999467289568994,
-  "seconds": 9.5
+  "seconds": 5.7
  },
  {
   "kind": "periodic",
@@ -570,7 +624,7 @@
   "z": 6.0,
   "shape": 3.772524276256903,
   "area": 0.9999418705955937,
-  "seconds": 9.2
+  "seconds": 5.8
  },
  {
   "kind": "periodic",
@@ -582,7 +636,7 @@
   "z": 6.0,
   "shape": 3.7798739123959,
   "area": 0.9999350429287969,
-  "seconds": 9.1
+  "seconds": 6.3
  },
  {
   "kind": "periodic",
@@ -594,7 +648,7 @@
   "z": 6.0,
   "shape": 3.7737632753029944,
   "area": 0.9999374576622532,
-  "seconds": 9.0
+  "seconds": 5.9
  },
  {
   "kind": "periodic",
@@ -606,7 +660,7 @@
   "z": 6.0,
   "shape": 3.780864551483664,
   "area": 0.999926129872095,
-  "seconds": 8.8
+  "seconds": 5.7
  },
  {
   "kind": "periodic",
@@ -618,7 +672,7 @@
   "z": 6.0,
   "shape": 3.774559780805903,
   "area": 0.9999256643495867,
-  "seconds": 8.8
+  "seconds": 5.8
  },
  {
   "kind": "periodic",
@@ -630,7 +684,7 @@
   "z": 6.0,
   "shape": 3.797643230528949,
   "area": 0.9999494696826531,
-  "seconds": 8.8
+  "seconds": 5.7
  },
  {
   "kind": "periodic",
@@ -642,7 +696,7 @@
   "z": 6.0,
   "shape": 3.7914696211104775,
   "area": 0.9999494484655898,
-  "seconds": 9.3
+  "seconds": 5.7
  },
  {
   "kind": "periodic",
@@ -654,7 +708,7 @@
   "z": 6.0,
   "shape": 3.7998997918166095,
   "area": 0.9999386538813784,
-  "seconds": 9.0
+  "seconds": 5.9
  },
  {
   "kind": "periodic",
@@ -666,7 +720,7 @@
   "z": 6.0,
   "shape": 3.7936363062293394,
   "area": 0.9999386160984998,
-  "seconds": 9.2
+  "seconds": 5.6
  },
  {
   "kind": "periodic",
@@ -678,7 +732,7 @@
   "z": 6.0,
   "shape": 3.801979724998139,
   "area": 0.999927616618511,
-  "seconds": 9.5
+  "seconds": 5.8
  },
  {
   "kind": "periodic",
@@ -690,7 +744,7 @@
   "z": 6.0,
   "shape": 3.7956390603820687,
   "area": 0.999927567833685,
-  "seconds": 9.3
+  "seconds": 5.8
  },
  {
   "kind": "periodic",
@@ -702,7 +756,7 @@
   "z": 6.0,
   "shape": 3.813929925341593,
   "area": 0.9999717021844581,
-  "seconds": 9.1
+  "seconds": 5.6
  },
  {
   "kind": "periodic",
@@ -714,7 +768,7 @@
   "z": 6.0,
   "shape": 3.8080992090282955,
   "area": 0.9999668310642241,
-  "seconds": 9.3
+  "seconds": 5.9
  },
  {
   "kind": "periodic",
@@ -726,7 +780,7 @@
   "z": 6.0,
   "shape": 3.8185837791086112,
   "area": 0.9999514861631339,
-  "seconds": 9.1
+  "seconds": 6.3
  },
  {
   "kind": "periodic",
@@ -738,7 +792,7 @@
   "z": 6.0,
   "shape": 3.812718144064801,
   "area": 0.9999490487134302,
-  "seconds": 8.8
+  "seconds": 7.0
  },
  {
   "kind": "periodic",
@@ -750,7 +804,7 @@
   "z": 6.0,
   "shape": 3.821797292646955,
   "area": 0.9999416219115601,
-  "seconds": 9.2
+  "seconds": 6.4
  },
  {
   "kind": "periodic",
@@ -762,6 +816,6 @@
   "z": 6.0,
   "shape": 3.8161263260200036,
   "area": 0.9999364779678693,
-  "seconds": 8.9
+  "seconds": 6.4
  }
 ]

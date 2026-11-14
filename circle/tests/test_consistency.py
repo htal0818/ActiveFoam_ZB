@@ -143,3 +143,54 @@ def test_active_run_is_independent_of_the_auxiliary_box(record_property):
         record_property(f"box_{factor:g}R_bitwise_identical", bool(bitwise))
         print(f"box {factor:g} R_w: largest difference {difference:.3g}, bitwise identical: {bitwise}")
         assert difference < 1e-9
+
+
+def test_strict_validation_rejects_crossing_cells_without_self_intersections():
+    center = np.array([12., 12.])
+    foam = DiscFoam.from_closed_cells(3., [
+        circle_polyline(center + [-.4, 0], .6, .1),
+        circle_polyline(center + [.4, 0], .6, .1)], center=center)
+    report = protocol.validate(foam, strict=False)
+    assert report['film_crossings'] == report['resolved_film_crossings'] == 2
+    assert report['nested'] == 0 and report['max_crossing_depth'] == 0
+    with pytest.raises(ValueError, match='resolved film crossing'):
+        protocol.validate(foam)
+
+
+def test_crossing_classification_requires_shared_local_junction():
+    from circle.kernels import crossing_details
+    a = np.array([[0., 0.], [1.5, .5], [2., 0.]])
+    b = np.array([[0., 0.], [1., 0.], [1., 1.]])
+    ends = np.array([[0, 1], [0, 2]])
+    vertices = np.array([a[0], a[-1], b[-1]])
+    deep = crossing_details(typed([a, b]), ends, vertices)
+    assert len(deep) == 1 and deep[0, 4] > protocol.FOLD_DEPTH
+    tiny = crossing_details(typed([a*.001, b*.001]), ends, vertices*.001)
+    assert tiny[0, 4] < protocol.FOLD_DEPTH
+    # Identical coordinates but different vertex identities: no local exemption.
+    separate = np.array([[0, 1], [3, 2]])
+    distant = crossing_details(typed([a*.001, b*.001]), separate,
+                                np.vstack([vertices, vertices[0]])*.001)
+    assert np.isinf(distant[0, 4])
+
+
+def test_split_junction_microfold_has_topological_and_distance_witness():
+    from circle.kernels import crossing_details, local_junction_groups
+    a = np.array([[0., 0.], [1.5, .5], [2., 0.]])*.001
+    b = np.array([[0., -.05], [1., 0.], [1., 1.]])*.001
+    bridge = np.array([a[0], b[0]])
+    ends = np.array([[0, 1], [3, 2], [0, 3]])
+    vertices = np.array([a[0], a[-1], b[-1], b[0]])
+    faces = np.array([[0,1],[0,2],[-1,0]])
+    mids = typed([a,b,bridge])
+    groups = local_junction_groups(mids,ends,faces,len(vertices),protocol.FOLD_DEPTH)
+    details = crossing_details(mids,ends,vertices,groups)
+    assert len(details)==1 and details[0,4] < protocol.FOLD_DEPTH
+    # Geometric proximity alone is insufficient: an ordinary cell contact
+    # cannot merge the endpoint identities for this exemption.
+    faces[-1]=[0,1]
+    groups = local_junction_groups(mids,ends,faces,len(vertices),protocol.FOLD_DEPTH)
+    assert np.isinf(crossing_details(mids,ends,vertices,groups)[0,4])
+    # Even connected endpoints do not excuse a crossing far along the films.
+    details = crossing_details(typed([a*100,b*100,bridge*100]), ends,vertices*100,np.zeros(4,dtype=int))
+    assert details[0,4] > protocol.FOLD_DEPTH

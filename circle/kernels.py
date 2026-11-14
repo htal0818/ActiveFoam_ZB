@@ -214,45 +214,90 @@ def films_finite(vpos, mids):
 
 
 @njit(cache=True)
-def film_crossings(mids, ends):
-    """Number of proper crossings between film segments that share no node.
+def local_junction_groups(mids, ends, faces, n_vertices, threshold):
+    """Connect split junctions only through short extracellular boundary films.
 
-    Every pair of segments is tested, within one film and between films,
-    including films that share a junction: such films can cross again away from
-    it.  Only segment pairs that legitimately meet are left out, namely
-    consecutive segments of one film and the two segments incident on a shared
-    junction.
+    A T2-reverse event replaces one junction by a tiny triangular space. These
+    endpoints remain one local group for diagnostics while its films are shorter
+    than the resolution threshold. This does not change physical connectivity.
+    """
+    parent = np.arange(n_vertices)
+    for e in range(len(ends)):
+        if faces[e, 0] >= 0 and faces[e, 1] >= 0:
+            continue
+        length = 0.
+        for j in range(len(mids[e])-1):
+            length += np.hypot(mids[e][j+1, 0]-mids[e][j, 0], mids[e][j+1, 1]-mids[e][j, 1])
+        if length > threshold:
+            continue
+        a, b = ends[e]
+        while parent[a] != a: a = parent[a]
+        while parent[b] != b: b = parent[b]
+        parent[b] = a
+    for v in range(n_vertices):
+        a = v
+        while parent[a] != a: a = parent[a]
+        parent[v] = a
+    return parent
+
+
+@njit(cache=True)
+def crossing_details(mids, ends, vertices, groups=None):
+    """Rows (film a, film b, x, y, shared-junction distance).
+
+    Only a crossing near a physical junction incident on BOTH films can be
+    classified as a local microfold. Optional groups connect endpoints through
+    sub-threshold free films around collapsed spaces. Both participating
+    endpoints must be close to the crossing. For self-crossings, endpoints of
+    that film are eligible. Unrelated nearby vertices never exempt an overlap.
+    Counts are proper segment intersections, as in the planar crossing kernel.
     """
     bounds = edge_bounds(mids)
-    count = 0
+    records = []
     for a in range(len(mids)):
-        ax0, ax1, ay0, ay1 = bounds[a]
         p = mids[a]; na = len(p)-1
-        closed = ends[a, 0] == ends[a, 1]
-        for i in range(na):                               # within film a
-            dx = p[i+1, 0]-p[i, 0]; dy = p[i+1, 1]-p[i, 1]
-            for j in range(i+2, na):
-                if closed and i == 0 and j == na-1:
-                    continue
-                if _intersection_parameter(p, p, i, j, dx, dy) > 0.:
-                    count += 1
-        for b in range(a+1, len(mids)):
-            bx0, bx1, by0, by1 = bounds[b]
-            if bx1 < ax0 or bx0 > ax1 or by1 < ay0 or by0 > ay1:
-                continue
+        for b in range(a, len(mids)):
             q = mids[b]; nb = len(q)-1
+            if (bounds[b, 1] < bounds[a, 0] or bounds[b, 0] > bounds[a, 1] or
+                    bounds[b, 3] < bounds[a, 2] or bounds[b, 2] > bounds[a, 3]):
+                continue
             for i in range(na):
-                dx = p[i+1, 0]-p[i, 0]; dy = p[i+1, 1]-p[i, 1]
                 for j in range(nb):
-                    # segments incident on a junction the two films share
-                    if ((i == 0 and j == 0 and ends[a, 0] == ends[b, 0]) or
+                    if a == b and (j <= i+1 or
+                            (ends[a, 0] == ends[a, 1] and i == 0 and j == na-1)):
+                        continue
+                    if a != b and ((i == 0 and j == 0 and ends[a, 0] == ends[b, 0]) or
                             (i == 0 and j == nb-1 and ends[a, 0] == ends[b, 1]) or
                             (i == na-1 and j == 0 and ends[a, 1] == ends[b, 0]) or
                             (i == na-1 and j == nb-1 and ends[a, 1] == ends[b, 1])):
                         continue
-                    if _intersection_parameter(p, q, i, j, dx, dy) > 0.:
-                        count += 1
-    return count
+                    dx = p[i+1, 0]-p[i, 0]; dy = p[i+1, 1]-p[i, 1]
+                    t = _intersection_parameter(p, q, i, j, dx, dy)
+                    if t > 0.:
+                        x = p[i, 0]+t*dx; y = p[i, 1]+t*dy
+                        depth = np.inf
+                        for va in ends[a]:
+                            for vb in ends[b]:
+                                if va == vb or (groups is not None and groups[va] == groups[vb]):
+                                    da = np.hypot(x-vertices[va, 0], y-vertices[va, 1])
+                                    db = np.hypot(x-vertices[vb, 0], y-vertices[vb, 1])
+                                    depth = min(depth, max(da, db))
+                        records.append((float(a), float(b), x, y, depth))
+    out = np.empty((len(records), 5))
+    for k in range(len(records)):
+        for j in range(5):
+            out[k, j] = records[k][j]
+    return out
+
+
+@njit(cache=True)
+def film_crossings(mids, ends):
+    """Count proper crossings, including self-crossings and adjacent films."""
+    vertices = np.zeros((ends.max()+1, 2))
+    for e in range(len(ends)):
+        vertices[ends[e, 0]] = mids[e][0]
+        vertices[ends[e, 1]] = mids[e][-1]
+    return len(crossing_details(mids, ends, vertices))
 
 
 @njit(cache=True)
