@@ -95,9 +95,9 @@ def validate(foam):
 @dataclass(frozen=True)
 class ProbeConfig:
     increments:int=24
-    min_hold:float=2.
-    max_hold:float=100.
-    window:float=1.
+    min_hold:float=15.
+    max_hold:float=300.
+    window:float=5.
     stable_windows:int=3
     force_atol:float=2e-4
     force_rtol:float=1e-3
@@ -140,7 +140,10 @@ def hold(foam, edge, vertices, target, config, initial_short):
             if len(recent)==config.stable_windows and iteration*foam.dt>=config.min_hold:
                 means=np.array([h['mean'] for h in recent])
                 tolerance=config.force_atol+config.force_rtol*abs(means.mean())
-                if np.ptp(means)<=tolerance and max(h['sd'] for h in recent)<=tolerance:
+                # Remeshing can produce a stationary force ripple even at zero
+                # tension noise. Test drift of consecutive block means, retain
+                # the instantaneous SD, and independently gate dt/hold refinement.
+                if np.ptp(means)<=tolerance:
                     return dict(separation=target,film_length=float(foam.edge_lengths()[edge]),
                         force=float(means.mean()),force_sd=float(max(h['sd'] for h in recent)),
                         duration=iteration*foam.dt,converged=True,history=history,quality=quality)
@@ -165,7 +168,7 @@ def curve_metrics(curve):
         excess_work_per_shortening=float((cumulative[-1]-baseline_work)/s[-1]) if s[-1]>0 else None)
 
 
-def probe(foam, edge, config=ProbeConfig()):
+def probe(foam, edge, config=ProbeConfig(), progress=None):
     """Quasi-static compression followed by the original T1 and free release.
 
     Preemption/nonconvergence retains the partial curve, marked incomplete; it
@@ -186,6 +189,7 @@ def probe(foam, edge, config=ProbeConfig()):
         for target in np.linspace(q0,config.target,config.increments+1):
             row=hold(work,edge,vertices,float(target),config,initial_short)
             result['curve'].append(row)
+            if progress is not None: progress(len(result['curve'])-1,row)
             if not row['converged']: raise ProbeStop('holding force did not converge')
         result['complete']=True
         if not config.apply_t1: result['status']='curve_only'

@@ -1,0 +1,19 @@
+{
+  "status": "smoke_only_acceptance_gates_pending",
+  "n": 16,
+  "w": 1.0,
+  "rho": 1.3,
+  "seed": 1,
+  "dt": 0.005,
+  "edpc": 0.1,
+  "preparation": {
+    "function": "protocol.equilibrated / protocol.periodic_equilibrated",
+    "anneal_mu": 0.0,
+    "anneal_tauT": 0.5,
+    "quench_tauT": 2.0,
+    "relax_steps": 1500
+  },
+  "selected_edge": 0,
+  "probe_increments": 12,
+  "note": "No scientific domain comparison is claimed. Step-count, longer-hold, half-dt and sham-subtracted weak-force gates remain pending."
+}

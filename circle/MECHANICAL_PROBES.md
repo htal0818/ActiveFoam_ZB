@@ -2,6 +2,13 @@
 
 **Implementation in progress; item 1 acceptance gates are not yet passed.**
 The first random-tissue smoke checks did not converge within their 60-τR holds.
+After extending the hold budget and testing drift of block-mean force rather
+than requiring instantaneous force fluctuations to vanish, complete trial curves
+were obtained on both 16-cell domains. These are implementation smoke checks,
+not accepted work measurements: step-count, hold-duration, dt and independent
+force-pulse agreement gates still need to be executed. Seven implementation
+tests pass. Trial outputs and the preparation parameters are saved under
+`data/force_probe_smoke_20261114/` for review.
 No disc/periodic work comparison, adhesion scan, size series, division-response
 scan or activity comparison is claimed for this new probe. Items 2–6 remain
 blocked by the numerical gates below. Existing historical experiments are
@@ -44,8 +51,12 @@ holds exactly as in the original zero-noise integrator. Film remeshing continues
 connectivity stays fixed until the explicitly requested T1.
 
 First hold q at its initial value to measure F0. Then reduce q in discrete steps.
-At each target require the means of three consecutive force windows and their
-within-window standard deviations to satisfy the absolute/relative tolerances.
+At each target require the means of three consecutive five-τR force windows to
+satisfy the absolute/relative drift tolerances. Instantaneous within-window SD
+is retained as a diagnostic, not required to vanish: in the initial disc test
+the late mean was approximately 0.020 with SD 0.028, consistent with a substantial
+force ripple. A mean plateau alone is not sufficient acceptance; work must also
+pass the independent dt, increment-count and hold-duration refinements below.
 Nonconverged holds are reported and are not accepted as quasi-static data.
 The finite instantaneous displacement at a target change is excluded from force
 plateaus; its numerical impulse is not counted as a mechanical barrier.
