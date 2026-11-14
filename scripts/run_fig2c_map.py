@@ -15,6 +15,7 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from activefoam.topology import build_periodic_voronoi
 from activefoam.foam_full import FoamTissue
+from activefoam.budget import call_with_budget, BudgetExceeded
 
 os.makedirs("data", exist_ok=True)
 
@@ -22,6 +23,7 @@ WS = np.round(np.arange(0.0, 0.71, 0.1), 3)
 RHOS = np.round(np.arange(0.80, 1.151, 0.05), 3)
 SEEDS = [1]
 TRANS_EVERY = 10
+MAX_SECONDS = 900      # per run; a run that crawls (tangled) is recorded as invalid
 
 
 def equilibrate(w, rho, seed):
@@ -52,8 +54,8 @@ def equilibrate(w, rho, seed):
 def _task(a):
     i, j, rho, w, s = a
     try:
-        p, z = equilibrate(w, rho, s)
-    except Exception as ex:                       # one bad run must not kill the sweep
+        p, z = call_with_budget(MAX_SECONDS, equilibrate, w, rho, s)
+    except (Exception, BudgetExceeded) as ex:                       # one bad run must not kill the sweep
         print(f"  !! rho={rho} W={w} seed={s} failed: {ex!r}", flush=True)
         p = z = np.nan
     return i, j, p, z

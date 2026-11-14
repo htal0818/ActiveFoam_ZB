@@ -61,6 +61,20 @@ def edge_len(ecrd):
     return np.hypot(d[:, 0], d[:, 1])
 
 
+def boundary_normal_signs(faces, loops):
+    """Outward normal of the second incident cell relative to the edge's left normal."""
+    signs = np.zeros(len(faces), np.int8)
+    for cell in range(len(loops)):
+        for signed in loops[cell]:
+            edge = signed if signed >= 0 else -signed - 1
+            if faces[edge, 1] == cell:
+                signs[edge] = -1 if signed >= 0 else 1
+    for edge in range(len(faces)):
+        if faces[edge, 1] >= 0 and signs[edge] == 0:
+            raise ValueError("film missing from the second cell's signed boundary")
+    return signs
+
+
 def edge_mid_vrtx_average(emd, edpc):
     """Re-sample a contact polyline to ~uniform spacing edpc between its ends.
 
@@ -113,8 +127,14 @@ class FoamTissue:
     """Vertex-network foam: curved contacts + extracellular spaces (face id -1)."""
 
     def __init__(self, base_tissue, w=0.0, rho=1.0, P0=10.0, tauT=10.0,
-                 dt=0.005, edpc=0.15, beta=0.0, seed=0, accelerated=False):
+                 dt=0.005, edpc=0.15, beta=0.0, seed=0, accelerated=False,
+                 reference_pressure_lag=False, pressure_normals="reference"):
+        if pressure_normals not in ("reference", "boundary"):
+            raise ValueError(f"unknown pressure normal convention: {pressure_normals}")
         self.accelerated = accelerated
+        self.reference_pressure_lag = reference_pressure_lag
+        self.pressure_normals = pressure_normals
+        self._pressure_geometry = None
         self.bs = base_tissue.L
         self.sstn = 0.0
         self.rho = rho
@@ -185,7 +205,7 @@ class FoamTissue:
         self.e_mid = [None] * Ne
         self.e_rfn = np.zeros(Ne, np.int64)
         for ei in range(Ne):
-            p = crd_local(self.vpos[self.e_v[ei]], self.bs, self.sstn)
+            p = self._local(self.vpos[self.e_v[ei]])
             mid, rfn = edge_mid_vrtx_average(p, self.edpc)
             self.e_mid[ei] = mid
             self.e_rfn[ei] = rfn
@@ -216,13 +236,19 @@ class FoamTissue:
         e = -se - 1
         return self.e_mid[e][::-1]
 
+    def _local(self, points):
+        if getattr(self, "accelerated", False):
+            from ._kernels import local
+            return local(np.asarray(points, dtype=float), self.bs, self.sstn)
+        return crd_local(points, self.bs, self.sstn)
+
     def _cell_polyline(self, ci):
         pieces = []
         for se in self.f_e[ci]:
             pts = self._signed_edge_pts(se)
             pieces.append(pts[:-1])            # drop last (shared with next)
         pts = np.vstack(pieces)
-        return crd_local(pts, self.bs, self.sstn)
+        return self._local(pts)
 
     def cell_area_center(self, ci):
         pts = self._cell_polyline(ci)
@@ -230,7 +256,7 @@ class FoamTissue:
         return a, crd_domain(c, self.bs, self.sstn)
 
     def _fast_geometry_inputs(self):
-        from numba.typed import List
+        from ._kernels import List
         mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
         key = tuple(tuple(es) for es in self.f_e)
         if key != getattr(self, "_fast_face_key", None):
@@ -267,12 +293,12 @@ class FoamTissue:
             etn -= self.gam
         return etn
 
-    def normal_force(self, ei, eln):
+    def normal_force(self, ei, eln, areas=None):
         f = self.e_f[ei]
         eNf = 0.0
         for ii in (0, 1):
             if f[ii] != SPACE:
-                A = self.f_area[f[ii]]
+                A = (self.f_area if areas is None else areas)[f[ii]]
                 sign = -1.0 if ii == 0 else 1.0
                 eNf += self.P0 * (1.0 / (A / self.lsc ** 2) - 1.0) * eln / 2.0 / self.lsc * sign
         return eNf
@@ -280,6 +306,17 @@ class FoamTissue:
     # ------------------------------------------------------------------ #
     def _wrap_vertices(self):
         self.vpos = crd_domain(self.vpos, self.bs, self.sstn)
+
+    def _force_geometry(self):
+        pressure = getattr(self, "_pressure_geometry", None)
+        return (self.f_area, self.f_center) if pressure is None else pressure
+
+    def _finish_step_geometry(self):
+        # ts_iteration computes face geometry from the incoming edge table.
+        # Keep that state for the next force step and measure the current films.
+        if getattr(self, "reference_pressure_lag", False):
+            self._pressure_geometry = (self.f_area, self.f_center)
+        self._update_faces()
 
     def step(self, mu=0.0):
         """One Euler-Maruyama step (port of ts_iteration.m)."""
@@ -289,15 +326,27 @@ class FoamTissue:
         Nv = len(self.vpos)
         Fv = np.zeros((Nv, 2))
         new_mid = [None] * Ne
+        areas, centers = self._force_geometry()
+        outward = None
+        if getattr(self, "pressure_normals", "reference") == "boundary":
+            outward = boundary_normal_signs(self.e_f, self.f_e)
         for i in range(Ne):
             rfn = self.e_rfn[i]
             eMd = self.e_mid[i]
-            fCn = self.f_center[self.e_f[i, 1]]
+            fCn = centers[self.e_f[i, 1]]
             eTf = max(0.0, self.e_t[i])
             vTn = np.zeros((rfn + 2, 2))
             for jj in range(rfn + 1):
-                tv, nv, eln = edge_vector(eMd[jj], eMd[jj + 1], fCn, self.bs, self.sstn)
-                eNf = self.normal_force(i, eln)
+                if outward is None:
+                    tv, nv, eln = edge_vector(eMd[jj], eMd[jj + 1], fCn, self.bs, self.sstn)
+                else:
+                    segment = eMd[jj + 1] - eMd[jj]
+                    eln = np.hypot(*segment)
+                    if eln < 1e-14:
+                        continue
+                    tv = segment / eln
+                    nv = outward[i] * np.array([-tv[1], tv[0]])
+                eNf = self.normal_force(i, eln, areas)
                 vTn[jj] += eTf * tv
                 vTn[jj + 1] -= eTf * tv
                 vTn[jj] += eNf * nv
@@ -312,7 +361,7 @@ class FoamTissue:
             eMd = new_mid[i]
             eMd[0] = self.vpos[self.e_v[i, 0]]
             eMd[-1] = self.vpos[self.e_v[i, 1]]
-            self.e_mid[i] = crd_local(eMd, self.bs, self.sstn)
+            self.e_mid[i] = self._local(eMd)
 
         # Ornstein-Uhlenbeck tension update
         etn = np.array([self.fixed_tension(i) for i in range(Ne)])
@@ -333,17 +382,26 @@ class FoamTissue:
                 self.e_mid[i], self.e_rfn[i] = edge_mid_vrtx_average(emd, self.edpc)
 
         self._wrap_vertices()
-        self._update_faces()
+        self._finish_step_geometry()
 
     # ------------------------------------------------------------------ #
     def _step_accelerated(self, mu):
-        from ._kernels import advance
-        from numba.typed import List
-        mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
-        self.vpos, mids, self.e_rfn = advance(
+        from ._kernels import List, advance, boundary_normal_signs
+        if getattr(self, "pressure_normals", "reference") == "boundary":
+            mids, loops = self._fast_geometry_inputs()
+            outward = boundary_normal_signs(self.e_f, loops)
+        else:
+            mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
+            outward = None
+        areas, centers = self._force_geometry()
+        vertices, mids, self.e_rfn = advance(
             self.vpos, self.e_v, self.e_f, self.e_t, mids,
-            self.f_area, self.f_center, self.bs, self.sstn, self.psi,
-            self.dt, self.P0, self.lsc, self.edpc)
+            areas, centers, self.bs, self.sstn, self.psi,
+            self.dt, self.P0, self.lsc, self.edpc, outward)
+        if getattr(self, "_measure_vertex_force", False):
+            displacement = vertices - self.vpos
+            self._max_vertex_force = np.linalg.norm(displacement, axis=1).max() / (self.psi * self.dt)
+        self.vpos = vertices
         self.e_mid = mids
         count = np.sum(self.e_f != SPACE, axis=1).astype(float)
         fixed = count - self.gam * np.all(self.e_f != SPACE, axis=1)
@@ -351,12 +409,17 @@ class FoamTissue:
         self.e_t = (self.e_t - self.dt / self.tauT * (self.e_t-fixed)
                     + mu / self.tauT * np.sqrt(self.dt)/2 * count * xi)
         self._wrap_vertices()
-        self._update_faces()
+        self._finish_step_geometry()
 
     def volume_fraction(self):
         return np.sum(np.clip(self.f_area, 0, None)) / (self.bs ** 2)
 
     def shape_factors(self):
+        if getattr(self, "accelerated", False):
+            from ._kernels import cell_perimeters
+            area = self.f_area > 1e-9
+            perimeter = cell_perimeters(*self._fast_geometry_inputs())
+            return perimeter[area] / np.sqrt(self.f_area[area])
         s = []
         for ci in range(self.nFa):
             A = self.f_area[ci]
@@ -403,7 +466,7 @@ class FoamTissue:
         return sorted(arr)          # SPACE=-1 sorts first, like the code's 0
 
     def _vrtx_sort_ccw(self, vlist):
-        pts = crd_local(self.vpos[vlist], self.bs, self.sstn)
+        pts = self._local(self.vpos[vlist])
         c = pts.mean(axis=0)
         ang = np.arctan2(pts[:, 1] - c[1], pts[:, 0] - c[0])
         return [vlist[i] for i in np.argsort(ang)]
@@ -419,22 +482,30 @@ class FoamTissue:
         """Signed edge loop for cell ci from its vertex loop (port ts_faceEdgeId)."""
         fvr = self.f_v[ci]
         n = len(fvr)
-        fed = []
-        used = set()
-        for k in range(n):
-            a, b = fvr[k], fvr[(k + 1) % n]
-            cand = [int(e) for e in self.v_e[a] if e >= 0
-                    and {int(self.e_v[e, 0]), int(self.e_v[e, 1])} == {a, b}
-                    and ci in (int(self.e_f[e, 0]), int(self.e_f[e, 1]))]
-            e = next(e for e in cand if e not in used)
-            used.add(e)
-            if int(self.e_v[e, 0]) == a and int(self.e_v[e, 1]) == b:
-                fed.append(e)
-            else:
-                fed.append(-(e + 1))
+        if getattr(self, "accelerated", False):
+            from ._kernels import signed_cell_edges
+            signed = signed_cell_edges(np.asarray(fvr, dtype=np.int64),
+                                       self.v_e, self.e_v, self.e_f, ci)
+            if len(signed) != n:
+                raise StopIteration("missing cell film")
+            fed = signed.tolist()
+        else:
+            fed = []
+            used = set()
+            for k in range(n):
+                a, b = fvr[k], fvr[(k + 1) % n]
+                cand = [int(e) for e in self.v_e[a] if e >= 0
+                        and {int(self.e_v[e, 0]), int(self.e_v[e, 1])} == {a, b}
+                        and ci in (int(self.e_f[e, 0]), int(self.e_f[e, 1]))]
+                e = next(e for e in cand if e not in used)
+                used.add(e)
+                if int(self.e_v[e, 0]) == a and int(self.e_v[e, 1]) == b:
+                    fed.append(e)
+                else:
+                    fed.append(-(e + 1))
         if n <= 2:
-            pts = crd_local(np.vstack([self._signed_edge_pts(e)[:-1]
-                                      for e in fed]), self.bs, self.sstn)
+            pts = self._local(np.vstack([self._signed_edge_pts(e)[:-1]
+                                      for e in fed]))
             if poly_area_centroid(pts)[0] < 0:
                 fed = [-e - 1 for e in fed[::-1]]
         return fed
@@ -446,8 +517,15 @@ class FoamTissue:
             self.f_v[ci] = self.f_v[ci][::-1]
             self.f_e[ci] = self._face_edge_id(ci)
             a, c = self.cell_area_center(ci)
-        self.f_area[ci] = a
-        self.f_center[ci] = crd_domain(c, self.bs, self.sstn)
+        self._set_face_geometry(ci, a, c)
+
+    def _set_face_geometry(self, ci, area, center):
+        self.f_area[ci] = area
+        self.f_center[ci] = center
+        pressure = getattr(self, "_pressure_geometry", None)
+        if pressure is not None:
+            pressure[0][ci] = area
+            pressure[1][ci] = center
 
     def t2_reverse(self, t2Id):
         """Open a small triangular extracellular space at vertex t2Id.
@@ -456,10 +534,14 @@ class FoamTissue:
         """
         # three neighbours of t2Id (CCW)
         inc = [e for e in self.v_e[t2Id] if e != -1]
+        if len(inc) != 3 or len(set(self.v_f[t2Id])) != 3 or SPACE in self.v_f[t2Id]:
+            return
         nbrs = []
         for e in inc:
             other = int(self.e_v[e, 0]) if int(self.e_v[e, 1]) == t2Id else int(self.e_v[e, 1])
             nbrs.append(other)
+        if len(set(nbrs)) != 3 or t2Id in nbrs:
+            return
         vl = self._vrtx_sort_ccw(nbrs)                       # vl[0:3] neighbours
         vnew1 = self._add_vertex(self.vpos[t2Id].copy())
         vnew2 = self._add_vertex(self.vpos[t2Id].copy())
@@ -470,6 +552,8 @@ class FoamTissue:
         for e in inc:
             other = int(self.e_v[e, 0]) if int(self.e_v[e, 1]) == t2Id else int(self.e_v[e, 1])
             elId[vlId.index(other)] = e
+        old_ends = self.e_v[elId[:3]].copy()
+        old_films = [self.e_mid[e] for e in elId[:3]]
         # three new triangle edges (placeholders, filled below)
         el3 = self._add_edge(t2Id, vnew1, SPACE, SPACE,
                              np.array([self.vpos[t2Id], self.vpos[vnew1]]), 0, 0.0)
@@ -495,9 +579,8 @@ class FoamTissue:
         self.v_f[vnew2] = self._sortf([flId[1], flId[2], flId[3]])
 
         # positions: tiny triangle, 1% toward each neighbour
-        vloc = crd_local(np.vstack([self.vpos[t2Id], self.vpos[vl[0]],
-                                    self.vpos[vl[1]], self.vpos[vl[2]]]),
-                         self.bs, self.sstn)
+        vloc = self._local(np.vstack([self.vpos[t2Id], self.vpos[vl[0]],
+                                    self.vpos[vl[1]], self.vpos[vl[2]]]))
         self.vpos[t2Id] = vloc[0] + 0.01 * (vloc[1] - vloc[0])
         self.vpos[vnew1] = vloc[0] + 0.01 * (vloc[2] - vloc[0])
         self.vpos[vnew2] = vloc[0] + 0.01 * (vloc[3] - vloc[0])
@@ -512,17 +595,21 @@ class FoamTissue:
         self.e_f[elId[4]] = self._sortf([flId[1], SPACE])
         self.e_f[elId[5]] = self._sortf([flId[2], SPACE])
 
-        # rebuild polylines: original edges keep neighbour end, move t2-end to new vertex
+        # Keep the outer polylines and move only their seed-side endpoints,
+        # as in ts_t2ReverseTransition. Straightening them would erase the
+        # geometry at every space creation, even far from the new junction.
         vvId = [t2Id, vnew1, vnew2]
-        for ii in range(3):
-            e = elId[ii]
-            endpts = crd_local(self.vpos[self.e_v[e]], self.bs, self.sstn)
-            mid, rfn = edge_mid_vrtx_average(endpts, self.edpc)
-            self.e_mid[e] = mid
-            self.e_rfn[e] = rfn
+        for e, ends, film, neighbor, moved in zip(elId[:3], old_ends, old_films, vl, vvId):
+            outer_first = ends[0] == neighbor
+            outer = film[:-1] if outer_first else film[1:][::-1]
+            polyline = np.vstack([outer, self.vpos[moved]])
+            if self.e_v[e, 0] != neighbor:
+                polyline = polyline[::-1]
+            self.e_mid[e], self.e_rfn[e] = edge_mid_vrtx_average(
+                self._local(polyline), self.edpc)
         for ii in range(3, 6):
             e = elId[ii]
-            endpts = crd_local(self.vpos[self.e_v[e]], self.bs, self.sstn)
+            endpts = self._local(self.vpos[self.e_v[e]])
             mid, rfn = edge_mid_vrtx_average(endpts, self.edpc)
             self.e_mid[e] = mid
             self.e_rfn[e] = rfn
@@ -538,9 +625,12 @@ class FoamTissue:
         for ci in (flId[0], flId[1], flId[2]):
             self._recompute_cell(ci)
 
-        # tensions of triangle edges (free boundaries -> fixed point 1)
-        for e in (elId[3], elId[4], elId[5]):
-            self.e_t[e] = self.fixed_tension(e)
+        # The new free films inherit the mean tension fluctuations of their
+        # two neighbouring outer films, relative to their own fixed points.
+        for e, left, right in zip(elId[3:], elId[:3], [elId[1], elId[2], elId[0]]):
+            fluctuation = .5 * (self.e_t[left] - self.fixed_tension(left)
+                                + self.e_t[right] - self.fixed_tension(right))
+            self.e_t[e] = self.fixed_tension(e) + fluctuation
 
     # ------------------------------------------------------------------ #
     #  T1 neighbour exchange (curved edges + spaces)
@@ -569,22 +659,33 @@ class FoamTissue:
                 return int(f)
         return SPACE
 
-    def _snapshot(self):
-        import copy
+    def _snapshot(self, *, typed_films=True):
+        pressure = getattr(self, "_pressure_geometry", None)
+        if typed_films and getattr(self, "accelerated", False):
+            from ._kernels import List, copy_polylines
+            mids = (copy_polylines(self.e_mid) if isinstance(self.e_mid, List)
+                    else [m.copy() for m in self.e_mid])
+        else:
+            mids = [m.copy() for m in self.e_mid]
         return (self.vpos.copy(), self.v_e.copy(), self.v_f.copy(),
                 self.e_v.copy(), self.e_f.copy(), self.e_t.copy(),
-                self.e_rfn.copy(), [m.copy() for m in self.e_mid],
+                self.e_rfn.copy(), mids,
                 [list(x) for x in self.f_v], [list(x) for x in self.f_e],
-                self.f_area.copy(), self.f_center.copy())
+                self.f_area.copy(), self.f_center.copy(),
+                None if pressure is None else (pressure[0].copy(), pressure[1].copy()))
 
     def _restore(self, s):
         (self.vpos, self.v_e, self.v_f, self.e_v, self.e_f, self.e_t,
          self.e_rfn, self.e_mid, self.f_v, self.f_e, self.f_area,
          self.f_center) = (s[0], s[1], s[2], s[3], s[4], s[5], s[6],
                            s[7], s[8], s[9], s[10], s[11])
+        self._pressure_geometry = s[12]
 
     def t1_foam(self, e):
         """Neighbour exchange on cell-cell edge e (handles adjacent spaces)."""
+        return self._t1_foam_with_rotation(e, 1)
+
+    def _t1_foam_with_rotation(self, e, rotation):
         v1, v2 = int(self.e_v[e, 0]), int(self.e_v[e, 1])
         fa, fb = int(self.e_f[e, 0]), int(self.e_f[e, 1])
         if fa == SPACE or fb == SPACE:
@@ -609,15 +710,8 @@ class FoamTissue:
         c2 = self._third_face(v2, {cL, cR})
         if c1 == c2 and c1 != SPACE:
             return False
-        # both cells and already neighbours -> would double an edge
-        if c1 != SPACE and c2 != SPACE:
-            nbr = set()
-            for ee in range(len(self.e_v)):
-                f0, f1 = int(self.e_f[ee, 0]), int(self.e_f[ee, 1])
-                if c1 in (f0, f1):
-                    nbr.add(f0); nbr.add(f1)
-            if c2 in nbr:
-                return False
+        # The reference permits another disjoint film between cells that
+        # already touch. Face loops distinguish the films by their endpoints.
         e_a = self._edge_between(v1, a)
         e_c = self._edge_between(v2, c)
         if e_a is None or e_c is None or e_a == e_c:
@@ -627,7 +721,7 @@ class FoamTissue:
         try:
             # geometry: rotate edge 90 deg about midpoint
             p1 = self.vpos[v1]
-            p2 = crd_local(np.array([p1, self.vpos[v2]]), self.bs, self.sstn)[1]
+            p2 = self._local(np.array([p1, self.vpos[v2]]))[1]
             mid = 0.5 * (p1 + p2)
             ev = p2 - p1
             perp = np.array([-ev[1], ev[0]])
@@ -635,7 +729,7 @@ class FoamTissue:
             perp = perp / npp if npp > 1e-12 else np.array([1.0, 0.0])
             # MATLAB rotates the existing edge without increasing its length.
             # cL lies left of v1->v2 and retains v2; cR retains v1.
-            half = 0.5 * np.hypot(*ev)
+            half = 0.5 * np.hypot(*ev) * rotation
             self.vpos[v1] = mid - half * perp
             self.vpos[v2] = mid + half * perp
             self._wrap_vertices()
@@ -669,19 +763,24 @@ class FoamTissue:
                     pts = pts[::-1].copy()
                 pts[0], pts[-1] = self.vpos[new_ends]
                 self.e_mid[ee], self.e_rfn[ee] = edge_mid_vrtx_average(
-                    crd_local(pts, self.bs, self.sstn), self.edpc)
-            pts = crd_local(self.vpos[self.e_v[e]], self.bs, self.sstn)
+                    self._local(pts), self.edpc)
+            pts = self._local(self.vpos[self.e_v[e]])
             self.e_mid[e], self.e_rfn[e] = edge_mid_vrtx_average(pts, self.edpc)
             old_fixed = sum(f != SPACE for f in snap[4][e]) - self.gam
             self.e_t[e] += self.fixed_tension(e) - old_fixed
             for ci in (cL, cR, c1, c2):
                 if ci != SPACE:
                     self._recompute_cell(ci)
-            # validate (degenerate or self-intersecting -> reject; poor-man's T4)
+            # MATLAB swaps the rotated endpoint placements if the moved
+            # films cross. Check the complete affected loops before accepting.
             for ci in (cL, cR, c1, c2):
-                if ci != SPACE and (len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4
-                                    or self._cell_self_intersects(ci)):
+                if ci == SPACE:
+                    continue
+                if len(self.f_v[ci]) < 3 or self.f_area[ci] <= 1e-4:
                     raise ValueError("degenerate/tangled cell")
+                if self._cell_self_intersects(ci):
+                    self._restore(snap)
+                    return self._t1_foam_with_rotation(e, -1) if rotation == 1 else False
             return True
         except Exception:
             self._restore(snap)
@@ -710,10 +809,10 @@ class FoamTissue:
                 common = set(self.e_f[ee]) & set(fs)
                 if len(common) != 1: raise ValueError("ambiguous T1 film")
                 owner[ee] = fs.index(common.pop())
-            points = crd_local(self.vpos[vs], self.bs, self.sstn)
+            points = self._local(self.vpos[vs])
             mid = points.mean(axis=0); dr = points[1]-points[0]
             rot = np.array([-dr[1], dr[0]])*.5
-            fc = crd_local(np.array([mid, self.f_center[fs[0]]]), self.bs, self.sstn)[1]
+            fc = self._local(np.array([mid, self.f_center[fs[0]]]))[1]
             if np.dot(rot, fc-mid) < 0: rot = -rot
             self.vpos[vs[0]], self.vpos[vs[1]] = mid+rot, mid-rot
             self._wrap_vertices()
@@ -729,9 +828,9 @@ class FoamTissue:
                 if new[0] > new[1]: new = new[::-1]; m = m[::-1]
                 self.e_v[ee] = new
                 self.e_mid[ee], self.e_rfn[ee] = edge_mid_vrtx_average(
-                    crd_local(m, self.bs, self.sstn), self.edpc)
+                    self._local(m), self.edpc)
             self.e_mid[e], self.e_rfn[e] = edge_mid_vrtx_average(
-                crd_local(self.vpos[vs], self.bs, self.sstn), self.edpc)
+                self._local(self.vpos[vs]), self.edpc)
             for k,f in enumerate(fs):
                 if f == SPACE: continue
                 self.f_v[f] = [x for x in self.f_v[f] if x != vs[1-k]]
@@ -760,53 +859,85 @@ class FoamTissue:
 
     def edge_lengths(self):
         if getattr(self, "accelerated", False):
-            from ._kernels import lengths
-            from numba.typed import List
+            from ._kernels import lengths, List
             mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
             return lengths(mids)
         return np.array([edge_len(m).sum() for m in self.e_mid])
 
-    def advance_scheduled(self, iteration, mu=0.0):
+    def advance_scheduled(self, iteration, mu=0.0, post_shear=False, contact_observer=None):
         """One timestep with the MATLAB 3/5-step transition cadence.
 
         Before-step lengths supply the shrinking-edge condition. Newly formed
-        all-cell junctions receive spaces on the Type2 sweep. Unlike the legacy
-        convenience do_transitions(), no extra triangle-annihilation rule is used.
+        all-cell junctions receive spaces on the Type2 sweep.
         """
-        before = self.edge_lengths() if iteration % 3 == 0 else None
+        slot = iteration % 5
+        t1_due = iteration % 3 == 0 or (post_shear and slot in (1, 3))
+        before = self.edge_lengths() if t1_due else None
         self.step(mu)
-        if iteration % 3 == 0:
+        if t1_due:
             now = self.edge_lengths()
             threshold = .01 * 2 * np.sqrt(np.pi)
             short = np.flatnonzero(now < threshold)
             if short.size:
                 cell_counts = np.count_nonzero(self.e_f[short] != SPACE, axis=1)
+                # The reference removes a new space-space film immediately.
+                # Keep each candidate's original length while tracking its
+                # current edge index after each merge.
+                interior = self.rng.permutation(short[cell_counts == 2])
+                boundary = self.rng.permutation(short[cell_counts == 1])
+                accelerated = getattr(self, "accelerated", False)
+                if accelerated:
+                    from ._kernels import shrinking_boundary_candidates
+                    eligible = shrinking_boundary_candidates(
+                        boundary, before, now, self.e_v, self.v_e, threshold)
+                    if not len(interior) and not np.any(eligible):
+                        boundary = boundary[:0]
+                candidates = [(int(e), before[e], now[e], 2) for e in interior]
+                candidates.extend((int(e), before[e], now[e], 1) for e in boundary)
                 changed = False
-                # MATLAB visits cell-cell contacts first, shuffling within each class.
-                for count in (2, 1):
-                    for e in self.rng.permutation(short[cell_counts == count]):
-                        length = edge_len(self.e_mid[e]).sum() if changed else now[e]
-                        if length >= threshold or length >= before[e]:
-                            continue
-                        if count == 1:
+                for j in range(len(candidates)):
+                    e, previous, initial, count = candidates[j]
+                    if e < 0:
+                        continue
+                    length = edge_len(self.e_mid[e]).sum() if changed else initial
+                    if length >= threshold or length >= previous:
+                        continue
+                    if count == 1:
+                        if accelerated and not changed:
+                            if not eligible[j - len(interior)]:
+                                continue
+                        else:
                             es = {int(x) for v in self.e_v[e] for x in self.v_e[v] if x >= 0}
                             far = set(self.e_v[list(es)].ravel()) - set(self.e_v[e])
                             if len(far) != 4:
                                 continue
-                        if self.t1_foam(int(e)):
-                            changed = True
+                    before_transition = getattr(contact_observer, "before_transition", None)
+                    if before_transition is not None:
+                        before_transition("T1", self)
+                    if not self.t1_foam(e):
+                        continue
+                    if contact_observer is not None:
+                        contact_observer(iteration, "T1", self)
+                    changed = True
+                    if np.all(self.e_f[e] == SPACE):
+                        remap = self._merge_space_edge(e)
+                        if remap is not None:
+                            candidates[j+1:] = [
+                                (remap.get(k, -1), prev, cur, n_cells)
+                                for k, prev, cur, n_cells in candidates[j+1:]
+                            ]
             self.resolve_space_space_edges()
-        if iteration % 5 == 1:
-            self.top_transition_type3()
-        if iteration % 5 == 2:
+        if not post_shear and slot == 1:
+            self.top_transition_type3(iteration, contact_observer)
+        if slot == 2:
             for v in self._adjacent_crossing_vertices():
                 self.t4_adjacent(v)
-        if iteration % 5 == 3:
+        if not post_shear and slot == 3:
             for v in np.flatnonzero(np.all(self.v_f != SPACE, axis=1)):
                 self.t2_reverse(int(v))
 
     def do_transitions(self, mu=0.0, create_spaces=False):
-        """Apply T4-adjacent (untangle) + T1 + T2 annihilation (+ optional creation)."""
+        """Apply T4 and T1, returning the T1 and space creation counts."""
         # T4 (adjacent): repair curved edges that folded through each other,
         # so a genuine tangle is un-folded rather than silently committed.
         # Iterate a few sweeps: fixing one fold can expose an adjacent one.
@@ -842,8 +973,6 @@ class FoamTissue:
         self.resolve_space_space_edges()
         # T4 (non-adjacent): cut two space-bordering films that cross (lens)
         self.top_transition_type3()
-        # T2: annihilate collapsed spaces
-        na = self.t2_annihilate_spaces()
         # optional ongoing space creation at all-cell vertices (topTransitionType2)
         n2 = 0
         if create_spaces:
@@ -856,7 +985,7 @@ class FoamTissue:
         self._update_faces()
         self._prev_lens = np.array([edge_len(self.e_mid[i]).sum()
                                     for i in range(len(self.e_mid))])
-        return n1, n2, na
+        return n1, n2
 
     # ------------------------------------------------------------------ #
     #  T2: annihilate a collapsed triangular extracellular space
@@ -880,10 +1009,16 @@ class FoamTissue:
         self.e_f = self.e_f[ekeep]
         self.e_t = self.e_t[ekeep]
         self.e_rfn = self.e_rfn[ekeep]
-        self.e_mid = [self.e_mid[e] for e in ekeep]
+        if getattr(self, "accelerated", False):
+            from ._kernels import List, selected_polylines
+            self.e_mid = (selected_polylines(self.e_mid, np.asarray(ekeep, dtype=np.int64))
+                          if isinstance(self.e_mid, List) else [self.e_mid[e] for e in ekeep])
+        else:
+            self.e_mid = [self.e_mid[e] for e in ekeep]
         self.f_v = [[vmap[v] for v in loop] for loop in self.f_v]
         for ci in range(self.nFa):
             self.f_e[ci] = self._face_edge_id(ci)
+        return emap
 
     def _find_collapsible_triangle(self, area_thr):
         """Return (a,b,c,eab,eac,ebc) of one tiny space triangle, or None."""
@@ -900,7 +1035,7 @@ class FoamTissue:
                 for j in range(i + 1, len(nbrs)):
                     b, c = nbrs[i], nbrs[j]
                     if b in adj.get(c, {}):
-                        tri = crd_local(self.vpos[[a, b, c]], self.bs, self.sstn)
+                        tri = self._local(self.vpos[[a, b, c]])
                         if abs(poly_area_centroid(tri)[0]) < area_thr:
                             return (a, b, c, adj[a][b], adj[a][c], adj[c][b])
         return None
@@ -958,7 +1093,7 @@ class FoamTissue:
                 faces.append(SPACE)
             self.v_f[a] = self._sortf(faces)
             # position -> triangle centroid
-            tri = crd_local(self.vpos[[a, b, c]], self.bs, self.sstn)
+            tri = self._local(self.vpos[[a, b, c]])
             self.vpos[a] = np.mod(tri.mean(axis=0), self.bs)
             # cells: replace b,c by a, drop duplicates
             for ci in range(self.nFa):
@@ -974,7 +1109,7 @@ class FoamTissue:
                     self.f_v[ci] = dedup
             # rebuild outer-edge polylines to end at a
             for ov in (oa, ob, oc):
-                pts = crd_local(self.vpos[self.e_v[ov]], self.bs, self.sstn)
+                pts = self._local(self.vpos[self.e_v[ov]])
                 self.e_mid[ov], self.e_rfn[ov] = edge_mid_vrtx_average(pts, self.edpc)
             self._remove_ve({b, c}, {eab, eac, ebc})
             # recompute the touched cells
@@ -997,11 +1132,15 @@ class FoamTissue:
         Port of ts_t3ReverseTransition: retain a vertex when its remaining
         boundary is a single closed edge; otherwise splice its two films.
         """
+        return self._merge_space_edge(deId) is not None
+
+    def _merge_space_edge(self, deId):
+        """Return the old-to-new edge index map if the merge succeeds."""
         if not np.all(self.e_f[deId] == SPACE):
-            return False
+            return None
         cv = list(map(int, self.e_v[deId]))
         if cv[0] == cv[1]:
-            return False
+            return None
         snap = self._snapshot()
         try:
             vdel, edel, affected = set(), {deId}, set()
@@ -1026,7 +1165,7 @@ class FoamTissue:
                 if a > b: mid = mid[::-1]
                 self.e_v[ea] = sorted([a,b])
                 self.e_mid[ea], self.e_rfn[ea] = edge_mid_vrtx_average(
-                    crd_local(mid, self.bs, self.sstn), self.edpc)
+                    self._local(mid), self.edpc)
                 self.e_t[ea] = .5*(self.e_t[ea]+self.e_t[eb])
                 self._replace_in_ve(b, eb, ea)
                 if a == b:
@@ -1034,16 +1173,16 @@ class FoamTissue:
                     self.v_e[a] = [-1]*(3-len(es_new)) + es_new
                 self.f_v[f] = [x for x in self.f_v[f] if x != v]
                 vdel.add(v); edel.add(eb)
-            self._remove_ve(vdel, edel)
+            remap = self._remove_ve(vdel, edel)
             for f in affected:
                 self._recompute_cell(f)
                 if not np.isfinite(self.f_area[f]) or self.f_area[f] <= 1e-4:
                     raise ValueError("collapsed cell after T3")
             self._prev_lens = None
-            return True
+            return remap
         except (ValueError, StopIteration, IndexError):
             self._restore(snap)
-            return False
+            return None
 
     def resolve_space_space_edges(self, max_events=400):
         """Remove all space-space edges via T3-reverse (re-detect after each)."""
@@ -1128,7 +1267,7 @@ class FoamTissue:
         segment pair that legitimately meets at v.  Returns (n, pt, seg1, seg2)."""
         P1, P2 = self.e_mid[e1], self.e_mid[e2]
         n1 = len(P1)
-        cat = crd_local(np.vstack([P1, P2]), self.bs, self.sstn)
+        cat = self._local(np.vstack([P1, P2]))
         Q1, Q2 = cat[:n1], cat[n1:]
         s1, s2 = len(Q1) - 1, len(Q2) - 1
         a1 = 0 if int(self.e_v[e1, 0]) == v else s1 - 1     # segment of e1 at v
@@ -1150,23 +1289,23 @@ class FoamTissue:
     def _trim_edge_at(self, e, v, ept, seg):
         """Replace edge e's polyline on the v-side of crossing segment `seg`
         with the intersection point ept, then re-refine."""
-        P = crd_local(self.e_mid[e], self.bs, self.sstn)
+        P = self._local(self.e_mid[e])
         if int(self.e_v[e, 0]) == v:                # edge starts at v
             new = np.vstack([ept, P[seg + 1:]])
         else:                                       # edge ends at v
             new = np.vstack([P[:seg + 1], ept])
-        new = crd_local(new, self.bs, self.sstn)
+        new = self._local(new)
         mid, rfn = edge_mid_vrtx_average(new, self.edpc)
         self.e_mid[e] = mid; self.e_rfn[e] = rfn
 
     def _move_edge_end(self, e, v, ept):
         """Drag edge e's endpoint at vertex v to ept and re-refine."""
-        P = crd_local(self.e_mid[e], self.bs, self.sstn).copy()
+        P = self._local(self.e_mid[e]).copy()
         if int(self.e_v[e, 0]) == v:
             P[0] = ept
         else:
             P[-1] = ept
-        P = crd_local(P, self.bs, self.sstn)
+        P = self._local(P)
         mid, rfn = edge_mid_vrtx_average(P, self.edpc)
         self.e_mid[e] = mid; self.e_rfn[e] = rfn
 
@@ -1174,8 +1313,7 @@ class FoamTissue:
         if not getattr(self, "accelerated", False):
             yield from range(len(self.vpos))
             return
-        from ._kernels import adjacent_vertices
-        from numba.typed import List
+        from ._kernels import adjacent_vertices, List
         def detect():
             mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
             return set(adjacent_vertices(mids, self.e_v, self.v_e, self.bs, self.sstn))
@@ -1189,12 +1327,12 @@ class FoamTissue:
                     candidates = detect()
 
     def t4_adjacent(self, v):
-        """Resolve a fold between two edges incident on vertex v. Returns True
-        if a crossing was repaired (and the repair passed the revert guard)."""
+        """Sweep incident film pairs at v, returning True if any fold was repaired."""
         eids = [int(e) for e in self.v_e[v] if e >= 0]
         if len(eids) < 2:
             return False
-        ring = eids + [eids[0]]
+        ring = eids + [eids[0]] if len(eids) > 2 else eids
+        repaired = False
         for idx in range(len(ring) - 1):
             ea, eb = ring[idx], ring[idx + 1]
             if ea == eb:
@@ -1219,7 +1357,7 @@ class FoamTissue:
             faces = [int(f) for f in self.v_f[v] if f != SPACE and f >= 0]
             for f in faces:
                 a, c = self.cell_area_center(f)
-                self.f_area[f] = a; self.f_center[f] = c
+                self._set_face_geometry(f, a, c)
             new_a = edge_len(self.e_mid[ea]).sum()
             new_b = edge_len(self.e_mid[eb]).sum()
             cri = min(new_a / max(old_a, 1e-12), new_b / max(old_b, 1e-12))
@@ -1228,10 +1366,13 @@ class FoamTissue:
                     or any(self._edge_degenerate(e) for e in eids)):
                 self._restore(snap)
                 continue
+            # Later pairs see the moved junction and the updated films.
+            # A rejected proposal rolls back only to its own snapshot.
+            repaired = True
+        if repaired:
             self._prev_lens = None
             self._adjacent_revision = getattr(self, "_adjacent_revision", 0) + 1
-            return True
-        return False
+        return repaired
 
     # ------------------------------------------------------------------ #
     #  T4 (non-adjacent): two space-bordering edges that physically cross at
@@ -1245,7 +1386,7 @@ class FoamTissue:
         Returns (n_crossings, [points])."""
         P1, P2 = self.e_mid[e1], self.e_mid[e2]
         n1 = len(P1)
-        cat = crd_local(np.vstack([P1, P2]), self.bs, self.sstn)
+        cat = self._local(np.vstack([P1, P2]))
         Q1, Q2 = cat[:n1], cat[n1:]
         if getattr(self, "accelerated", False):
             from ._kernels import crossings
@@ -1265,8 +1406,7 @@ class FoamTissue:
 
     def _edge_bounds(self):
         if getattr(self, "accelerated", False):
-            from ._kernels import edge_bounds
-            from numba.typed import List
+            from ._kernels import edge_bounds, List
             mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
             return edge_bounds(mids)
         return np.array([self._edge_bbox(e) for e in range(len(self.e_v))])
@@ -1314,7 +1454,7 @@ class FoamTissue:
     def edge_cut_piece(self, emdi, ept, evr1, evr2, vId):
         """Port of ts_edgeCutPiece.m: the piece of polyline emdi on the vId side
         of the cut point ept.  evr1=original endpoints, evr2=new endpoints."""
-        emdc = crd_local(np.vstack([ept, emdi]), self.bs, self.sstn)
+        emdc = self._local(np.vstack([ept, emdi]))
         ept_l, emd = emdc[0], emdc[1:]
         k = self._cut_index(ept_l, emd)
         if int(evr1[0]) == vId:
@@ -1338,6 +1478,13 @@ class FoamTissue:
         self.f_v[f] = fvr
         self._recompute_cell(f)
 
+    def _opposed_contact(self, edge):
+        """Check that the two cell loops traverse their common film in opposite directions."""
+        a, b = self.e_f[edge]
+        forward, backward = edge, -edge - 1
+        return ((forward in self.f_e[a] and backward in self.f_e[b])
+                or (backward in self.f_e[a] and forward in self.f_e[b]))
+
     def edge_cut_single_piece(self, emdi, p, q, endpoints, first_vertex):
         """Retain the outer arc of a closed film (ts_edgeCutSinglePiece).
 
@@ -1345,7 +1492,7 @@ class FoamTissue:
         length differs most from the straight bridge. Locate cuts by segment
         distance to avoid the reference's vertical-line slope singularity.
         """
-        pts = crd_local(np.vstack([p, q, emdi]), self.bs, self.sstn)
+        pts = self._local(np.vstack([p, q, emdi]))
         p, q, mid = pts[0], pts[1], pts[2:]
         i, j = self._cut_index(p, mid), self._cut_index(q, mid)
         if i < j:
@@ -1394,7 +1541,7 @@ class FoamTissue:
                 [self.fixed_tension(e) for e in edges])
             bridge_ends = sorted([v5, v6])
             bridge = np.array([p, q]) if v5 < v6 else np.array([q, p])
-            bm, br = edge_mid_vrtx_average(crd_local(bridge, self.bs, self.sstn), self.edpc)
+            bm, br = edge_mid_vrtx_average(self._local(bridge), self.edpc)
             be = self._add_edge(*bridge_ends, *sorted(faces), bm, br, bridge_t)
             incident = {v5: [be], v6: [be]}
             for k, e in enumerate(edges):
@@ -1405,19 +1552,19 @@ class FoamTissue:
                     mid = self.edge_cut_single_piece(old_mid, p, q, ev, v5)
                     self.e_v[e] = ev
                     self.e_mid[e], self.e_rfn[e] = edge_mid_vrtx_average(
-                        crd_local(mid, self.bs, self.sstn), self.edpc)
+                        self._local(mid), self.edpc)
                     incident[v5].append(e); incident[v6].append(e)
                     self.f_v[faces[k]] = [v5, v6]
                 else:
                     # Crossings are ordered along the original polyline.
-                    local = crd_local(np.vstack([p, q, old_mid]), self.bs, self.sstn)
+                    local = self._local(np.vstack([p, q, old_mid]))
                     if self._cut_index(local[0], local[2:]) > self._cut_index(local[1], local[2:]):
                         a, b = b, a
                     ev1, ev2 = sorted([a, v5]), sorted([b, v6])
                     m1 = self.edge_cut_piece(old_mid, p, ends[k], ev1, a)
                     m2 = self.edge_cut_piece(old_mid, q, ends[k], ev2, b)
-                    m1, r1 = edge_mid_vrtx_average(crd_local(m1, self.bs, self.sstn), self.edpc)
-                    m2, r2 = edge_mid_vrtx_average(crd_local(m2, self.bs, self.sstn), self.edpc)
+                    m1, r1 = edge_mid_vrtx_average(self._local(m1), self.edpc)
+                    m2, r2 = edge_mid_vrtx_average(self._local(m2), self.edpc)
                     self.e_v[e] = ev1; self.e_mid[e] = m1; self.e_rfn[e] = r1
                     en = self._add_edge(*ev2, *self.e_f[e], m2, r2, old_t[k])
                     self._replace_in_ve(b, e, en)
@@ -1433,6 +1580,8 @@ class FoamTissue:
                     raise ValueError("collapsed T4 cell")
                 if self._cell_self_intersects(f):
                     raise ValueError("self-intersecting T4 cell")
+            if not self._opposed_contact(be):
+                raise ValueError("T4 contact has matching cell boundary orientations")
             affected = set(incident[v5] + incident[v6])
             if any(self._edge_degenerate(e) for e in affected):
                 raise ValueError("degenerate T4 edge")
@@ -1477,7 +1626,7 @@ class FoamTissue:
         # cross for a strongly curved film (the MATLAB chord heuristic).
         vl = [v1a, v1b, v2a, v2b, None, None]
         for offset, edge in ((0,e1),(2,e2)):
-            local = crd_local(np.vstack([ePt1,ePt2,self.e_mid[edge]]),self.bs,self.sstn)
+            local = self._local(np.vstack([ePt1,ePt2,self.e_mid[edge]]))
             if self._cut_index(local[0],local[2:]) > self._cut_index(local[1],local[2:]):
                 vl[offset],vl[offset+1] = vl[offset+1],vl[offset]
 
@@ -1499,20 +1648,11 @@ class FoamTissue:
         ev_e4 = self._sortf([vl[3], v6])      # elId(4): e2 second piece
         ev_e5 = self._sortf([v5, v6])         # elId(5): bridge (two cells)
 
-        m1, r1 = edge_mid_vrtx_average(crd_local(
-            self.edge_cut_piece(e1_oldmid, ePt1, e1_oldev, ev_e1, vl[0]),
-            self.bs, self.sstn), self.edpc)
-        m3, r3 = edge_mid_vrtx_average(crd_local(
-            self.edge_cut_piece(e1_oldmid, ePt2, e1_oldev, ev_e3, vl[1]),
-            self.bs, self.sstn), self.edpc)
-        m2, r2 = edge_mid_vrtx_average(crd_local(
-            self.edge_cut_piece(e2_oldmid, ePt1, e2_oldev, ev_e2, vl[2]),
-            self.bs, self.sstn), self.edpc)
-        m4, r4 = edge_mid_vrtx_average(crd_local(
-            self.edge_cut_piece(e2_oldmid, ePt2, e2_oldev, ev_e4, vl[3]),
-            self.bs, self.sstn), self.edpc)
-        m5, r5 = edge_mid_vrtx_average(crd_local(
-            np.array([ePt1, ePt2]), self.bs, self.sstn), self.edpc)
+        m1, r1 = edge_mid_vrtx_average(self._local(self.edge_cut_piece(e1_oldmid, ePt1, e1_oldev, ev_e1, vl[0])), self.edpc)
+        m3, r3 = edge_mid_vrtx_average(self._local(self.edge_cut_piece(e1_oldmid, ePt2, e1_oldev, ev_e3, vl[1])), self.edpc)
+        m2, r2 = edge_mid_vrtx_average(self._local(self.edge_cut_piece(e2_oldmid, ePt1, e2_oldev, ev_e2, vl[2])), self.edpc)
+        m4, r4 = edge_mid_vrtx_average(self._local(self.edge_cut_piece(e2_oldmid, ePt2, e2_oldev, ev_e4, vl[3])), self.edpc)
+        m5, r5 = edge_mid_vrtx_average(self._local(np.array([ePt1, ePt2])), self.edpc)
 
         # bridge tension: base average + fixed-point correction (ts_t4Transition)
         ft5 = 2.0 - self.gam                                # interior (two cells)
@@ -1544,21 +1684,23 @@ class FoamTissue:
                     or self._cell_self_intersects(f)):
                 self._restore(snap)
                 return False
+        if not self._opposed_contact(e5):
+            self._restore(snap)
+            return False
         if any(self._edge_degenerate(e) for e in (e1, e2, e3, e4, e5)):
             self._restore(snap)
             return False
         self._prev_lens = None
         return True
 
-    def top_transition_type3(self):
+    def top_transition_type3(self, iteration=0, contact_observer=None):
         """Apply non-adjacent T4 to every space-bordering edge (ts_topTransitionType3)."""
         n = 0
         # Reuse bounds until a transition changes geometry or connectivity.
         def eligible():
             if not getattr(self, "accelerated", False):
                 return np.ones(len(self.e_v), dtype=bool)
-            from ._kernels import lens_edges
-            from numba.typed import List
+            from ._kernels import lens_edges, List
             mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
             return lens_edges(mids, self.e_v, self.e_f, self.bs, self.sstn)
         candidates = eligible()
@@ -1566,9 +1708,16 @@ class FoamTissue:
             return 0
         self._t4_boxes = self._edge_bounds()
         try:
+            before_transition = getattr(contact_observer, "before_transition", None)
             for e in range(len(self.e_v)):  # freeze MATLAB eMx
-                if candidates[e] and int(self.e_f[e, 0]) == SPACE and self.t4_transition(e):
+                if not candidates[e] or int(self.e_f[e, 0]) != SPACE:
+                    continue
+                if before_transition is not None:
+                    before_transition("T4", self)
+                if self.t4_transition(e):
                     n += 1
+                    if contact_observer is not None:
+                        contact_observer(iteration, "T4", self)
                     self._t4_boxes = self._edge_bounds()
                     candidates = eligible()
         finally:
@@ -1611,6 +1760,10 @@ class FoamTissue:
 
     def shear_stress(self):
         """sigma_xy (paper Eq. 5)."""
+        if getattr(self, "accelerated", False):
+            from ._kernels import shear_component, List
+            mids = self.e_mid if isinstance(self.e_mid, List) else List(self.e_mid)
+            return self.rho * shear_component(mids, self.e_t) / self.bs**2
         return self.stress_tensor()[0, 1]
 
     def apply_affine_shear(self, strain):
@@ -1623,3 +1776,4 @@ class FoamTissue:
             self.e_mid[e] = m
         self._wrap_vertices()
         self._update_faces()
+        self._pressure_geometry = None

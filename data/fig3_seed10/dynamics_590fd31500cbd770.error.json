@@ -1,0 +1,27 @@
+{
+  "job": {
+    "kind": "dynamics",
+    "parameters": {
+      "w": 1.2,
+      "rho": 1.0,
+      "mu": 1.5,
+      "duration_tauT": 120.0,
+      "record_msd": true,
+      "record_snapshot": false,
+      "record_junction": false,
+      "example": null,
+      "seed": 10,
+      "n_side": 10,
+      "geometry_policy": "reference"
+    },
+    "panels": [
+      "3c",
+      "3d"
+    ],
+    "source_hash": "b3a37b1e63b577fe1bfcea1246e5af1bfd26e391c04b0c59df5fcd5afd5d5afc",
+    "profile": "full",
+    "id": "dynamics_590fd31500cbd770"
+  },
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/claude-0/-home-user-ActiveFoam-ZB/e7f4f248-55cb-54cd-8f40-a578e4ab73f4/scratchpad/fig3_cloud/activefoam/foam_measure.py\", line 70, in evolve\n    validate(ft)\n  File \"/tmp/claude-0/-home-user-ActiveFoam-ZB/e7f4f248-55cb-54cd-8f40-a578e4ab73f4/scratchpad/fig3_cloud/activefoam/foam_measure.py\", line 16, in validate\n    raise ValueError('nonfinite or nonpositive cell area')\nValueError: nonfinite or nonpositive cell area\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/tmp/claude-0/-home-user-ActiveFoam-ZB/e7f4f248-55cb-54cd-8f40-a578e4ab73f4/scratchpad/fig3_cloud/scripts/reproduce_requested.py\", line 43, in task\n    result=handlers[kind](**args)\n           ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/claude-0/-home-user-ActiveFoam-ZB/e7f4f248-55cb-54cd-8f40-a578e4ab73f4/scratchpad/fig3_cloud/scripts/resume_figure3.py\", line 30, in measure\n    return dict(figure3_dynamics(**params, checkpoint=checkpoint), solver_source_hash=digest)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/claude-0/-home-user-ActiveFoam-ZB/e7f4f248-55cb-54cd-8f40-a578e4ab73f4/scratchpad/fig3_cloud/scripts/reproduce_figure3.py\", line 94, in figure3_dynamics\n    evolve(foam, (total_steps - step)*foam.dt, mu, start=step, sample_every=1, observer=observe,\n  File \"/tmp/claude-0/-home-user-ActiveFoam-ZB/e7f4f248-55cb-54cd-8f40-a578e4ab73f4/scratchpad/fig3_cloud/activefoam/foam_measure.py\", line 75, in evolve\n    raise ValueError(f'{exc} at elapsed time {k*ft.dt:g} tau_R, strain {ft.sstn:g}') from exc\nValueError: nonfinite or nonpositive cell area at elapsed time 119 tau_R, strain 0\n",
+  "elapsed_seconds": 95.74993801116943
+}

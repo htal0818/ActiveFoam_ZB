@@ -22,6 +22,8 @@ def test_accelerated_trajectory_matches_python(shear):
         np.testing.assert_array_equal(fast.e_rfn,ref.e_rfn)
         for a,b in zip(fast.e_mid,ref.e_mid):
             np.testing.assert_allclose(a,b,atol=2e-11,rtol=2e-11)
+    np.testing.assert_allclose(fast.shape_factors(), ref.shape_factors(), atol=2e-11)
+    np.testing.assert_allclose(fast.shear_stress(), ref.shear_stress(), atol=2e-11)
 
 def test_accelerated_transition_search_matches_python():
     pytest.importorskip('numba')
@@ -59,3 +61,23 @@ def test_polygon_centroid_independent_of_boundary_sampling():
     for points in (coarse, resampled):
         centers = polygon_centroids(List([points]), loop, 10., 0.)
         np.testing.assert_allclose(centers[0], [14/9, 8/9], atol=1e-12)
+
+
+def test_reference_force_lag_preserves_current_measurement_geometry():
+    pytest.importorskip("numba")
+    tissue = build_periodic_voronoi(4, np.random.default_rng(2))
+    actual = FoamTissue(tissue, w=.5, accelerated=True, reference_pressure_lag=True)
+    expected = FoamTissue(tissue, w=.5, accelerated=True)
+    initial_area, initial_center = expected.f_area.copy(), expected.f_center.copy()
+    actual.step()
+    expected.step()
+    np.testing.assert_allclose(actual.f_area, expected.f_area)
+
+    # The reference's next force evaluation still sees the incoming geometry.
+    expected.f_area, expected.f_center = initial_area, initial_center
+    expected.step()
+    actual.step()
+    np.testing.assert_allclose(actual.vpos, expected.vpos)
+    np.testing.assert_allclose(actual.f_area, expected.f_area)
+    for area, face in zip(actual.f_area, range(actual.nFa)):
+        np.testing.assert_allclose(area, actual.cell_area_center(face)[0])

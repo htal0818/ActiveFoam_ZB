@@ -1,0 +1,1657 @@
+{
+  "panels": [
+    "4a",
+    "4b",
+    "4d",
+    "4e",
+    "4f",
+    "4g"
+  ],
+  "jobs": [
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 0.0,
+        "duration": 280.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4a",
+        "4b"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_cd821743e12b2a3c"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4a",
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_d4a33a816fe26e0b"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4a",
+        "4b",
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_0abcb5f469ebe03f"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4a",
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_1036421bc5e049ed"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4a",
+        "4b",
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_e2a4cd21df33c76d"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4a",
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_09c18decb7475f93"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4a",
+        "4b",
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_4fe80e97de3193f4"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 0.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_7f70719b046228be"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 0.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_0a4ca5915cc8b451"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 0.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_df314ebe2d7aba49"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 0.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_b69d5289b77d378e"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_0bed879b55617a0f"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_269fcf4ca46539a3"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_50c10fc06c8d6b70"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_f3ab0e4940a28abd"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_78a7f9a7d28f1677"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_32dcb8b71f81cb4c"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_53c63242ec81e8a8"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_469fcd92b315bb52"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_764178ac06aa05d6"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_7dd1dac262ffd996"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_a623c3a38ac671b8"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_c276bcec964a2f06"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_04c78434c543c13c"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_62d3396bad4e8628"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_d7d3834150323b46"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_82194c2c1fa122d7"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_f7e7a805223449ea"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_29ec607dc28d2866"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_dbae011309c01432"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_3614f5dd00c637c1"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_ed8fb5ae38c614ca"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_1ecd5595b0626405"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_52a527f48010f628"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.5,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_f1ac0aca544b7466"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_bd3a348f69296ca0"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_786a05310c59a41e"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_eabcbed7b3973b0b"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_0d0c5fb6c3b75e31"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_e391296cb06b4617"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.3,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_e2b0e823bf8eb20b"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_36774982c5f1bbcf"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.8,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_7d271d67d6179cc7"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_4bcfd1e5cdb6a907"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.0,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 2,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_21e107f55f9927cf"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 0.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_00765f601f0d44d2"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 0.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_8fdcb5882ce10715"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_d3ef0573e5f36759"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_7d0ac3a5db898298"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_6c4827f59c721f54"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 0.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_c5c5485c9a636dd6"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_2e9412572874253b"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_89abfeb854f78dbc"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_393503d081d95d34"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 0.75,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_2ece3e301ddcd9ac"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_ecf437a024691136"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_5fa1c36e83880eda"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_7de93dfa51366f8d"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 1.0,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_cc43c42d799c34fe"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_f2fd9bf04877f11d"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_472b97e342421c25"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_4d1360b734125fe5"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 1.25,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_16ea7e7555fc42ae"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_0646f70bc5c8751b"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 0.0,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_09f221c3b8dece5d"
+    },
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_1c49cc4a79197c50"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 1,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_1d145fea3c3155ff"
+    }
+  ],
+  "limitations": {
+    "4d": "One simulation per setting on six of the published adhesion values.",
+    "4e": "One simulation per setting on six of the published adhesion values.",
+    "4f": "One simulation per setting on six of the published adhesion values.",
+    "4g": "One simulation per setting on six of the published adhesion values."
+  },
+  "active_adhesions": [
+    0.0,
+    0.3,
+    0.5,
+    0.8,
+    1.0,
+    1.2
+  ],
+  "active_activities": [
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5
+  ],
+  "paper": "10.1038/s41567-021-01215-1",
+  "model": "FoamTissue (Numba)",
+  "replicates_per_setting": 1,
+  "profile": "full",
+  "n_side": 10,
+  "geometry_policy": "reference",
+  "pressure_normals": "reference",
+  "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+  "replacements": {
+    "shear_2905b242df32bcb3": {
+      "job": "shear_21e107f55f9927cf",
+      "seed": 2
+    }
+  }
+}

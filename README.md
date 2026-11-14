@@ -1,7 +1,5 @@
 # Active Foam — Python reproduction of Kim *et al.*, *Nature Physics* (2021)
 
-Current full-foam work for Figures **2b, 2c, 3a, 4a, and 4g**, including closed-edge T4 cases, numerical acceleration, validation, and checkpointed runs, is documented in [REPRODUCTION.md](REPRODUCTION.md). The older gallery below predates these changes.
-
 Python reimplementation of the dynamic vertex ("active foam") model from
 
 > S. Kim, M. Pochitaloff, G. A. Stooke‑Vaughan & O. Campàs,
@@ -72,19 +70,29 @@ side‑by‑side comparison PNGs into `figures/`.
 These use the paper's **Methods stress tensor** (Eq. 4/5),
 `σ_mn = ρ [ −Σ_i Δp_i a_i δ_mn + Σ_ij t_ij ℓ_m ℓ_n / |ℓ| ]`, implemented on the
 curved‑edge foam model (`FoamTissue.stress_tensor`), together with the affine
-shear‑step‑and‑relax protocol (`apply_affine_shear`). Fig 2i recovers the paper's
-family exactly — largest elastic jump at `W=0`, highest residual (yield) stress at
-the structural transition `W/T₀≈0.5`, and zero stress at `W/T₀=2`.
+shear‑step‑and‑relax protocol (`apply_affine_shear`). In Fig 2i the elastic jump
+falls with adhesion (0.95, 0.63, 0.32 at `W/T₀` = 0.5, 1.0, 1.5 for a strain of
+1.0; the paper uses 1.5) and the stress is zero at `W/T₀=2`. The residual stress
+after 30 τ_R is 0.41, 0.39, 0.20, against 0.37, ≈0.24, ≈0.11 in the paper at
+long times. There is **no `W=0` curve**: both seeds at that adhesion tangled and
+ran past the per‑run time limit. In Fig 2j the yield stress peaks at
+`W/T₀≈0.4` (0.32) and vanishes at `W/T₀=2`; the `W=0` value (0.12 ± 0.09, two
+of three seeds) is not reliable.
+
+All foam‑model figures were regenerated after the space‑annihilation step was
+removed from the model (see the transition inventory below).
 
 **Fig 3c/3d.** The foam model covers all adhesions but only over a 20 τ_R
-window (NE-rate floor ≈ 7×10⁻⁴, MSD lag 2 τ_T). The ΔT/T₀ = 1.0 and 1.5 curves
-show the paper's minimum near W/T₀ ≈ 0.8–0.9 and the rise on both sides with
-similar magnitudes (ΔT/T₀ = 1.5: 0.04 → 0.16; paper ≈ 0.03 → 0.15). Lower
+window (NE-rate floor ≈ 7×10⁻⁴, MSD lag 2 τ_T). The NE rate falls steeply from
+the non-confluent side to a minimum near W/T₀ ≈ 0.6–0.9, but the rise on the
+confluent side is weak: at ΔT/T₀ = 1.0 it goes 0.010 → 0.024 and at 1.5 it is
+flat at ≈ 0.03–0.04 (paper ≈ 0.03 → 0.15). Lower
 activities are floor-limited, so on the confluent branch (W/T₀ ≥ 0.6) the fast
 confluent model is run for 2000 τ_R, giving MSD at the paper's 10² τ_T lag and
 NE rates down to ~10⁻⁵. Its NE rate counts net contact losses between snapshots
-one τ_T apart and is 2–6× below the foam model's event count where they
-overlap, so the two sets are drawn separately rather than joined.
+one τ_T apart, while the foam model counts T1 events; at ΔT/T₀ ≤ 0.5 the two
+differ by one to two orders of magnitude, so the sets are drawn separately
+rather than joined.
 
 For the **τ_SR map (4d)** and **phase diagram (4e)** the paper states that
 long‑timescale stress relaxation is driven by *actively induced NE (T1)
@@ -93,10 +101,12 @@ rate. We therefore measure the steady‑state NE (topological‑event) rate `k_N
 directly from the foam model across `(W/T₀, ΔT/T₀)` and set
 `τ_SR = τ_T · (k_NE^max / k_NE)` (stress relaxes within one tension‑persistence
 time at the fully‑fluid NE ceiling, diverging as the NE rate → 0). Applying the
-paper's fluidity criterion `τ_SR/τ_T = 10²` reproduces the topology of Fig 4e:
-a solid band bordering the structural transition at low activity, fluid
-everywhere for large enough `ΔT/T₀`. This is a reduced NE‑rate reconstruction,
-not a per‑point stretched‑exponential fit of the full stress‑relaxation curve.
+paper's fluidity criterion `τ_SR/τ_T = 10²` gives only two solid points
+(`ΔT/T₀ = 0.5`, `W/T₀` = 0.6 and 0.8), next to the structural transition; the
+paper's solid region is much larger (up to `ΔT/T₀ = 1.0`, `W/T₀` ≈ 0.4–1.2).
+The foam model's T1 rate on the confluent side is too high to reproduce it.
+This is a reduced NE‑rate reconstruction, not a per‑point stretched‑exponential
+fit of the full stress‑relaxation curve.
 
 ## Faithful vertex-network foam model (`foam_full.py`)
 
@@ -123,7 +133,7 @@ adhesion-dependent extracellular spaces, matching Fig 2a.
 |---|---|---|
 | **T1** | neighbour exchange (edge flip) | ✅ confluent + foam model (`t1_foam`, handles adjacent spaces), validated |
 | **T2-reverse** | create a triangular extracellular space at a vertex | ✅ `ts_t2ReverseTransition` port (`t2_reverse`) |
-| **T2** | annihilate a collapsed space back to a triple junction | ✅ `t2_annihilate_spaces` (+ id remap `_remove_ve`) |
+| **T2** (space annihilation) | remove a collapsed space | — not in the model: neither the reference code nor the paper's Methods removes spaces; a closed space persists as a tiny triangle |
 | **T3-reverse** | merge two spaces across a space–space edge | ✅ `ts_t3ReverseTransition` port (`t3_reverse`) |
 | **T4 (adjacent)** | uncross two curved edges *sharing a vertex* that folded through each other | ✅ `ts_t4AdjacentTransition` + `ts_edgeCrossAdjacent` port (`t4_adjacent`), with revert guard, validated |
 | **T4 (non-adjacent)** | cut two *non-adjacent* space-bordering edges crossing at two points (a lens) and splice a bridge edge | ✅ `ts_t4Transition` + `ts_edgeCutPiece` + `ts_topTransitionType3` port (`t4_transition` / `top_transition_type3`), validated |
@@ -138,17 +148,25 @@ toward 6 with adhesion, matching the paper for W/T₀ ≳ 0.5.
 was ported, contacts could break (T1 → T3-reverse) but never re-form, so the
 foam limit over-fragmented (z ≈ 2.8–3.2 at W=0, ρ=1). The non-adjacent T4 is the
 reference code's contact-*formation* step; with it the same point gives
-z ≈ 4.5–4.7, above the isostatic value 4. By the paper's own Fig 2f/4f that
-point sits near jamming (φ ≈ 0.83), so this is the right neighbourhood, though
-I cannot check the exact Fig 2c value (the crop lacks the ρ axis).
+z ≈ 4.5–4.7, above the isostatic value 4; the published source data give
+z = 4.09 (φ = 0.830) at that point.
 
 What remains broken in the low-adhesion corner:
 
-* **Tangling.** In the (W/T₀, ρ) map (`run_fig2c_map.py`) 10 of 64 points —
+* **Tangling.** In the (W/T₀, ρ) map (`run_fig2c_map.py`) 8 of 64 points —
   all at W/T₀ ≤ 0.2 — produced no valid configuration (self-overlapping cells,
-  φ > 1, or a run that never finished). Under activity, W=0 runs in the Fig 3c/3d
-  sweep tangled for ΔT/T₀ = 0.5 and 1.0. These points are excluded and shown
-  as blanks, not filled in.
+  φ > 1, or a run past the time limit). In the coarse sweep on the published
+  grid (`run_fig2bc_coarse.py`) it is 5 of 54, again all at W/T₀ ≤ 0.2. Under
+  activity, 5 of 72 runs in the Fig 3c/3d sweep were invalid, all at
+  W/T₀ ≤ 0.15 (no valid seed at W=0, ΔT/T₀ = 1.5). These points are excluded
+  and marked, not filled in.
+* **Late confluence at low density.** Against the published Fig 2b/2c source
+  data the coarse sweep has RMS differences of 0.067 in φ and 0.27 in z over
+  its 49 valid points. The largest errors are at ρ = 0.81–0.92, where the
+  model is still non-confluent (φ ≈ 0.78) at W/T₀ = 0.6–0.8 and the published
+  data are confluent from W/T₀ ≈ 0.58. Cell–space edges are never flipped by
+  T1 here (the reference code does flip them), so a space with four or more
+  sides cannot shed sides and close.
 * **Transient coarsening.** After spaces are opened they keep coarsening, so
   low-adhesion NE rates and MSDs are partly non-steady-state.
 * The underlying corner force balance (a contact of tension 2−W against two
@@ -173,7 +191,7 @@ fixed-point averaging rule. A validity guard reverts the cut if it would leave a
 cell degenerate or self-intersecting. Both modes are exercised by the test suite
 (`test_t4_adjacent_resolves_fold`, `test_t4_transition_cuts_lens`). They run in
 the MATLAB order inside `do_transitions` (T4-adjacent → T1 → T3-reverse →
-T4-non-adjacent → T2), matching the `ts_simStep` schedule.
+T4-non-adjacent); `advance` runs them on the `ts_simStep` cadence.
 
 A cut is only made for a real lens: if the two crossing points coincide (one
 crossing at a polyline node counted twice) the cut is refused, since it would

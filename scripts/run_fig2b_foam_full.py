@@ -11,12 +11,14 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from activefoam.topology import build_periodic_voronoi
 from activefoam.foam_full import FoamTissue
+from activefoam.budget import call_with_budget, BudgetExceeded
 
 os.makedirs("data", exist_ok=True)
 
 WS = np.round(np.arange(0.0, 1.51, 0.25), 3)
 RHOS = [1.0, 0.9, 0.8]
 SEEDS = [1, 2]
+MAX_SECONDS = 900      # per run; a run that crawls (tangled) is recorded as invalid
 
 
 def equilibrate(w, rho, seed):
@@ -31,7 +33,7 @@ def equilibrate(w, rho, seed):
     for it in range(350):
         ft.step(mu=0.5)               # anneal
         if it % 20 == 0:
-            ft.do_transitions()       # T1 + T2 annihilation
+            ft.do_transitions()       # T1 + T3-reverse + T4
     for it in range(700):
         ft.step(mu=0.0)               # quench
         if it % 20 == 0:
@@ -54,7 +56,11 @@ def main():
         for j, w in enumerate(WS):
             pv, zv = [], []
             for s in SEEDS:
-                p, z = equilibrate(w, rho, s)
+                try:
+                    p, z = call_with_budget(MAX_SECONDS, equilibrate, w, rho, s)
+                except (Exception, BudgetExceeded) as ex:
+                    print(f"  !! rho={rho} W={w} seed={s} invalid: {ex!r}", flush=True)
+                    p = z = np.nan
                 pv.append(p); zv.append(z)
             phi[i, j] = np.nanmean(pv) if np.any(np.isfinite(pv)) else np.nan
             zz[i, j] = np.nanmean(zv) if np.any(np.isfinite(zv)) else np.nan

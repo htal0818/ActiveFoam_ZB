@@ -1,0 +1,94 @@
+{
+  "panels": [
+    "4a",
+    "4b",
+    "4d",
+    "4e",
+    "4f",
+    "4g"
+  ],
+  "jobs": [
+    {
+      "kind": "dynamics",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration_tauT": 120.0,
+        "record_msd": false,
+        "record_snapshot": false,
+        "record_junction": false,
+        "example": null,
+        "seed": 4,
+        "n_side": 10,
+        "geometry_policy": "reference"
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4f",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "dynamics_00d5680a4f0b51fe"
+    },
+    {
+      "kind": "shear",
+      "parameters": {
+        "w": 1.2,
+        "rho": 1.0,
+        "mu": 1.5,
+        "duration": 1000.0,
+        "pilot": false,
+        "record_snapshot": false,
+        "seed": 4,
+        "n_side": 10,
+        "geometry_policy": "reference",
+        "record_diagnostics": true
+      },
+      "panels": [
+        "4d",
+        "4e",
+        "4g"
+      ],
+      "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+      "profile": "full",
+      "id": "shear_7f3eec81a7a73c3c"
+    }
+  ],
+  "limitations": {
+    "4d": "One simulation per setting on six of the published adhesion values.",
+    "4e": "One simulation per setting on six of the published adhesion values.",
+    "4f": "One simulation per setting on six of the published adhesion values.",
+    "4g": "One simulation per setting on six of the published adhesion values."
+  },
+  "active_adhesions": [
+    0.0,
+    0.3,
+    0.5,
+    0.8,
+    1.0,
+    1.2
+  ],
+  "active_activities": [
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5
+  ],
+  "paper": "10.1038/s41567-021-01215-1",
+  "model": "FoamTissue (Numba)",
+  "replicates_per_setting": 1,
+  "profile": "full",
+  "n_side": 10,
+  "geometry_policy": "reference",
+  "pressure_normals": "reference",
+  "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+  "replacements": {
+    "dynamics_1c49cc4a79197c50": "dynamics_00d5680a4f0b51fe",
+    "shear_1d145fea3c3155ff": "shear_7f3eec81a7a73c3c"
+  }
+}

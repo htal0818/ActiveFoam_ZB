@@ -1,0 +1,26 @@
+{
+  "job": {
+    "kind": "shear",
+    "parameters": {
+      "w": 1.0,
+      "rho": 1.0,
+      "mu": 1.5,
+      "duration": 1000.0,
+      "pilot": false,
+      "record_snapshot": false,
+      "seed": 1,
+      "n_side": 10,
+      "geometry_policy": "reference",
+      "record_diagnostics": true
+    },
+    "panels": [
+      "4d",
+      "4e",
+      "4g"
+    ],
+    "source_hash": "69d8daa34a971a1e887078d17dde40a23764394cb0eeb846e9c4534c25b84d16",
+    "profile": "full",
+    "id": "shear_2905b242df32bcb3"
+  },
+  "elapsed_seconds": 117.97510409355164
+}

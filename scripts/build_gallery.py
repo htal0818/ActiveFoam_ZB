@@ -24,25 +24,26 @@ CARDS = [
      "Curved cells (intermediate vertices) with extracellular spaces opening at low "
      "adhesion / low density and closing to confluence as W/T₀ rises."),
     ("compare_fig2b_phi.png", "Fig 2b", "Volume fraction φ vs adhesion",
-     "Unified foam model (T1 + T2 + T2-reverse + T3-reverse)", "strong",
+     "Unified foam model (T1 + T2-reverse + T3-reverse + T4)", "strong",
      "φ rises from ≈ the jamming value toward 1 (confluent) as adhesion "
      "increases, with lower density giving lower φ."),
     ("compare_fig2c_z.png", "Fig 2c", "Contact number over adhesion and density",
      "Foam model with full T1–T4 (contact formation via non-adjacent T4)", "good",
      "z rises to 6 with adhesion and density. With contact formation active the "
-     "W=0, ρ=1 point gives z≈4.7 (was ≈2.8). Ten low-adhesion points (W/T₀≤0.2) "
-     "gave no valid configuration and are marked, not filled in."),
+     "W=0, ρ=1 point gives z≈4.7 (published 4.09). Eight low-adhesion points "
+     "(W/T₀≤0.2) gave no valid configuration and are marked, not filled in."),
     ("compare_fig2i_stress.png", "Fig 2i", "Shear-stress relaxation vs adhesion",
-     "Foam model + paper Eq. 4/5 stress + affine-shear step", "strong",
-     "The paper's Methods protocol (strain step then relax): the initial elastic "
-     "jump is largest at W=0 and vanishes at W/T₀=2, while the residual (yield) "
-     "stress is highest at the structural transition (W/T₀≈0.5) — the exact "
-     "ordering and crossover of the paper's family."),
+     "Foam model + paper Eq. 4/5 stress + affine-shear step", "partial",
+     "The paper's Methods protocol (strain step then relax): the elastic jump "
+     "falls with adhesion and vanishes at W/T₀=2, and the residual stress is "
+     "highest near W/T₀≈0.5. There is no W=0 curve (both seeds tangled), and "
+     "the residuals at W/T₀=1.0 and 1.5 sit above the paper's."),
     ("compare_fig2j_yield.png", "Fig 2j", "Yield stress vs adhesion",
-     "Foam model + paper Eq. 4/5 stress", "strong",
-     "Computed with the paper's Methods stress tensor: the yield stress is "
-     "maximal at the structural transition (W/T₀≈0.5–0.6) and vanishes at W=0 "
-     "(jamming) and W=2 (vanishing tension) — the tissue's two fluid limits."),
+     "Foam model + paper Eq. 4/5 stress", "good",
+     "Computed with the paper's Methods stress tensor: the yield stress peaks "
+     "near the structural transition (W/T₀≈0.4) and vanishes at W=2 (vanishing "
+     "tension). The W=0 point (0.12 ± 0.09, two of three seeds) does not reach "
+     "the paper's near-zero value."),
     ("compare_fig2f_jamming.png", "Fig 2f", "Foam-limit jamming",
      "Soft-particle jamming (O'Hern)", "strong",
      "φ_c ≈ 0.85 (paper 0.83), z_c = 4 at the isostatic point, z rising with "
@@ -59,15 +60,16 @@ CARDS = [
      "activity, so the extracted exponent α is biased high."),
     ("compare_fig3c_msd_vs_w.png", "Fig 3c", "Cell movements vs adhesion",
      "Foam model (all W) + confluent model (long lag)", "partial",
-     "Foam model at a 2 τ_T lag shows the dip and high-adhesion rise for "
-     "ΔT/T₀ ≥ 1; the confluent branch is shown separately at the paper's "
-     "100 τ_T lag. No single curve spans the full range at the paper's lag."),
+     "Foam model at a 2 τ_T lag shows the fall from the non-confluent side but "
+     "almost no high-adhesion rise; the confluent branch is shown separately at "
+     "the paper's 100 τ_T lag. No single curve spans the full range at the "
+     "paper's lag."),
     ("compare_fig3d_ne_rate.png", "Fig 3d", "Neighbour-exchange rate vs adhesion",
-     "Foam model (T1 + contact changes)", "good",
-     "High-activity curves reproduce the minimum near W/T₀≈0.8–0.9 and the rise "
-     "on both sides with the paper's magnitudes. Low-activity curves hit the "
-     "20 τ_R resolution floor; dashed squares extend them on the confluent "
-     "branch with a 2000 τ_R window (different counting rule, 2–6× lower)."),
+     "Foam model (T1 events)", "partial",
+     "The NE rate falls steeply from the non-confluent side to a minimum near "
+     "W/T₀≈0.6–0.9; the rise on the confluent side is weak (flat at ΔT/T₀=1.5). "
+     "Dashed squares show the confluent model over a 2000 τ_R window, which "
+     "uses a different counting rule and sits far lower at low activity."),
     ("compare_fig4g_shape.png", "Fig 4g", "Dynamic shape factor",
      "Confluent dynamic vertex model", "good",
      "s̄ rises with adhesion and with activity, crossing the 3.81 rigidity line; "
@@ -92,11 +94,11 @@ CARDS = [
      "compressed relative to the paper: the finite measurement window "
      "(60 τ_R) resolves τ_SR only up to ~10³·⁵, not the paper's 10⁶ tail."),
     ("compare_fig4e_phase.png", "Fig 4e", "Fluid / solid phase diagram",
-     "Foam model, τ_SR/τ_T = 10² criterion", "good",
-     "Applying the paper's fluidity criterion (fluid if τ_SR/τ_T < 10²): solid "
-     "states form a band bordering the structural transition at low activity and "
-     "the tissue is fluid everywhere for large enough ΔT/T₀ — reproducing the "
-     "topology of the paper's phase diagram from a direct NE-rate measurement."),
+     "Foam model, τ_SR/τ_T = 10² criterion", "partial",
+     "Applying the paper's fluidity criterion (fluid if τ_SR/τ_T < 10²) gives "
+     "only two solid points, at ΔT/T₀=0.5 next to the structural transition. "
+     "The paper's solid region is much larger; the foam model's T1 rate on the "
+     "confluent side is too high to reproduce it."),
 ]
 
 VERDICT = {
@@ -117,7 +119,6 @@ PARAMS = [
 TRANS = [
     ("T1", "neighbour exchange (edge flip)", "done", "confluent + foam model, validated"),
     ("T2-reverse", "create a triangular extracellular space", "done", "ts_t2ReverseTransition port"),
-    ("T2", "annihilate a collapsed space → triple junction", "done", "with id remap"),
     ("T3-reverse", "merge two spaces across a space–space edge", "done", "ts_t3ReverseTransition port"),
     ("T4 (adjacent)", "uncross two curved edges sharing a vertex", "done", "ts_t4AdjacentTransition port, revert-guarded"),
     ("T4 (non-adjacent)", "cut two crossing space films (lens) + splice a bridge", "done", "ts_t4Transition + ts_edgeCutPiece port, validated"),

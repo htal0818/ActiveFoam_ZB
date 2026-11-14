@@ -7,7 +7,7 @@ there.  Low W/T0 is mobile because cell contacts continually break and reform
 neighbour exchanges (confluent).
 
 Measured directly from the curved-edge foam model, which has BOTH branches:
-  * cellular NE rate k_NE = (T1 + contact-change events) per cell per tau_R  (Fig 3d, log)
+  * cellular NE rate k_NE = T1 events on cell-cell edges per cell per tau_R       (Fig 3d, log)
   * MSD of the 36 persistent cell centroids over the measurement window,
     in the tissue centre-of-mass frame, in units of L0^2                     (Fig 3c)
 
@@ -19,6 +19,7 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from activefoam.topology import build_periodic_voronoi
 from activefoam.foam_full import FoamTissue
+from activefoam.budget import call_with_budget, BudgetExceeded
 
 os.makedirs("data", exist_ok=True)
 
@@ -30,6 +31,8 @@ WIN_TAUR = 20.0
 TRANS_EVERY = 15
 SAMPLE = 40          # MSD trajectory sampling interval (steps)
 VCAP = 420
+MAX_SECONDS = 1200     # per run; a run that crawls (tangled) is recorded as invalid
+PHI_MAX = 1.05         # phi above this means self-overlapping cells: invalid
 
 
 def _centroids(ft, ncell):
@@ -65,8 +68,8 @@ def measure(dt_act, w, seed=1):
     for it in range(steps):
         ft.step(mu=dt_act)
         if it % TRANS_EVERY == 0:
-            n1, n2, na = ft.do_transitions(mu=dt_act, create_spaces=False)
-            n_ev += n1 + n2 + na
+            n1, n2 = ft.do_transitions(mu=dt_act, create_spaces=False)
+            n_ev += n1 + n2
         if len(ft.vpos) > VCAP:
             frag = True
         if it % SAMPLE == 0:
@@ -91,10 +94,12 @@ def measure(dt_act, w, seed=1):
 def _task(a):
     i, j, d, w, s = a
     try:
-        k, m, p = measure(d, w, seed=s)
+        k, m, p = call_with_budget(MAX_SECONDS, measure, d, w, seed=s)
         if not (np.isfinite(k) and np.isfinite(m)):
             raise FloatingPointError("non-finite result")
-    except Exception as ex:                       # one bad run must not kill the sweep
+        if not p <= PHI_MAX:
+            raise FloatingPointError(f"tangled, phi={p:.2f}")
+    except (Exception, BudgetExceeded) as ex:                       # one bad run must not kill the sweep
         print(f"  !! dT={d} W={w} seed={s} failed: {ex!r}", flush=True)
         k = m = p = np.nan
     return i, j, k, m, p

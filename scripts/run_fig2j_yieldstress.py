@@ -12,12 +12,14 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from activefoam.topology import build_periodic_voronoi
 from activefoam.foam_full import FoamTissue
+from activefoam.budget import call_with_budget, BudgetExceeded
 
 os.makedirs("data", exist_ok=True)
 
 WS = np.round(np.arange(0.0, 2.01, 0.2), 3)
 SEEDS = [1, 2, 3]
 STRAIN = 0.5
+MAX_SECONDS = 900      # per run; a run that crawls (tangled) is recorded as invalid
 
 
 def yield_stress(w, rho=1.0, seed=1):
@@ -53,7 +55,12 @@ def main():
     sig = np.zeros(len(WS))
     err = np.zeros(len(WS))
     for j, w in enumerate(WS):
-        vals = [yield_stress(w, seed=s) for s in SEEDS]
+        vals = []
+        for s in SEEDS:
+            try:
+                vals.append(call_with_budget(MAX_SECONDS, yield_stress, w, seed=s))
+            except (Exception, BudgetExceeded) as ex:
+                print(f"  !! W={w} seed={s} invalid: {ex!r}", flush=True)
         vals = [v for v in vals if np.isfinite(v)]
         sig[j] = np.mean(vals) if vals else np.nan
         err[j] = np.std(vals) if len(vals) > 1 else 0.0

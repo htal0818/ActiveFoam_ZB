@@ -1,0 +1,34 @@
+{
+  "manifest_hash": "b3a37b1e63b577fe1bfcea1246e5af1bfd26e391c04b0c59df5fcd5afd5d5afc",
+  "solver_source_hash": "df69dc2986ee84afffc476dfad340b353a4a891ebab26e9fa4a19fc2b0aac3b3",
+  "prior_completed": [],
+  "remaining": 78,
+  "acceleration": "compiled boundary validation and T1 candidate checks",
+  "omitted_optional_observables": [
+    "3b trajectories",
+    "3d example geometry"
+  ],
+  "checkpoint_steps": 12000,
+  "seeds": [
+    10
+  ],
+  "parity": "identical complete states in 600-step replays at W=0 and W=1",
+  "source_files": {
+    "activefoam/__init__.py": "e14b2c74e1fd3ea66c1e89bb767913ce2d85624ed6645e14e1cdb4f5e1eab152",
+    "activefoam/_kernels.py": "2db9939b724eaae47e08f564f8078f0db7176b9c3c1a2448a370ca3378658d10",
+    "activefoam/deformable.py": "5c588d7db3e8ebaf9016cfd61bd3cc80025d08e01493102797f7ada23b115cdd",
+    "activefoam/foam.py": "1a01ec16f6c2eda852260d8d747041dcfc648bcaa783563de45e5b4dbdb0da98",
+    "activefoam/foam_full.py": "f86706a01e35668e29ced67e3dc5cbcc7815616ea3851b0962defaa5df640f9b",
+    "activefoam/foam_measure.py": "f405c3c57fd39830c068f4856916b87b19162c0e2b24c4e19cb97f250edb48a9",
+    "activefoam/measure.py": "7121d60028741d8e47be1cfced6afb19233ce6993b9d021b34a5409040d16b85",
+    "activefoam/model.py": "01c0ed2c285c9029647f1e754fb50fd76790055c36570e1a8932497e643c5453",
+    "activefoam/paper_measure.py": "f8213a8a91d586d12fd30929a49a356f719f903a7040f9dea68f8e66f22cb2b9",
+    "activefoam/plotting.py": "483462ed48b5ea18da7df11e3280d68d69eb70a2b33ddcdcc76170c3278490bb",
+    "activefoam/topology.py": "2e177d5641edb8fa1e6b9b81ea2ec0b390fd2994b9c56537efc77a12033a67c9",
+    "scripts/reproduce_figure3.py": "05a553d94ef22f32b9a88e186d6f3b27e7ee643575a28c072d1c14e285138f99",
+    "scripts/reproduce_paper.py": "5d8c6c30bdb37613d03eda5ea9ca6705cc5bb33f705604762c8cf81121f55e8b",
+    "scripts/reproduce_requested.py": "f263276a6d229a40f79c9eb273f0fd60adfa0fa5cbcb5b32283dc6f1e4e23be1",
+    "scripts/resume_figure3.py": "a4ed37dec7bc437ea0c8a8e0399bd79154b2ba9057b21f87bb18bcc72f07f4aa",
+    "scripts/figure3_checkpoint.py": "28cbf1e6314f784c66797976d9d8a8ea14cc56a4a88c8098539a7c7ad380cc17"
+  }
+}
