@@ -1,0 +1,46 @@
+{
+  "w": 1.2,
+  "activity": 1.5,
+  "rho": 1.0,
+  "seed": 1,
+  "cells": 100,
+  "runs": {
+    "dynamics": {
+      "id": "dynamics_639fb4e1003f17e6",
+      "status": "completed",
+      "duration_tau_R": 1200.0,
+      "geometry_checks": 2422,
+      "crossing_checks": 2404
+    },
+    "shear": {
+      "id": "shear_9000510959869b0e",
+      "status": "completed",
+      "duration_tau_R": 1000.0,
+      "geometry_checks": 2123,
+      "crossing_checks": 2103
+    }
+  },
+  "published_relaxation_tau_R": 112.026475258915,
+  "sigma_A": 0.019963121130274507,
+  "phi_mean": {
+    "simulation": 1.003354271416096,
+    "published": 0.999975727990548,
+    "published_band": 0.000128256651960625
+  },
+  "shape_mean": {
+    "simulation": 5.041826115775913,
+    "published": 4.21259114719404,
+    "published_band": 0.108833232556707
+  },
+  "fit_parameters": {
+    "offset": 0.008894599291156016,
+    "amplitude": 0.4344133842120974,
+    "time_constant": 33.030668047894935,
+    "beta": 0.9465459179655208
+  },
+  "relaxation_tau_R": 130.45421163645057,
+  "simulation_phase": "fluid",
+  "published_phase": "fluid",
+  "post_shear_crossing_checks": 2000,
+  "post_shear_geometry_checks": 2000
+}
