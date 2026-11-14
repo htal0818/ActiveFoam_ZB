@@ -1,0 +1,9 @@
+key,w,seed,transactions,distinct_changed_pairs,eligible_losses,returns_within_tau,newly_born_contact_episodes
+8fef33e36dd854e6c26e,0.5,1,0,0,0,0,0
+c0f9d16242b7d452f43e,0.5,2,0,0,0,0,0
+27314d2f41c7fb1d9517,0.5,3,0,0,0,0,0
+b40cfca3568277c0ac5a,1.0,1,14,1,7,7,7
+4f962eae1f3cd3d4a6b5,1.0,2,2,1,1,1,1
+22fc153d364dde18b698,1.0,3,14,4,7,5,7
+688d77e78ab1c0b9a970,1.5,1,80,11,27,26,40
+c7a087334fdaef8218b6,1.5,3,222,12,111,106,111

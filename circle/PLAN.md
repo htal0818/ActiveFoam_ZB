@@ -128,3 +128,33 @@ constraint, resampling default, transition rules and planar defaults are unchang
   topology implementation are unchanged.
 - `NEXT_EXPERIMENTS.md` proposes event-resolved dynamics measurements and controlled
   extensions. Those follow-up experiments are not claimed as completed.
+
+## Follow-up: event-resolved dynamics and controlled wall/activity extensions
+
+- Added `experiments.py` for committed outer transition events, immediate pair
+  changes, censored contact episodes and cell trajectories. Nested events rolled
+  back by a parent do not appear as physical events. Recording preserves the
+  dynamics and random stream, including a real neighbor-changing T1 regression.
+- Added paired uniform/wall/sector activity pulses, two tension-persistence protocols,
+  longer observations, lower adhesion/density points and joint active-adhesion runs.
+  The original force law, OU normalization and planar defaults are unchanged.
+- Added `EllipseFoam` with a rigid equal-area wall and true Euclidean closest-point
+  projection. Tests cover normal reaction, confinement, rollback, circle limit,
+  unchanged interior forces and compiled/Python agreement. Circle-only angular
+  traction normalization is not used for ellipses.
+- Executed 137 main runs: 96 completed, 41 geometry failures. All 24 pulse/sham runs,
+  24 persistence runs and eight of nine geometry runs completed. The μ=1.5 refinement
+  gate failed all eight cases; it does not support a physical high-activity phase.
+- Six additional baseline runs passed every-timestep geometry checks after
+  preparation and reproduced the ordinary trajectories and events exactly. Finer
+  checks during preparation had exposed transient resolved crossings, so acceptance
+  remains qualified by the established preparation/checking protocol and microfold
+  tolerance. No geometric guard was loosened.
+- Exported 13 PNG/PDF figure sets, raw compressed trajectories/events, per-run and
+  group summaries, paired pulse effects, contact reversals/lifetimes, spatial
+  profiles, shape/velocity correlations and curvature-conditioned measurements.
+  Counts, failures and seed variation remain visible. Full suite: 158 tests pass.
+- Contact-specific tension–length correlations still require stable film lineage
+  IDs. Correlated noise, osmotic forcing, mechanosensitive feedback and growth are
+  deferred. Numerical failures must be resolved before extending the high-activity
+  grid or assigning phase boundaries. See `EXPERIMENTS.md` and the linked findings.

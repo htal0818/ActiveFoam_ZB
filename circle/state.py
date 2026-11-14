@@ -25,7 +25,7 @@ from activefoam._kernels import copy_polylines
 PARAMETERS = frozenset({
     "accelerated", "reference_pressure_lag", "pressure_normals", "bs", "sstn", "rho", "psi",
     "lsc", "A0", "P0", "w", "beta", "gam", "tauT", "dt", "edpc", "nFa", "radius", "center",
-    "wall_tol", "delta_max", "audit", "remesh", "wall_resample", "geometry_policy", "_measure_vertex_force",
+    "aspect", "wall_tol", "delta_max", "audit", "remesh", "wall_resample", "geometry_policy", "_measure_vertex_force",
 })
 PHYSICAL = ("vpos", "v_e", "v_f", "e_v", "e_f", "e_t", "e_rfn", "e_mid", "f_v", "f_e",
             "f_area", "f_center", "_pressure_geometry")

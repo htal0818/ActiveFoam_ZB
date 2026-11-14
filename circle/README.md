@@ -61,6 +61,10 @@ per cell is 1 and `rho` is the preferred area, as in the periodic box.
 | `scripts/pilot_compare.py` | pilot disc vs periodic comparison and the configuration figure |
 | `sweep.py`, `scripts/parameter_sweep.py` | resumable parameter, activity and wall-curvature sweeps |
 | `scripts/plot_sweep.py` | snapshots, structure maps, exchange/shape dynamics and MSD figures |
+| `experiments.py` | committed-event and trajectory recorder; persistence and activity protocols |
+| `ellipse.py`, `ellipse_kernels.py` | rigid equal-area ellipses with nearest-point obstacle projection |
+| `scripts/run_experiments.py`, `scripts/audit_experiments.py` | experiment batch and timestep-by-timestep geometry audit |
+| `scripts/plot_experiments.py`, `scripts/verify_experiments.py` | figures, contact lifetimes, provenance and matched-control checks |
 
 ## Use
 
@@ -328,7 +332,8 @@ The extended measurements are checked against the shared rho=1.3 trajectories in
 [`measurement_validation.json`](data/phase_sweep_20261114/measurement_validation.json).
 For possible follow-up dynamics, see [`NEXT_EXPERIMENTS.md`](NEXT_EXPERIMENTS.md):
 persistent neighbor changes, event cascades, longer-time motion, persistence sweeps
-and patterned activity. These follow-up experiments have not been run here.
+and patterned activity. The first execution of these experiments is documented in
+[`EXPERIMENTS.md`](EXPERIMENTS.md), with an [figure gallery](../figures/circle/experiments_20261114/index.html).
 
 ## Limits
 
@@ -340,8 +345,8 @@ and patterned activity. These follow-up experiments have not been run here.
 - Under compression, collapsed extracellular spaces can persist as local microfolds.
   They are reported separately from clean geometry and require timestep and spacing
   convergence before quantitative claims. Resolved crossings abort strict runs.
-- Adhesions below `W/T0 = 0.5`, where the planar model tangles, have not been run in
-  the disc beyond the transition tests.
+- Exploratory lower-adhesion runs now include `W/T0=0.25` and `0.35`; failures
+  remain excluded from physical averages. See the experiment report for acceptance counts.
 - The preparation relaxes the tiling at `W = 0`, `rho = 1` before switching to the target
   parameters, as the planar protocol does. Relaxing at high adhesion instead produced
   deep folds in interior cells.

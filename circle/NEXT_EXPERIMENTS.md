@@ -1,6 +1,9 @@
 # Next experiments for active foam in a rigid circular container
 
-These are proposed follow-up experiments, not additional simulations already run.
+This was the proposal for follow-up experiments. The first batch now implements
+event recording, active adhesion, longer trajectories, persistence controls, pulses
+and equal-area ellipses; see [`EXPERIMENTS.md`](EXPERIMENTS.md) and its linked results.
+The additional feedback, correlated-noise and biological extensions remain proposals.
 The fixed, frictionless, nonadhesive wall and flat tissue surface remain the baseline.
 The current phase maps are finite-time response maps; they do not classify a fluid/solid
 transition. High-activity geometry failures must not be treated as a physical phase.

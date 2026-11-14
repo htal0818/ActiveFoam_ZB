@@ -1,0 +1,16 @@
+{
+  "core_source_hash": "8e0dcc59950a6bdafd235161589a8214948c23d8ac82c152dda78309bb5a1cde",
+  "runs": 137,
+  "completed": 96,
+  "duplicate_persistence_controls_verified": 3,
+  "pre_pulse_sham_matches": 18,
+  "checks": [
+    "recorded sample times and finite geometry",
+    "final polygon confinement",
+    "no resolved final crossings/nesting",
+    "contact survival bounded by neighbor overlap",
+    "event time ranges",
+    "duplicate persistence controls",
+    "pre-pulse matched shams"
+  ]
+}

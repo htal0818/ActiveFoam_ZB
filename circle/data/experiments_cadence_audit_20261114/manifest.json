@@ -1,0 +1,12 @@
+{
+  "tasks": [
+    "c6721323142aa666e702",
+    "53060d5f6e7fe3875820",
+    "f430f09577ce5c5e24a1",
+    "0b3bd952c9a0adb3ec4c",
+    "2883e2690723dde33c84",
+    "d0ef4076cacd696becec"
+  ],
+  "source_hash": "8e0dcc59950a6bdafd235161589a8214948c23d8ac82c152dda78309bb5a1cde",
+  "definition": "Same preparation, seed and dynamics as corresponding adhesion_activity runs, with geometry checks every timestep after preparation. A finer observation cadence can detect transient crossings missed at 0.5 tauR checks."
+}

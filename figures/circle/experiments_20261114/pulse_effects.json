@@ -1,0 +1,62 @@
+[
+  {
+    "n": 36,
+    "pattern": "pulse",
+    "paired_seeds": 3,
+    "peak_mean_shape_change": 0.052766748285550204,
+    "time_of_peak": 20.5,
+    "seed_sd_at_peak": 0.01084577803363939,
+    "final_mean_shape_change": 0.002905524241591184,
+    "final_seed_sd": 0.005771801576211423
+  },
+  {
+    "n": 36,
+    "pattern": "wall",
+    "paired_seeds": 3,
+    "peak_mean_shape_change": 0.01743562868559752,
+    "time_of_peak": 20.5,
+    "seed_sd_at_peak": 0.006414333090373928,
+    "final_mean_shape_change": -0.00016758110415867242,
+    "final_seed_sd": 0.00020487700539840976
+  },
+  {
+    "n": 36,
+    "pattern": "sector",
+    "paired_seeds": 3,
+    "peak_mean_shape_change": 0.017308637877560578,
+    "time_of_peak": 22.0,
+    "seed_sd_at_peak": 0.012716465642259788,
+    "final_mean_shape_change": 0.004266925059838389,
+    "final_seed_sd": 0.004582656637462268
+  },
+  {
+    "n": 100,
+    "pattern": "pulse",
+    "paired_seeds": 3,
+    "peak_mean_shape_change": 0.05564413139375827,
+    "time_of_peak": 20.5,
+    "seed_sd_at_peak": 0.00779670947653678,
+    "final_mean_shape_change": 0.0013101033835503095,
+    "final_seed_sd": 0.003481996122276622
+  },
+  {
+    "n": 100,
+    "pattern": "wall",
+    "paired_seeds": 3,
+    "peak_mean_shape_change": 0.008389848631213356,
+    "time_of_peak": 21.0,
+    "seed_sd_at_peak": 0.0026954953685682267,
+    "final_mean_shape_change": -0.0010458124913716265,
+    "final_seed_sd": 0.005457101688376423
+  },
+  {
+    "n": 100,
+    "pattern": "sector",
+    "paired_seeds": 3,
+    "peak_mean_shape_change": 0.019077663846898574,
+    "time_of_peak": 21.0,
+    "seed_sd_at_peak": 0.0063256402718206775,
+    "final_mean_shape_change": -0.004430416307870259,
+    "final_seed_sd": 0.0052559223897374946
+  }
+]
