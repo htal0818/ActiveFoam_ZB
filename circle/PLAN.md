@@ -37,11 +37,11 @@ Each step's tests and the 42 planar tests must pass before the next step.
 |---|---|---|---|---|
 | 1 | Clipped network (`tiling.py`) | `tests/test_tiling.py` | Claude | done |
 | 2 | Disc integrator and wall (`kernels.py`, `disc.py`) | `tests/test_wall.py` | Claude | done |
-| 3 | Transition guards and rollback (`state.py`, `disc.py`) | `tests/test_transitions.py` | Claude | in progress |
-| 4 | Active-run audit and box independence | `tests/test_consistency.py` | Claude | pending |
+| 3 | Transition guards and rollback (`state.py`, `disc.py`) | `tests/test_transitions.py` | Claude | done |
+| 4 | Active-run audit, box independence, overlap diagnostics | `tests/test_consistency.py` | Claude | done |
 | 5 | Measurements (`measure.py`) | `tests/test_measure.py` | Claude | pending |
 | 6 | Compiled vs pure-Python kernel; then disc vs matched periodic | `tests/test_acceleration.py`, `scripts/` | Claude | pending |
-| R | Independent review of steps 1–2 against this plan | — | ChatGPT (proposed) | open |
+| R | Independent review of each pushed step | — | ChatGPT | steps 1–2 reviewed at `cb24540`; three findings fixed |
 
 Step 2 results so far (single-cell fixtures, zero activity):
 

@@ -17,11 +17,47 @@ from activefoam._kernels import resample, _intersection_parameter, edge_bounds
 
 
 @njit(cache=True)
+def resample_on_wall(mid, spacing, cx, cy, radius, tol):
+    """``activefoam._kernels.resample`` with wall-following segments kept on the wall.
+
+    A new node interpolated between two old nodes that both lie on the wall is
+    moved radially onto the wall.  Contact is read from the positions at this
+    instant; nothing is stored.  Without this, such a node starts on the chord,
+    slightly inside the wall, and carries no reaction until pressure returns it.
+    """
+    lengths = np.sqrt(np.sum((mid[1:]-mid[:-1])**2, axis=1))
+    total = lengths.sum()
+    n = int(np.floor(total/spacing))
+    out = np.empty((n+2, 2))
+    out[0], out[-1] = mid[0], mid[-1]
+    if n:
+        on = np.empty(len(mid), np.bool_)
+        for i in range(len(mid)):
+            on[i] = np.hypot(mid[i, 0]-cx, mid[i, 1]-cy) >= radius-tol
+        cum = np.empty(len(mid)); cum[0] = 0.
+        for i in range(len(lengths)): cum[i+1] = cum[i]+lengths[i]/total
+        for i in range(n):
+            t = (i+1)/(n+1)
+            k = min(max(np.searchsorted(cum, t, side='right')-1, 0), len(lengths)-1)
+            f = (t-cum[k])/(cum[k+1]-cum[k]+1e-30)
+            out[i+1] = mid[k]+f*(mid[k+1]-mid[k])
+            if on[k] and on[k+1]:
+                x = out[i+1, 0]-cx; y = out[i+1, 1]-cy; r = np.hypot(x, y)
+                if r > 0.:
+                    out[i+1, 0] = cx+x*(radius/r); out[i+1, 1] = cy+y*(radius/r)
+    return out, n
+
+
+@njit(cache=True)
 def advance_disc(vpos, ends, faces, tension, mids, areas, psi, dt, pressure, lsc,
-                 spacing, outward, cx, cy, radius, tol, remesh):
+                 spacing, outward, cx, cy, radius, tol, remesh, wall_resample=False):
     """One force step with projection onto a rigid circular wall.
 
     Nodal forces are in the planar code's units: displacement = psi*dt*force.
+    ``residual`` is the largest constrained nodal force (net displacement of a
+    node over ``psi*dt``, after projection, before remeshing): it vanishes at a
+    mechanical equilibrium.
+
     Returns the new geometry and, on pre-remesh node identities, the nodal wall
     reaction estimate ``(x_projected - x_trial)/(psi*dt)``, the continuous
     constraint value ``max(0, force.n)`` for nodes on the wall at the start of
@@ -64,6 +100,7 @@ def advance_disc(vpos, ends, faces, tension, mids, areas, psi, dt, pressure, lsc
 
     # ---- junctions: constraint value at step start, then projection ----------
     excursion = -np.inf
+    residual = 0.
     v_react = np.zeros((nv, 2)); v_direct = np.zeros(nv)
     v_flag = np.zeros(nv, np.int8); v_trib = np.zeros(nv)
     for v in range(nv):
@@ -80,6 +117,8 @@ def advance_disc(vpos, ends, faces, tension, mids, areas, psi, dt, pressure, lsc
             v_react[v, 1] = (py-vertices[v, 1])/step
             vertices[v, 0] = px; vertices[v, 1] = py
             if v_flag[v] == 0: v_flag[v] = 2
+        residual = max(residual, np.hypot(vertices[v, 0]-vpos[v, 0],
+                                          vertices[v, 1]-vpos[v, 1])/step)
 
     # ---- film nodes: shared endpoints, projection, records, remesh -----------
     n_edge = np.empty(interior_total, np.int64); n_index = np.empty(interior_total, np.int64)
@@ -87,6 +126,7 @@ def advance_disc(vpos, ends, faces, tension, mids, areas, psi, dt, pressure, lsc
     n_direct = np.zeros(interior_total); n_flag = np.zeros(interior_total, np.int8)
     n_trib = np.zeros(interior_total)
     k = 0
+    resampled = 0
     counts = np.empty(len(mids), np.int64)
     for e in range(len(new)):
         mid = new[e]; old = mids[e]; f = nodal[e]
@@ -108,6 +148,7 @@ def advance_disc(vpos, ends, faces, tension, mids, areas, psi, dt, pressure, lsc
                 rx = (px-mid[j, 0])/step; ry = (py-mid[j, 1])/step
                 mid[j, 0] = px; mid[j, 1] = py
                 if flag == 0: flag = 2
+            residual = max(residual, np.hypot(mid[j, 0]-old[j, 0], mid[j, 1]-old[j, 1])/step)
             if flag != 0:
                 n_edge[k] = e; n_index[k] = j
                 n_react[k, 0] = rx; n_react[k, 1] = ry
@@ -136,9 +177,13 @@ def advance_disc(vpos, ends, faces, tension, mids, areas, psi, dt, pressure, lsc
         n = len(mid)-2
         if remesh and (total < spacing*(n-1/3) or total > spacing*(n+4/3)
                        or maximum/max(minimum, 1e-12) > 2):
-            mid, n = resample(mid, spacing)
+            if wall_resample:
+                mid, n = resample_on_wall(mid, spacing, cx, cy, radius, tol)
+            else:
+                mid, n = resample(mid, spacing)
+            resampled += 1
         new[e] = mid; counts[e] = n
-    return (vertices, new, counts, excursion, v_react, v_direct, v_flag, v_trib,
+    return (vertices, new, counts, excursion, residual, resampled, v_react, v_direct, v_flag, v_trib,
             n_edge[:k], n_index[:k], n_pos[:k], n_react[:k], n_direct[:k], n_flag[:k],
             n_trib[:k])
 
@@ -156,24 +201,55 @@ def max_radius(vpos, mids, cx, cy):
 
 
 @njit(cache=True)
+def films_finite(vpos, mids):
+    """True if every junction and every film node has finite coordinates."""
+    for v in range(len(vpos)):
+        if not (np.isfinite(vpos[v, 0]) and np.isfinite(vpos[v, 1])):
+            return False
+    for mid in mids:
+        for j in range(len(mid)):
+            if not (np.isfinite(mid[j, 0]) and np.isfinite(mid[j, 1])):
+                return False
+    return True
+
+
+@njit(cache=True)
 def film_crossings(mids, ends):
-    """Number of proper crossings between films that share no junction."""
+    """Number of proper crossings between film segments that share no node.
+
+    Every pair of segments is tested, within one film and between films,
+    including films that share a junction: such films can cross again away from
+    it.  Only segment pairs that legitimately meet are left out, namely
+    consecutive segments of one film and the two segments incident on a shared
+    junction.
+    """
     bounds = edge_bounds(mids)
     count = 0
     for a in range(len(mids)):
         ax0, ax1, ay0, ay1 = bounds[a]
-        p = mids[a]
+        p = mids[a]; na = len(p)-1
+        closed = ends[a, 0] == ends[a, 1]
+        for i in range(na):                               # within film a
+            dx = p[i+1, 0]-p[i, 0]; dy = p[i+1, 1]-p[i, 1]
+            for j in range(i+2, na):
+                if closed and i == 0 and j == na-1:
+                    continue
+                if _intersection_parameter(p, p, i, j, dx, dy) > 0.:
+                    count += 1
         for b in range(a+1, len(mids)):
-            if (ends[a, 0] == ends[b, 0] or ends[a, 0] == ends[b, 1] or
-                    ends[a, 1] == ends[b, 0] or ends[a, 1] == ends[b, 1]):
-                continue
             bx0, bx1, by0, by1 = bounds[b]
             if bx1 < ax0 or bx0 > ax1 or by1 < ay0 or by0 > ay1:
                 continue
-            q = mids[b]
-            for i in range(len(p)-1):
+            q = mids[b]; nb = len(q)-1
+            for i in range(na):
                 dx = p[i+1, 0]-p[i, 0]; dy = p[i+1, 1]-p[i, 1]
-                for j in range(len(q)-1):
+                for j in range(nb):
+                    # segments incident on a junction the two films share
+                    if ((i == 0 and j == 0 and ends[a, 0] == ends[b, 0]) or
+                            (i == 0 and j == nb-1 and ends[a, 0] == ends[b, 1]) or
+                            (i == na-1 and j == 0 and ends[a, 1] == ends[b, 0]) or
+                            (i == na-1 and j == nb-1 and ends[a, 1] == ends[b, 1])):
+                        continue
                     if _intersection_parameter(p, q, i, j, dx, dy) > 0.:
                         count += 1
     return count
@@ -195,12 +271,14 @@ def _inside(point, polygon):
 
 @njit(cache=True)
 def contained_cells(mids, loops, faces):
-    """Number of ordered cell pairs (A, B) with a boundary node of A inside B.
+    """Number of ordered cell pairs (A, B) with A nested inside B.
 
-    The test node lies on a film of A that does not border B, so cells that
-    merely share a contact are not counted.  Together with ``film_crossings``
-    this detects overlap: two simple polygons whose boundaries do not cross are
-    either disjoint or nested.
+    A is nested in B when every node of A on a film that does not border B lies
+    inside B.  Requiring all of them separates nesting from a sub-threshold
+    fold at a junction, which puts only a few nodes on the wrong side and is
+    reported by the per-cell crossing report instead.  Together with
+    ``film_crossings`` this covers overlap: two simple polygons whose boundaries
+    do not cross are either disjoint or nested.
     """
     polygons = List()
     boxes = np.empty((len(loops), 4))
@@ -221,17 +299,23 @@ def contained_cells(mids, loops, faces):
     for a in range(len(loops)):
         for b in range(len(loops)):
             if a == b: continue
-            if (boxes[a, 1] < boxes[b, 0] or boxes[a, 0] > boxes[b, 1] or
-                    boxes[a, 3] < boxes[b, 2] or boxes[a, 2] > boxes[b, 3]):
-                continue
+            if (boxes[a, 0] < boxes[b, 0] or boxes[a, 1] > boxes[b, 1] or
+                    boxes[a, 2] < boxes[b, 2] or boxes[a, 3] > boxes[b, 3]):
+                continue                                # A's box must lie within B's
+            tested = 0; inside = 0
             for signed in loops[a]:
                 e = signed if signed >= 0 else -signed-1
                 if faces[e, 0] == b or faces[e, 1] == b:
                     continue
                 line = mids[e]
-                m = len(line)//2
-                point = line[m] if len(line) > 2 else .5*(line[0]+line[1])
-                if _inside(point, polygons[b]):
-                    count += 1
-                break
+                for j in range(len(line)):
+                    tested += 1
+                    if _inside(line[j], polygons[b]):
+                        inside += 1
+                    else:
+                        break
+                if inside < tested:
+                    break
+            if tested > 0 and inside == tested:
+                count += 1
     return count

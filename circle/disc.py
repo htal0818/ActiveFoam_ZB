@@ -28,7 +28,7 @@ from activefoam.topology import Tissue
 from activefoam._kernels import boundary_normal_signs
 
 from . import state
-from .kernels import advance_disc, max_radius
+from .kernels import advance_disc, films_finite, max_radius
 from .tiling import clipped_voronoi
 
 
@@ -58,6 +58,8 @@ class WallRecord:
     node_flag: np.ndarray
     node_tributary: np.ndarray
     excursion: float
+    residual: float
+    resampled: int
     center: np.ndarray
     radius: float
 
@@ -67,6 +69,7 @@ class TransitionLog:
     """Accepted and rejected transition attempts.  Lives outside restored state."""
     iteration: int = -1
     accepted: list = field(default_factory=list)      # (iteration, kind, id)
+    sites: list = field(default_factory=list)         # r/R_w of each accepted event
     rejected: list = field(default_factory=list)      # (iteration, kind, id, reason)
     declined: dict = field(default_factory=dict)      # kind -> count (planar code said no)
 
@@ -107,13 +110,14 @@ class DiscFoam(FoamTissue):
     REJECT_TOL = 1e-9          # relative to the wall radius
 
     def __init__(self, tiling, w=0.0, rho=1.0, P0=10.0, tauT=10.0, dt=0.005, edpc=0.15,
-                 seed=0, box=None, audit=False, remesh=True):
+                 seed=0, box=None, audit=False, remesh=True, wall_resample=False):
         self.radius = float(tiling.radius)
         self.center = np.array(tiling.center, dtype=float)
         self.wall_tol = 1e-9 * self.radius
         self.delta_max = 0.5 * self.radius
         self.audit = bool(audit)
         self.remesh = bool(remesh)
+        self.wall_resample = bool(wall_resample)
         self.audit_calls = 0
         self.wall = None
         self.log = TransitionLog()
@@ -218,11 +222,12 @@ class DiscFoam(FoamTissue):
         mids, loops = self._fast_geometry_inputs()
         outward = boundary_normal_signs(self.e_f, loops)
         before = self.vpos
-        (vertices, new, counts, excursion, v_react, v_direct, v_flag, v_trib,
+        (vertices, new, counts, excursion, residual, resampled, v_react, v_direct, v_flag,
+         v_trib,
          n_edge, n_index, n_pos, n_react, n_direct, n_flag, n_trib) = advance_disc(
             self.vpos, self.e_v, self.e_f, self.e_t, mids, self.f_area, self.psi, self.dt,
             self.P0, self.lsc, self.edpc, outward, self.center[0], self.center[1],
-            self.radius, self.wall_tol, self.remesh)
+            self.radius, self.wall_tol, self.remesh, self.wall_resample)
         if not excursion <= self.delta_max:
             raise ValueError(f"trial position {excursion:.3g} beyond the wall; "
                              "the Euclidean guarantee of the auxiliary box no longer holds")
@@ -232,7 +237,9 @@ class DiscFoam(FoamTissue):
         self.vpos, self.e_mid, self.e_rfn = vertices, new, counts
         self.wall = WallRecord(vertices.copy(), v_react, v_direct, v_flag, v_trib,
                                n_edge, n_index, n_pos, n_react, n_direct, n_flag, n_trib,
-                               float(excursion), self.center.copy(), self.radius)
+                               float(excursion), float(residual), int(resampled),
+                               self.center.copy(),
+                               self.radius)
         count = np.sum(self.e_f != SPACE, axis=1).astype(float)
         fixed = count - self.gam * np.all(self.e_f != SPACE, axis=1)
         xi = self.rng.standard_normal(len(count))
@@ -256,34 +263,47 @@ class DiscFoam(FoamTissue):
 
     def _invalid_reason(self):
         """Why the current state may not be accepted after a transition, or None."""
-        if not np.all(np.isfinite(self.vpos)):
-            return "nonfinite junction"
+        mids, _ = self._fast_geometry_inputs()
+        if not films_finite(self.vpos, mids):
+            return "nonfinite junction or film node"
         if not np.all(np.isfinite(self.f_area)) or np.any(self.f_area <= 0.0):
             return "nonpositive or nonfinite cell area"
-        radius = self.max_radius()
+        radius = float(max_radius(self.vpos, mids, self.center[0], self.center[1]))
         if not radius <= self.radius * (1.0 + self.REJECT_TOL):
             return f"node outside the wall by {radius - self.radius:.3g}"
         return None
 
-    def _guard(self, kind, ident, operation, accepted_of, rejected_value):
+    EXPECTED_FAILURES = (ValueError, StopIteration, IndexError, KeyError)
+
+    def _guard(self, kind, ident, site, operation, accepted_of, rejected_value):
+        """Run one transition attempt; leave the state untouched unless it is accepted.
+
+        The planar operation, the acceptance test and the validity check all run
+        under the same protection.  A failure of an expected type is a rejected
+        attempt.  Anything else is restored first and then re-raised.
+        """
+        site = float(np.hypot(*(np.asarray(site, dtype=float) - self.center)) / self.radius)
         snap = state.snapshot(self)
-        error = None
+        reason = None
+        accepted = False
         try:
             result = operation()
-        except (ValueError, StopIteration, IndexError, KeyError) as exc:
-            result, error = rejected_value, exc
+            accepted = bool(accepted_of(result, snap))
+            if accepted:
+                reason = self._invalid_reason()
+        except self.EXPECTED_FAILURES as exc:
+            result, accepted = rejected_value, False
+            reason = f"exception: {type(exc).__name__}: {exc}"
+        except BaseException:
+            state.restore(self, snap)
+            raise
         if self.rng.bit_generator.state != snap.rng:
             state.restore(self, snap)
             raise RuntimeError(f"{kind} consumed random draws; attempts must not")
-        if error is not None:
-            reason = f"exception: {type(error).__name__}: {error}"
-        elif accepted_of(result, snap):
-            reason = self._invalid_reason()
-            if reason is None:
-                self.log.accepted.append((self.log.iteration, kind, ident))
-                return result
-        else:
-            reason = None
+        if accepted and reason is None:
+            self.log.accepted.append((self.log.iteration, kind, ident))
+            self.log.sites.append(site)
+            return result
         state.restore(self, snap)
         if reason is None:
             self.log.declined[kind] = self.log.declined.get(kind, 0) + 1
@@ -292,24 +312,30 @@ class DiscFoam(FoamTissue):
         return rejected_value
 
     def t1_foam(self, e):
-        return self._guard("T1", int(e), lambda: FoamTissue.t1_foam(self, e),
+        return self._guard("T1", int(e), self.vpos[self.e_v[e]].mean(axis=0),
+                           lambda: FoamTissue.t1_foam(self, e),
                            lambda result, snap: bool(result), False)
 
     def t2_reverse(self, t2Id):
-        return self._guard("T2r", int(t2Id), lambda: FoamTissue.t2_reverse(self, t2Id),
+        return self._guard("T2r", int(t2Id), self.vpos[t2Id],
+                           lambda: FoamTissue.t2_reverse(self, t2Id),
                            lambda result, snap: len(self.vpos) > len(snap.physical["vpos"]),
                            None)
 
     def t4_adjacent(self, v):
-        return self._guard("T4a", int(v), lambda: FoamTissue.t4_adjacent(self, v),
+        return self._guard("T4a", int(v), self.vpos[v],
+                           lambda: FoamTissue.t4_adjacent(self, v),
                            lambda result, snap: bool(result), False)
 
     def t4_transition(self, t4Id):
-        return self._guard("T4", int(t4Id), lambda: FoamTissue.t4_transition(self, t4Id),
+        film = self.e_mid[t4Id]
+        return self._guard("T4", int(t4Id), film[len(film) // 2],
+                           lambda: FoamTissue.t4_transition(self, t4Id),
                            lambda result, snap: bool(result), False)
 
     def _merge_space_edge(self, deId):
-        return self._guard("T3r", int(deId), lambda: FoamTissue._merge_space_edge(self, deId),
+        return self._guard("T3r", int(deId), self.vpos[self.e_v[deId]].mean(axis=0),
+                           lambda: FoamTissue._merge_space_edge(self, deId),
                            lambda result, snap: result is not None, None)
 
     # ------------------------------------------------------------------ #
