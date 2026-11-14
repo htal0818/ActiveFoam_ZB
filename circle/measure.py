@@ -126,3 +126,53 @@ def zone_statistics(foam, depth=1.0):
         else:
             out[f"z_{name}"] = out[f"shape_{name}"] = out[f"area_{name}"] = np.nan
     return out
+
+
+class DynamicsRecorder:
+    """Motion and neighbour exchange, split into wall layer and interior.
+
+    Use as the ``observer`` of ``protocol.evolve``.  Zones are assigned from the
+    centroids at the first sample.  Displacements are in the frame of the fixed
+    wall.  A neighbour change is a cell pair that is in contact in one sample
+    and not in the next (or the reverse); each change counts once for each of
+    the two cells.
+    """
+
+    def __init__(self, foam, depth=1.0):
+        self.zone_wall = wall_layer(foam, depth)
+        self.A0 = foam.A0
+        self.times = [0.0]
+        self.centroids = [cell_centroids(foam)]
+        self.pairs = neighbor_pairs(foam)
+        self.changes = np.zeros(foam.nFa)
+        self.loads = []
+
+    def __call__(self, time, foam):
+        self.times.append(float(time))
+        self.centroids.append(cell_centroids(foam))
+        pairs = neighbor_pairs(foam)
+        for a, b in pairs ^ self.pairs:
+            self.changes[a] += 1
+            self.changes[b] += 1
+        self.pairs = pairs
+        if foam.wall is not None:
+            self.loads.append(wall_load(foam.wall)["total"])
+
+    def results(self, n_lags=12):
+        times = np.array(self.times)
+        track = np.array(self.centroids)
+        duration = times[-1] - times[0]
+        lags = np.unique(np.round(np.geomspace(1, max(1, len(times) - 1), n_lags)).astype(int))
+        out = dict(duration=float(duration), lag_time=(times[1] - times[0]) * lags,
+                   wall_load_mean=float(np.mean(self.loads)) if self.loads else np.nan)
+        for name, mask in (("wall", self.zone_wall), ("interior", ~self.zone_wall)):
+            out[f"n_{name}"] = int(mask.sum())
+            if not mask.any():
+                out[f"msd_{name}"] = np.full(len(lags), np.nan)
+                out[f"exchange_rate_{name}"] = np.nan
+                continue
+            out[f"msd_{name}"] = np.array([
+                np.mean(np.sum((track[lag:, mask] - track[:-lag, mask]) ** 2, axis=2)) / self.A0
+                for lag in lags])
+            out[f"exchange_rate_{name}"] = float(self.changes[mask].mean() / duration)
+        return out

@@ -39,18 +39,11 @@ Each step's tests and the 42 planar tests must pass before the next step.
 | 2 | Disc integrator and wall (`kernels.py`, `disc.py`) | `tests/test_wall.py` | Claude | done |
 | 3 | Transition guards and rollback (`state.py`, `disc.py`) | `tests/test_transitions.py` | Claude | done |
 | 4 | Active-run audit, box independence, overlap diagnostics | `tests/test_consistency.py` | Claude | done |
-| 5 | Measurements (`measure.py`) | `tests/test_measure.py` | Claude | pending |
-| 6 | Compiled vs pure-Python kernel; then disc vs matched periodic | `tests/test_acceleration.py`, `scripts/` | Claude | pending |
+| 5 | Measurements (`measure.py`) | `tests/test_measure.py` | Claude | done |
+| 6 | Compiled vs pure-Python kernel; then disc vs matched periodic | `tests/test_acceleration.py`, `scripts/pilot_compare.py` | Claude | kernel check done; pilot comparison only (2 seeds), ensembles deferred |
 | R | Independent review of each pushed step | — | ChatGPT | steps 1–2 reviewed at `cb24540`; three findings fixed |
 
-Step 2 results so far (single-cell fixtures, zero activity):
-
-- Free cell far from the wall: area within 0.06% of the planar free-cell root, zero reaction,
-  identical trajectory to the planar kernel.
-- Squeezed cell: integrated traction vs `2*pi*R_w*(p_n - T_eff/R_w)`: errors 1.8%, 0.45%,
-  0.11% at spacings 0.15, 0.075, 0.0375 (second order).
-- Chord-area deficit: `0.161–0.165 * (spacing/R_w)^2`, against the leading-order `1/6`.
-- Projection estimate vs constraint value on a fixed mesh: first order in `dt`.
+Measured results: [`BENCHMARKS.md`](BENCHMARKS.md) and the summary in [`README.md`](README.md).
 
 ## Working together
 
@@ -70,13 +63,20 @@ Step 2 results so far (single-cell fixtures, zero activity):
 
 ## Open points
 
-- A nonadhesive wall leaves extracellular space beside it even at `rho = 1`: boundary
-  junctions retract from the wall and the films leave it tangentially. The interior
-  therefore sits at a higher effective density than `rho`. This matters for the matched
-  periodic comparison in step 6.
-- Nodes created by remeshing a wall-following film start slightly inside the wall and are
-  recorded as arrivals when pressure returns them. Fixed-mesh tests isolate the projection
-  error; time-averaged traction is used once remeshing is on.
+- **`rho = 1` is not a matched comparison point.** The periodic box holds the tissue in
+  tension at cell area 1; a nonadhesive wall cannot, so the disc tissue shrinks to cell
+  areas of 0.86–0.93 and leaves the wall. Ensembles should compare at matched interior
+  cell area or pressure, or stay at `rho >= 1.2`, where the tissue presses on the wall.
+- **Partial-contact traction converges slowly.** About 9% high at spacing 0.15 for three
+  cells; 0.5% between the two finest levels. Wall reaction in ensembles needs a spacing
+  study at the cell numbers used.
+- **Remeshing and contact.** Instantaneous reaction dips to 58% of its mean after
+  resampling; no resolved bias in the time average (21.6 ± 0.1 vs 21.8 ± 0.1). Wall-aware
+  resampling exists as an option and is off by default. Decide whether to turn it on.
+- **Interior shape factor** is 0.03–0.05 above the periodic value at every pilot point.
+  Size dependence untested.
+- **No natural out-of-wall rejection** has been observed; the guard is tested with
+  fixtures only.
 
 ## Not in scope
 

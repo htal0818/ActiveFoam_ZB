@@ -1,8 +1,8 @@
 """Preparation, evolution and validation for the disc and for matched periodic runs.
 
-The sequence mirrors ``activefoam.foam_measure`` (confluent relaxation, space
-seeding at every junction, anneal, quench) so that a disc run and a periodic
-run differ only in the domain.  Both use boundary-orientation pressure normals
+The sequence mirrors ``activefoam.foam_measure`` (confluent relaxation at
+``W = 0``, ``rho = 1``, space seeding at every junction, anneal, quench) so
+that a disc run and a periodic run differ only in the domain.  Both use boundary-orientation pressure normals
 and current-step areas; the planar defaults are left alone, which is why the
 periodic runs are built here and not through ``foam_measure.initialize``.
 """
@@ -71,7 +71,16 @@ def evolve(foam, duration, mu, start=0, sample_every=0, observer=None, check_eve
 #  preparation
 # --------------------------------------------------------------------------- #
 def relax_confluent(foam, steps=1500):
-    """Confluent relaxation with T1 on short, shrinking contacts (cf. ``relaxed_tiling``)."""
+    """Confluent relaxation with T1 on short, shrinking contacts (cf. ``relaxed_tiling``).
+
+    A periodic confluent tiling has no free films, so the planar protocol needs
+    nothing else here.  A disc has outer films from the start: under compression
+    the films of neighbouring cells meet beside the wall, and at high adhesion
+    they fold.  The disc therefore also runs the film repairs of the normal
+    schedule (T3-reverse, T4, T4-adjacent) during this stage, but no space
+    seeding.
+    """
+    disc = isinstance(foam, DiscFoam)
     previous = foam.edge_lengths()
     scale = 10
     for iteration in range(1, steps + 1):
@@ -90,6 +99,11 @@ def relax_confluent(foam, steps=1500):
                 continue                       # outer films of the disc are not contacts
             if min(len(foam.f_v[a]), len(foam.f_v[b])) > 3 and lengths[e] < previous[e]:
                 foam.t1_foam(int(e))
+        if disc:
+            foam.resolve_space_space_edges()
+            foam.top_transition_type3(iteration)
+            for v in foam._adjacent_crossing_vertices():
+                foam.t4_adjacent(v)
         previous = foam.edge_lengths()
     return foam
 
@@ -99,12 +113,34 @@ def _seed_spaces(foam):
         foam.t2_reverse(v)
 
 
+RELAX = dict(w=0.0, rho=1.0, edpc=0.2)     # settings of the planar ``relaxed_tiling``
+
+
+def _adopt(target, relaxed):
+    """Copy the relaxed geometry and connectivity; the target keeps its own generator."""
+    snap = state.snapshot(relaxed)
+    for name, value in snap.physical.items():
+        setattr(target, name, value)
+    for name in state.KEYED_CACHES + state.STATE_CACHES:
+        if hasattr(target, name):
+            delattr(target, name)
+    target.e_t = np.array([target.fixed_tension(e) for e in range(len(target.e_v))])
+    target._update_faces()
+
+
 def initialize(n_cells, w, rho, seed, anneal_mu=0.5, anneal_tauT=1.0, relax_steps=1500,
                strict=True, **kwargs):
-    """Disc prepared as in the planar protocol: relax, seed spaces, anneal."""
+    """Disc prepared as in the planar protocol.
+
+    The tiling is relaxed at ``W = 0``, ``rho = 1`` with film spacing 0.2 (the
+    planar ``relaxed_tiling`` settings), then adopted by a foam with the target
+    parameters, spaces are seeded at every all-cell junction, and the foam is
+    annealed.
+    """
+    relaxed = DiscFoam.random(n_cells, seed=seed, **{**kwargs, **RELAX})
+    relax_confluent(relaxed, relax_steps)
     foam = DiscFoam.random(n_cells, seed=seed, w=w, rho=rho, **kwargs)
-    relax_confluent(foam, relax_steps)
-    foam.e_t = np.array([foam.fixed_tension(e) for e in range(len(foam.e_v))])
+    _adopt(foam, relaxed)
     _seed_spaces(foam)
     evolve(foam, anneal_tauT * foam.tauT, anneal_mu, strict=strict)
     return foam
@@ -127,10 +163,13 @@ def periodic_foam(n_side, w, rho, seed, **kwargs):
 
 def periodic_initialize(n_side, w, rho, seed, anneal_mu=0.5, anneal_tauT=1.0,
                         relax_steps=1500, strict=True, **kwargs):
+    relaxed = periodic_foam(n_side, seed=seed, **{**kwargs, **RELAX})
+    relax_confluent(relaxed, relax_steps)
     foam = periodic_foam(n_side, w, rho, seed, **kwargs)
     foam.geometry_policy = "strict" if strict else "reference"
-    relax_confluent(foam, relax_steps)
+    foam._restore(relaxed._snapshot())
     foam.e_t = np.array([foam.fixed_tension(e) for e in range(len(foam.e_v))])
+    foam._update_faces()
     _seed_spaces(foam)
     evolve(foam, anneal_tauT * foam.tauT, anneal_mu, strict=strict)
     return foam
