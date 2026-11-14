@@ -168,11 +168,13 @@ def curve_metrics(curve):
         excess_work_per_shortening=float((cumulative[-1]-baseline_work)/s[-1]) if s[-1]>0 else None)
 
 
-def probe(foam, edge, config=ProbeConfig(), progress=None):
+def probe(foam, edge, config=ProbeConfig(), progress=None, return_state=False):
     """Quasi-static compression followed by the original T1 and free release.
 
     Preemption/nonconvergence retains the partial curve, marked incomplete; it
     is never silently interpreted as a zero-work or successful exchange.
+    With return_state=True, return (result, isolated_working_state) for a paired
+    release experiment; the caller's state remains untouched.
     """
     work=isolated_copy(foam)
     prerequisites(work,edge,config)
@@ -213,7 +215,9 @@ def probe(foam, edge, config=ProbeConfig(), progress=None):
     except ValueError as exc:
         result['status']='preempted';result['reason']=f'geometry or T1/release: {exc}';result['complete']=False
     result.update(curve_metrics(result['curve']))
-    return result
+    # The optional state is the isolated working copy, never the caller's foam.
+    # It lets paired release experiments fork the same loaded configuration.
+    return (result, work) if return_state else result
 
 
 def pulse(foam, edge, force, duration=50., sample_interval=.25):

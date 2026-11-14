@@ -5,10 +5,18 @@ biological tissues*, Biophys. J. 122, 4264–4273 (2023). The full text was read
 copy supplied by the user. Code: [`probe.py`](probe.py), tests:
 [`tests/test_probe.py`](tests/test_probe.py).
 
-**Status: draft.** The probe and its tests are complete. The two pilot scripts
-([`scripts/probe_pilot.py`](scripts/probe_pilot.py),
-[`scripts/probe_division.py`](scripts/probe_division.py)) have not been run to completion
-and there are no pilot results.
+**Status:** this document describes the earlier independent prototype.
+The gated implementation used for the new experiments is
+[`force_probe.py`](force_probe.py), documented in
+[`MECHANICAL_PROBES.md`](MECHANICAL_PROBES.md). New results and exact commands are
+in [`COLLECTIVE_EXPERIMENTS.md`](COLLECTIVE_EXPERIMENTS.md). The legacy pilot
+scripts below were not used for these results.
+
+The old `probe.save/load` preserves selected simulation fields and resets some
+caches; it does **not** satisfy the stronger requirement of preserving every
+cache and diagnostic exactly. New probes run on isolated copies and leave the
+supplied object, including its cache identities, untouched. Cross-validation of
+this older routine is performed on such a copy.
 
 ## What the paper does
 
@@ -98,7 +106,7 @@ Tests in [`tests/test_probe.py`](tests/test_probe.py), 16 cells, `W/T0 = 1`, `rh
 
 | Check | Result |
 |---|---|
-| Probe leaves the foam untouched (state, generator, caches) | exact, disc and periodic |
+| Legacy probe restoration | selected state and generator; see cache/diagnostic limitation above |
 | Work with 8 vs 16 levels | 0.6359 vs 0.6348 |
 | Work with holds up to 15 vs 40 τ_R | 0.6359 vs 0.6299 |
 | Work at `dt` vs `dt/2` | 0.6359 vs 0.6356 |

@@ -1,0 +1,146 @@
+{
+  "geometry": [
+    {
+      "n": 8,
+      "time": 1.9999999999998905,
+      "max_difference": 0.0
+    },
+    {
+      "n": 16,
+      "time": 1.9999999999998905,
+      "max_difference": 0.0
+    },
+    {
+      "n": 32,
+      "time": 6.000000000000338,
+      "max_difference": 0.0
+    },
+    {
+      "n": 64,
+      "time": 9.999999999999897,
+      "max_difference": 0.0
+    },
+    {
+      "n": 128,
+      "time": 13.99999999999768,
+      "max_difference": 0.0
+    },
+    {
+      "n": 256,
+      "time": 17.999999999999016,
+      "max_difference": 0.0
+    },
+    {
+      "n": 256,
+      "time": 22.000000000003904,
+      "max_difference": 0.0
+    }
+  ],
+  "counting": [
+    {
+      "n": 16,
+      "old_operation_counter": 0,
+      "checks": [
+        {
+          "dwell": 0.1,
+          "historical_grouped": 0,
+          "new_step_end": 0
+        },
+        {
+          "dwell": 0.2,
+          "historical_grouped": 0,
+          "new_step_end": 0
+        },
+        {
+          "dwell": 0.5,
+          "historical_grouped": 0,
+          "new_step_end": 0
+        }
+      ]
+    },
+    {
+      "n": 32,
+      "old_operation_counter": 0,
+      "checks": [
+        {
+          "dwell": 0.1,
+          "historical_grouped": 2,
+          "new_step_end": 2
+        },
+        {
+          "dwell": 0.2,
+          "historical_grouped": 0,
+          "new_step_end": 0
+        },
+        {
+          "dwell": 0.5,
+          "historical_grouped": 0,
+          "new_step_end": 0
+        }
+      ]
+    },
+    {
+      "n": 64,
+      "old_operation_counter": 4,
+      "checks": [
+        {
+          "dwell": 0.1,
+          "historical_grouped": 40,
+          "new_step_end": 40
+        },
+        {
+          "dwell": 0.2,
+          "historical_grouped": 11,
+          "new_step_end": 11
+        },
+        {
+          "dwell": 0.5,
+          "historical_grouped": 2,
+          "new_step_end": 2
+        }
+      ]
+    },
+    {
+      "n": 128,
+      "old_operation_counter": 42,
+      "checks": [
+        {
+          "dwell": 0.1,
+          "historical_grouped": 279,
+          "new_step_end": 279
+        },
+        {
+          "dwell": 0.2,
+          "historical_grouped": 90,
+          "new_step_end": 90
+        },
+        {
+          "dwell": 0.5,
+          "historical_grouped": 25,
+          "new_step_end": 25
+        }
+      ]
+    },
+    {
+      "n": 256,
+      "old_operation_counter": 184,
+      "checks": [
+        {
+          "dwell": 0.1,
+          "historical_grouped": 972,
+          "new_step_end": 972
+        },
+        {
+          "dwell": 0.2,
+          "historical_grouped": 381,
+          "new_step_end": 381
+        },
+        {
+          "dwell": 0.5,
+          "historical_grouped": 126,
+          "new_step_end": 126
+        }
+      ]
+    }
+  ]
+}

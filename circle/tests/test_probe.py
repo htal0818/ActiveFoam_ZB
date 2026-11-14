@@ -160,21 +160,18 @@ def test_invalid_targets_are_refused(disc):
 
 
 def test_agrees_with_the_independent_force_probe_implementation(disc, disc_curve):
-    """``circle.force_probe`` was written separately; both must trace the same curve.
-
-    Its default convergence gate is tighter than the noise of the holding force
-    on this prepared state, so a looser gate is passed here and only the levels
-    it completes are compared.
-    """
+    """Compare complete curves at matched resolution and tight settling tolerances."""
     from circle import force_probe
-    config = force_probe.ProbeConfig(increments=24, min_hold=2.0, max_hold=60.0,
-                                     force_atol=1e-3, force_rtol=1e-3, stable_windows=3,
-                                     apply_t1=False)
+    config = force_probe.ProbeConfig(increments=24, apply_t1=False)
+    reference = probe.contract_contact(force_probe.isolated_copy(disc), disc_curve["edge"],
+                                       levels=24, window=5., max_hold=300., tolerance=1e-4)
     other = force_probe.probe(disc, disc_curve["edge"], config)
+    assert reference["all_converged"] and other["complete"]
+    disc_curve = reference
     separation = np.array([row["separation"] for row in other["curve"]])
     force = np.array([row["force"] for row in other["curve"]])
     force = force - force[0]
-    assert len(separation) >= 8
+    assert len(separation) == 25
     shortening = disc_curve["d0"] - separation
     here = np.interp(shortening, disc_curve["d0"] - disc_curve["separation"], disc_curve["force"])
     compare = shortening > 0.08 * disc_curve["d0"]         # past the first, noisiest levels

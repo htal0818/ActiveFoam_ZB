@@ -1,25 +1,24 @@
 # Force-based mechanical probes: specification and execution gates
 
-**Implementation in progress; item 1 acceptance gates are not yet passed.**
-The first random-tissue smoke checks did not converge within their 60-τR holds.
-After extending the hold budget and testing drift of block-mean force rather
-than requiring instantaneous force fluctuations to vanish, complete trial curves
-were obtained on both 16-cell domains. These are implementation smoke checks,
-not accepted work measurements: step-count, hold-duration, dt and independent
-force-pulse agreement gates still need to be executed. Seven implementation
-tests pass. Trial outputs and the preparation parameters are saved under
-`data/force_probe_smoke_20261114/` for review.
-No disc/periodic work comparison, adhesion scan, size series, division-response
-scan or activity comparison is claimed for this new probe. Items 2–6 remain
-blocked by the numerical gates below. Existing historical experiments are
-separate from this protocol.
+**Item 1 numerical gates passed in both domains (2026-11-14).**
+Reproducible outputs are in `data/collective_dynamics_20261114/gates/`.
+Run `python -m circle.scripts.collective_gates` to reproduce. Doubling the
+24 shortening increments, doubling the force averaging window and halving dt
+change work by at most 0.86% in the disc and 1.12% in the periodic box.
+Sham-subtracted settled weak-force shortening agrees with the stepwise curve
+within 0.19% and 0.36%, respectively. All paths complete and holds converge.
+These are reference-path checks, not proof of convergence for every contact.
+Scientific pilots retain incomplete paths and geometry failures explicitly.
+The two independently implemented contraction routines now agree to 0.40%
+with matching resolution and sufficiently long holds; the earlier looser
+comparison failed because its settling and sampling resolutions differed.
 
 The dynamics, OU drift/noise, pressure, tension clipping, topology operations and
 unilateral frictionless wall are unchanged. All new code lives in `circle/`.
 No preferred perimeter, target shape index, energy functional or critical shape
 index is introduced. The disc remains flat: comparisons concern boundary and
 finite-size effects. The user's supplied summary of Thomas & Hopyan motivates
-the measurements; direct access to its full text has not been verified here.
+the measurements; the full-text excerpts supplied by the user were used here.
 
 Implementation order: (1) quasi-static forced contact shortening and acceptance
 gates; (2) compressed disc versus equally sized periodic samples with matching

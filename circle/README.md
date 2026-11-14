@@ -354,6 +354,21 @@ See [`BIOLOGY.md`](BIOLOGY.md), the
 [measured findings](../figures/circle/biology_20261114/FINDINGS.md). The feedback law
 and division process are explicit model extensions; `activefoam/` is unchanged.
 
+## Controlled collective-dynamics pilots
+
+The next batch keeps the original equations and uses external force probes,
+matched controls and persistent contact measurements. It tests forced exchange
+and propagation, local mechanical facilitation, wall versus interior response,
+preparation history, tension persistence at fixed raw variance, and five
+synchronous division rounds from 8 to 256 cells without growth.
+
+See the [protocol and reproduction commands](COLLECTIVE_EXPERIMENTS.md),
+[results and limitations](../figures/circle/collective_dynamics_20261114/FINDINGS.md),
+and [plots](../figures/circle/collective_dynamics_20261114/index.html).
+The force-probe acceptance gates pass in both domains. Division counts now use
+the step-end contact graph; an exact replay audit explains their difference from
+the earlier within-step operation counter. The underlying simulation is unchanged.
+
 ## Limits
 
 - Films are polylines. At full wall coverage the cells fall short of the disc area by
