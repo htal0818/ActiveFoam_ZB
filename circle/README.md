@@ -114,7 +114,7 @@ step and spacing. At the default spacing it is about 9% above the finest level.
 `dt`, `dt/2` and `dt/4` (first order).
 
 **Remeshing and contact.** A freshly resampled node of a wall-following film starts
-slightly inside the wall. In the three-cell case the instantaneous reaction dips to 58%
+slightly inside the wall. In the three-cell case the instantaneous reaction dips as low as 48%
 of its mean while films are being resampled; the equilibrium value is unaffected. In an
 active 16-cell tissue the time-averaged reaction is 21.6 ± 0.1 with plain resampling and
 21.8 ± 0.1 with the optional wall-aware resampling (three seeds), not a resolved

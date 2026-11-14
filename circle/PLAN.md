@@ -70,7 +70,7 @@ Measured results: [`BENCHMARKS.md`](BENCHMARKS.md) and the summary in [`README.m
 - **Partial-contact traction converges slowly.** About 9% high at spacing 0.15 for three
   cells; 0.5% between the two finest levels. Wall reaction in ensembles needs a spacing
   study at the cell numbers used.
-- **Remeshing and contact.** Instantaneous reaction dips to 58% of its mean after
+- **Remeshing and contact.** Instantaneous reaction dips as low as 48% of its mean after
   resampling; no resolved bias in the time average (21.6 ± 0.1 vs 21.8 ± 0.1). Wall-aware
   resampling exists as an option and is off by default. Decide whether to turn it on.
 - **Interior shape factor** is 0.03–0.05 above the periodic value at every pilot point.
