@@ -1,5 +1,9 @@
 # 512-cell hollow epithelial ring
 
+This is an artificial size experiment, not an anatomical cross-section through
+a 512-cell embryo. The revised biological interpretation and 48-profile
+simulation are documented in [BLASTULA_CROSS_SECTION.md](BLASTULA_CROSS_SECTION.md).
+
 This enlarges the 24-cell ring preview while retaining approximately unit
 constructed cell area and the original epithelial thickness. It does not put
 512 cells inside the old radius, and it is not a cleavage or growth simulation.
