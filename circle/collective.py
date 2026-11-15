@@ -28,7 +28,7 @@ def variance_matched_mu(tau,dt,reference_mu=3.,reference_tau=10.):
     return reference_mu*np.sqrt(tau*(2-dt/tau)/(reference_tau*(2-dt/reference_tau)))
 
 
-def trajectory(f,duration,mu=0.,start=0,sample=.1,dwell=.2,site=None):
+def trajectory(f,duration,mu=0.,start=0,sample=.1,dwell=.2,site=None,observer=None):
     """Observe every step; filter persistent step-end contact changes.
 
     Net changes within a timestep are observable; a loss and recovery inside
@@ -48,12 +48,14 @@ def trajectory(f,duration,mu=0.,start=0,sample=.1,dwell=.2,site=None):
         if not isinstance(f,DiscFoam):step-=np.rint(step/f.bs)*f.bs
         unwrapped+=step;last=now.copy()
         displacement=unwrapped-ref;displacement-=displacement.mean(axis=0)
+        contact_tensions=f.e_t[np.all(f.e_f>=0,axis=1)]
         records.append(dict(time=t,shape=float(f.shape_factors().mean()),
             neighbors=2*len(previous)/f.nFa,packing=float(f.volume_fraction()),
             msd=float(np.mean(np.sum(displacement**2,axis=1)))/mean_area,
             residual_msd=(nonaffine_msd(ref,unwrapped)/mean_area if isinstance(f,DiscFoam) else None),
             cell_displacement=displacement.copy(),centers=now,mean_area=float(f.f_area.mean()),
-            tension_variance=float(np.mean((f.e_t[np.all(f.e_f>=0,axis=1)]-(2-f.gam))**2))))
+            tension_variance=float(np.mean((contact_tensions-(2-f.gam))**2)) if len(contact_tensions) else None))
+        if observer is not None:records[-1].update(observer(f))
     capture(0.)
     every=max(1,round(sample/f.dt));check=max(1,round(.5/f.dt))
     for k in range(1,round(duration/f.dt)+1):
