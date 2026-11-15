@@ -83,3 +83,6 @@ Figures, numerical summaries, a time sequence, and a discrete-frame animation:
 `../figures/circle/invagination_blastula_crosssection_48_20261115/`.
 The animation uses actual saved frames without interpolation, and playback
 time is not physical time.
+
+The subsequent diagnostic and fixed-topology bending experiments are documented
+in [BENDING_STUDY.md](BENDING_STUDY.md).

@@ -1,0 +1,12 @@
+control_B5_dt_half elapsed 25.0
+refine_dt_A2 elapsed 25.0
+control_B5_dt_half elapsed 50.0
+{"name": "control_B5_dt_half", "status": "complete", "reason": null, "last_valid_elapsed": 50.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 466.8059635210084}
+refine_dt_A2 elapsed 50.0
+{"name": "refine_dt_A2", "status": "complete", "reason": null, "last_valid_elapsed": 50.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 476.9105505079933}
+control_B5_mesh_half elapsed 25.0
+refine_mesh_A2 elapsed 25.0
+control_B5_mesh_half elapsed 50.0
+{"name": "control_B5_mesh_half", "status": "complete", "reason": null, "last_valid_elapsed": 50.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 780.0920572220057}
+refine_mesh_A2 elapsed 50.0
+{"name": "refine_mesh_A2", "status": "complete", "reason": null, "last_valid_elapsed": 50.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 797.7658640750014}
