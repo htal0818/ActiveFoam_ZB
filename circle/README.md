@@ -9,6 +9,9 @@ allows sliding, and lets cells detach inward. Nothing in `activefoam/` is modifi
 Plan, conventions and status: [`PLAN.md`](PLAN.md). Measured benchmark errors:
 [`BENCHMARKS.md`](BENCHMARKS.md).
 
+For the hollow epithelial-ring extension, see [`BENDING_STUDY.md`](BENDING_STUDY.md)
+and the subsequent [24-of-48-cell activation experiment](HALF_RING_BENDING.md).
+
 ## Model
 
 Interior physics is unchanged. With `T_eff = max(T, 0)` and

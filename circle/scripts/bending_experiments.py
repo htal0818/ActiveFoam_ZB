@@ -103,6 +103,11 @@ def run_case(config):
     f.apical_amplitude = config['apical']; f.lateral_amplitude = config['lateral']
     f.activation_weights = (f.active_cells.astype(float) if config['name'].startswith('sharp')
                            else smooth_patch(f.nFa, config['patch']))
+    if 'activation_weights' in config:
+        weights = np.asarray(config['activation_weights'], dtype=float)
+        if weights.shape != (f.nFa,) or not np.all(np.isfinite(weights)) or np.any((weights < 0) | (weights > 1)):
+            raise ValueError('activation weights must have one finite value in [0, 1] per cell')
+        f.activation_weights = weights.copy()
     f.active_cells = f.activation_weights > 0
     # Match both geometry AND lumen pressure when varying the compression modulus.
     initial_area = f.interface_data()[2]; initial_pressure = f.lumen_pressure(initial_area)
