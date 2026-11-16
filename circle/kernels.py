@@ -50,7 +50,8 @@ def resample_on_wall(mid, spacing, cx, cy, radius, tol):
 
 @njit(cache=True)
 def advance_disc(vpos, ends, faces, tension, mids, areas, psi, dt, pressure, lsc,
-                 spacing, outward, cx, cy, radius, tol, remesh, wall_resample=False):
+                 spacing, outward, cx, cy, radius, tol, remesh, wall_resample=False,
+                 edge_pressure=None):
     """One force step with projection onto a rigid circular wall.
 
     Nodal forces are in the planar code's units: displacement = psi*dt*force.
@@ -76,6 +77,7 @@ def advance_disc(vpos, ends, faces, tension, mids, areas, psi, dt, pressure, lsc
         pn = 0.
         if f0 >= 0: pn -= pressure*(lsc*lsc/areas[f0]-1.)/lsc
         if f1 >= 0: pn += pressure*(lsc*lsc/areas[f1]-1.)/lsc
+        if edge_pressure is not None: pn = edge_pressure[e]
         teff = max(0., tension[e])
         for j in range(len(mid)-1):
             dx = mid[j+1, 0] - mid[j, 0]

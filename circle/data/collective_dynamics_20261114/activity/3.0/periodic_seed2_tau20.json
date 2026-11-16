@@ -1,0 +1,1 @@
+{"status": "failed", "parameters": {"domain": "periodic", "seed": 2, "tau": 20.0, "n": 36, "w": 1.5, "rho": 1.3, "dt": 0.005, "spacing": 0.1, "burn": 100.0, "duration": 100.0, "mu_reference": 3.0}, "error": "ValueError: resolved boundary crossing: junction distance 0.0407549 at elapsed time 4 tau_R"}

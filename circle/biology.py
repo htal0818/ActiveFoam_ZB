@@ -104,6 +104,18 @@ class BiologyFoam(DiscFoam):
             if c>=0:pn+=(1 if side else -1)*self.P0*(self.preferred[c]/areas[c]-1)/self.lsc
         return pn*eln/2
 
-    def divide_synchronously(self):
+    def divide_synchronously(self,orientation_rng=None):
+        """One atomic wave; optional independent RNG supplies random cut angles."""
         from .division import divide_round
-        return divide_round(self)
+        return divide_round(self,orientation_rng)
+
+    def stress_tensor(self):
+        """Original reported stress convention with each cell's actual K/P0.
+
+        The inherited measurement assumes uniform A0. After cleavage, replace
+        its isotropic pressure term by sum P0*(preferred_i/A_i-1)*A_i.
+        This changes only a diagnostic, never the integration forces.
+        """
+        stress=super().stress_tensor()
+        correction=self.rho*self.P0*np.sum(self.preferred-self.A0)/self.disc_area
+        return stress-correction*np.eye(2)

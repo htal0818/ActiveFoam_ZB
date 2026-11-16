@@ -1,0 +1,920 @@
+{
+  "division": [
+    {
+      "interval": 2.0,
+      "divide_changes": 314,
+      "skip_changes": 51,
+      "divide_rate": 0.306640625,
+      "skip_rate": 0.099609375,
+      "shape_initial": 4.0980657988182525,
+      "shape_final": 3.8160129315599187,
+      "survival": 0.8695035460992908,
+      "residual_msd": 0.06539739634852362,
+      "preferred_total": 8.0,
+      "dwell_sensitivity": {
+        "0.1": {
+          "divide": 847,
+          "skip": 165
+        },
+        "0.2": {
+          "divide": 314,
+          "skip": 51
+        },
+        "0.5": {
+          "divide": 99,
+          "skip": 16
+        }
+      },
+      "max_tolerated_microfolds": 67,
+      "max_resolved_crossings": 0
+    },
+    {
+      "interval": 4.0,
+      "divide_changes": 381,
+      "skip_changes": 72,
+      "divide_rate": 0.3720703125,
+      "skip_rate": 0.140625,
+      "shape_initial": 4.10992910945348,
+      "shape_final": 3.8207985299667566,
+      "survival": 0.851063829787234,
+      "residual_msd": 0.06974378586096888,
+      "preferred_total": 8.0,
+      "dwell_sensitivity": {
+        "0.1": {
+          "divide": 972,
+          "skip": 197
+        },
+        "0.2": {
+          "divide": 381,
+          "skip": 72
+        },
+        "0.5": {
+          "divide": 126,
+          "skip": 5
+        }
+      },
+      "max_tolerated_microfolds": 83,
+      "max_resolved_crossings": 0
+    },
+    {
+      "interval": 8.0,
+      "divide_changes": 294,
+      "skip_changes": 38,
+      "divide_rate": 0.287109375,
+      "skip_rate": 0.07421875,
+      "shape_initial": 4.110762348977957,
+      "shape_final": 3.812329103651416,
+      "survival": 0.8857545839210155,
+      "residual_msd": 0.06665514432808096,
+      "preferred_total": 8.0,
+      "dwell_sensitivity": {
+        "0.1": {
+          "divide": 774,
+          "skip": 127
+        },
+        "0.2": {
+          "divide": 294,
+          "skip": 38
+        },
+        "0.5": {
+          "divide": 81,
+          "skip": 1
+        }
+      },
+      "max_tolerated_microfolds": 55,
+      "max_resolved_crossings": 0
+    }
+  ],
+  "activity": [
+    {
+      "domain": "disc",
+      "seed": 1,
+      "tau": 2.0,
+      "mu": 0.11174746920721987,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.003493826440384056,
+      "tension_variance": 0.0030080426060482726
+    },
+    {
+      "domain": "disc",
+      "seed": 2,
+      "tau": 2.0,
+      "mu": 0.11174746920721987,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.0018900596899061055,
+      "tension_variance": 0.003254780279561199
+    },
+    {
+      "domain": "disc",
+      "seed": 1,
+      "tau": 10.0,
+      "mu": 0.25,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.004252134472716788,
+      "tension_variance": 0.002969297172384889
+    },
+    {
+      "domain": "disc",
+      "seed": 2,
+      "tau": 10.0,
+      "mu": 0.25,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.005771952286767202,
+      "tension_variance": 0.0031019529544711695
+    },
+    {
+      "domain": "disc",
+      "seed": 1,
+      "tau": 20.0,
+      "mu": 0.35357549251500275,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.006833872838756902,
+      "tension_variance": 0.003028472349149832
+    },
+    {
+      "domain": "disc",
+      "seed": 2,
+      "tau": 20.0,
+      "mu": 0.35357549251500275,
+      "reference_mu": 0.25,
+      "changes": 2,
+      "rate": 0.0005555555555555556,
+      "survival": 0.9885057471264368,
+      "msd": 0.008449074107720172,
+      "tension_variance": 0.0032838686964938393
+    },
+    {
+      "domain": "periodic",
+      "seed": 1,
+      "tau": 2.0,
+      "mu": 0.11174746920721987,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.0017038181527532627,
+      "tension_variance": 0.0031343065447643737
+    },
+    {
+      "domain": "periodic",
+      "seed": 2,
+      "tau": 2.0,
+      "mu": 0.11174746920721987,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.0017483782009192397,
+      "tension_variance": 0.003110188744375342
+    },
+    {
+      "domain": "periodic",
+      "seed": 1,
+      "tau": 10.0,
+      "mu": 0.25,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.0065512549370306886,
+      "tension_variance": 0.0029799820019509628
+    },
+    {
+      "domain": "periodic",
+      "seed": 2,
+      "tau": 10.0,
+      "mu": 0.25,
+      "reference_mu": 0.25,
+      "changes": 2,
+      "rate": 0.0005555555555555556,
+      "survival": 0.9907407407407407,
+      "msd": 0.009315584519750338,
+      "tension_variance": 0.00312145164533511
+    },
+    {
+      "domain": "periodic",
+      "seed": 1,
+      "tau": 20.0,
+      "mu": 0.35357549251500275,
+      "reference_mu": 0.25,
+      "changes": 0,
+      "rate": 0.0,
+      "survival": 1.0,
+      "msd": 0.006313269353502047,
+      "tension_variance": 0.0029203369315551177
+    },
+    {
+      "domain": "periodic",
+      "seed": 2,
+      "tau": 20.0,
+      "mu": 0.35357549251500275,
+      "reference_mu": 0.25,
+      "changes": 2,
+      "rate": 0.0005555555555555556,
+      "survival": 0.9907407407407407,
+      "msd": 0.009206848205450972,
+      "tension_variance": 0.0033285350485074716
+    }
+  ],
+  "mechanics": [
+    {
+      "domain": "disc",
+      "zone": "interior",
+      "seed": 1,
+      "quench_tauT": 1.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.4666376861288687,
+      "work_per_shortening": 0.5120526072126331,
+      "excess_work_per_shortening": 0.541456496854731,
+      "baseline_force": -0.029403889642097832,
+      "old_pair": [
+        9,
+        23
+      ],
+      "shape": 3.8453844978434324,
+      "secondary_excess": 0,
+      "facilitation": [
+        {
+          "zone": "near",
+          "distance": 0.25670204398453755,
+          "difference": -0.012934435631458768,
+          "difference_unforced": 0.015302749567524369,
+          "before": 0.04947040721275346,
+          "after": 0.03653597158129469,
+          "sham": 0.021233222013770325
+        },
+        {
+          "zone": "far",
+          "distance": 3.66090977352391,
+          "difference": -0.003235083428011945,
+          "difference_unforced": -0.0004756302811184665,
+          "before": 0.07551379511470745,
+          "after": 0.0722787116866955,
+          "sham": 0.07275434196781397
+        }
+      ]
+    },
+    {
+      "domain": "disc",
+      "zone": "interior",
+      "seed": 1,
+      "quench_tauT": 5.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.4669949136643027,
+      "work_per_shortening": 0.5224112583543578,
+      "excess_work_per_shortening": 0.52514998709958,
+      "baseline_force": -0.002738728745222305,
+      "old_pair": [
+        9,
+        23
+      ],
+      "shape": 3.8438245802484636,
+      "secondary_excess": 0,
+      "facilitation": [
+        {
+          "zone": "near",
+          "distance": 0.3091409900319493,
+          "difference": -0.012222717705739572,
+          "difference_unforced": 0.016031308664570712,
+          "before": 0.04975786804457188,
+          "after": 0.037535150338832306,
+          "sham": 0.021503841674261594
+        },
+        {
+          "zone": "far",
+          "distance": 3.6178680224696675,
+          "difference": -0.0032125493981435826,
+          "difference_unforced": -0.00017384305282325263,
+          "before": 0.07571556707430034,
+          "after": 0.07250301767615676,
+          "sham": 0.07267686072898001
+        }
+      ]
+    },
+    {
+      "domain": "disc",
+      "zone": "interior",
+      "seed": 2,
+      "quench_tauT": 1.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.6235938935358558,
+      "work_per_shortening": 0.5767461681367443,
+      "excess_work_per_shortening": 0.5628675727807485,
+      "baseline_force": 0.01387859535599578,
+      "old_pair": [
+        0,
+        33
+      ],
+      "shape": 3.853167073755081,
+      "secondary_excess": 0,
+      "facilitation": []
+    },
+    {
+      "domain": "disc",
+      "zone": "interior",
+      "seed": 2,
+      "quench_tauT": 5.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.6234663662734509,
+      "work_per_shortening": 0.5714885517283212,
+      "excess_work_per_shortening": 0.5743119487744577,
+      "baseline_force": -0.002823397046136381,
+      "old_pair": [
+        0,
+        33
+      ],
+      "shape": 3.852723093583822,
+      "secondary_excess": 0,
+      "facilitation": []
+    },
+    {
+      "domain": "disc",
+      "zone": "wall",
+      "seed": 1,
+      "quench_tauT": 1.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.7051354688953281,
+      "work_per_shortening": 0.6586441855959845,
+      "excess_work_per_shortening": 0.7191273121618077,
+      "baseline_force": -0.06048312656582328,
+      "old_pair": [
+        0,
+        33
+      ],
+      "shape": 3.8453844978434324,
+      "secondary_excess": 0,
+      "facilitation": []
+    },
+    {
+      "domain": "disc",
+      "zone": "wall",
+      "seed": 1,
+      "quench_tauT": 5.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.7060862787511748,
+      "work_per_shortening": 0.6719177738163041,
+      "excess_work_per_shortening": 0.6918018139781777,
+      "baseline_force": -0.01988404016187358,
+      "old_pair": [
+        0,
+        33
+      ],
+      "shape": 3.8438245802484636,
+      "secondary_excess": 0,
+      "facilitation": []
+    },
+    {
+      "domain": "disc",
+      "zone": "wall",
+      "seed": 2,
+      "quench_tauT": 1.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.5497161468440694,
+      "work_per_shortening": 0.583731901609002,
+      "excess_work_per_shortening": 0.5946526533714321,
+      "baseline_force": -0.010920751762430068,
+      "old_pair": [
+        2,
+        25
+      ],
+      "shape": 3.853167073755081,
+      "secondary_excess": 0,
+      "facilitation": []
+    },
+    {
+      "domain": "disc",
+      "zone": "wall",
+      "seed": 2,
+      "quench_tauT": 5.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.619340371271581,
+      "work_per_shortening": 0.649111483395041,
+      "excess_work_per_shortening": 0.6411483077558312,
+      "baseline_force": 0.007963175639209827,
+      "old_pair": [
+        4,
+        14
+      ],
+      "shape": 3.852723093583822,
+      "secondary_excess": 0,
+      "facilitation": [
+        {
+          "zone": "far",
+          "distance": 5.74212538673428,
+          "difference": 0.0031617571952681084,
+          "difference_unforced": 0.0014631151371560652,
+          "before": 0.07292911717804303,
+          "after": 0.07609087437331113,
+          "sham": 0.07462775923615507
+        }
+      ]
+    },
+    {
+      "domain": "periodic",
+      "zone": "periodic",
+      "seed": 1,
+      "quench_tauT": 1.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.47535603763264195,
+      "work_per_shortening": 0.5284556635492879,
+      "excess_work_per_shortening": 0.5054620967403195,
+      "baseline_force": 0.02299356680896837,
+      "old_pair": [
+        9,
+        19
+      ],
+      "shape": 3.8016987940169846,
+      "secondary_excess": 0,
+      "facilitation": []
+    },
+    {
+      "domain": "periodic",
+      "zone": "periodic",
+      "seed": 1,
+      "quench_tauT": 5.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.47555042376976014,
+      "work_per_shortening": 0.5207448485574094,
+      "excess_work_per_shortening": 0.518261968462127,
+      "baseline_force": 0.0024828800952824566,
+      "old_pair": [
+        9,
+        19
+      ],
+      "shape": 3.801186283440268,
+      "secondary_excess": 0,
+      "facilitation": [
+        {
+          "zone": "far",
+          "distance": 4.169765478794363,
+          "difference": -0.00044148423494290434,
+          "difference_unforced": 0.00140723943675998,
+          "before": 0.06538758460963295,
+          "after": 0.06494610037469005,
+          "sham": 0.06353886093793007
+        }
+      ]
+    },
+    {
+      "domain": "periodic",
+      "zone": "periodic",
+      "seed": 2,
+      "quench_tauT": 1.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.47427586095559404,
+      "work_per_shortening": 0.4801817845099047,
+      "excess_work_per_shortening": 0.49100625309192936,
+      "baseline_force": -0.01082446858202473,
+      "old_pair": [
+        6,
+        12
+      ],
+      "shape": 3.8101739637947807,
+      "secondary_excess": 0,
+      "facilitation": []
+    },
+    {
+      "domain": "periodic",
+      "zone": "periodic",
+      "seed": 2,
+      "quench_tauT": 5.0,
+      "n": 36,
+      "w": 1.0,
+      "rho": 1.3,
+      "spacing": 0.1,
+      "dt": 0.005,
+      "release": 10.0,
+      "edge_selection": "longest two eligible, first complete path",
+      "outcome": "reversal",
+      "work": 0.47424915434548714,
+      "work_per_shortening": 0.48332610442913043,
+      "excess_work_per_shortening": 0.48695737441149967,
+      "baseline_force": -0.0036312699823692397,
+      "old_pair": [
+        6,
+        12
+      ],
+      "shape": 3.809643256573279,
+      "secondary_excess": 0,
+      "facilitation": [
+        {
+          "zone": "near",
+          "distance": 0.33493714577411277,
+          "difference": -0.010490558021073938,
+          "difference_unforced": 0.02138222198169941,
+          "before": 0.0453752707298303,
+          "after": 0.034884712708756364,
+          "sham": 0.013502490727056957
+        },
+        {
+          "zone": "far",
+          "distance": 4.058541334596626,
+          "difference": -0.002772159908080926,
+          "difference_unforced": -0.00010688485790520674,
+          "before": 0.06612667875244321,
+          "after": 0.06335451884436229,
+          "sham": 0.0634614037022675
+        }
+      ]
+    }
+  ],
+  "failures": {
+    "division": [],
+    "activity": [
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 1,
+          "tau": 10.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 50.0,
+          "duration": 100.0,
+          "mu_reference": 0.5
+        },
+        "status": "failed",
+        "error": "ValueError: 4 resolved film crossing(s); films 18, 27 at (11.6315, 14.5083); local-junction distance inf"
+      },
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 2,
+          "tau": 10.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 50.0,
+          "duration": 100.0,
+          "mu_reference": 0.5
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.103848 at elapsed time 45 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 2,
+          "tau": 20.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 100.0,
+          "duration": 100.0,
+          "mu_reference": 0.5
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.122745 at elapsed time 58 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "periodic",
+          "seed": 1,
+          "tau": 20.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 100.0,
+          "duration": 100.0,
+          "mu_reference": 0.5
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.154587 at elapsed time 28 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "periodic",
+          "seed": 2,
+          "tau": 20.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 100.0,
+          "duration": 100.0,
+          "mu_reference": 0.5
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.113183 at elapsed time 78 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 1,
+          "tau": 10.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 50.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.165324 at elapsed time 2 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 1,
+          "tau": 2.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 10.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.151711 at elapsed time 1 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 1,
+          "tau": 20.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 100.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.24507 at elapsed time 3 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 2,
+          "tau": 10.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 50.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.270577 at elapsed time 2.5 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 2,
+          "tau": 2.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 10.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.403083 at elapsed time 1.5 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "disc",
+          "seed": 2,
+          "tau": 20.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 100.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.223067 at elapsed time 3 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "periodic",
+          "seed": 1,
+          "tau": 10.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 50.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.155298 at elapsed time 1.5 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "periodic",
+          "seed": 1,
+          "tau": 2.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 10.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.239794 at elapsed time 1.5 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "periodic",
+          "seed": 1,
+          "tau": 20.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 100.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.168441 at elapsed time 2 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "periodic",
+          "seed": 2,
+          "tau": 10.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 50.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.0399534 at elapsed time 2.5 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "periodic",
+          "seed": 2,
+          "tau": 2.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 10.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.461256 at elapsed time 1.5 tau_R"
+      },
+      {
+        "parameters": {
+          "domain": "periodic",
+          "seed": 2,
+          "tau": 20.0,
+          "n": 36,
+          "w": 1.5,
+          "rho": 1.3,
+          "dt": 0.005,
+          "spacing": 0.1,
+          "burn": 100.0,
+          "duration": 100.0,
+          "mu_reference": 3.0
+        },
+        "status": "failed",
+        "error": "ValueError: resolved boundary crossing: junction distance 0.0407549 at elapsed time 4 tau_R"
+      }
+    ],
+    "mechanics": []
+  },
+  "division_counts": {
+    "total": 3,
+    "complete": 3
+  },
+  "activity_counts": {
+    "total": 40,
+    "complete": 23
+  },
+  "mechanics_counts": {
+    "total": 12,
+    "complete": 12
+  }
+}

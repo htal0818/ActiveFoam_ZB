@@ -9,6 +9,9 @@ allows sliding, and lets cells detach inward. Nothing in `activefoam/` is modifi
 Plan, conventions and status: [`PLAN.md`](PLAN.md). Measured benchmark errors:
 [`BENCHMARKS.md`](BENCHMARKS.md).
 
+For the hollow epithelial-ring extension, see [`BENDING_STUDY.md`](BENDING_STUDY.md)
+and the subsequent [24-of-48-cell activation experiment](HALF_RING_BENDING.md).
+
 ## Model
 
 Interior physics is unchanged. With `T_eff = max(T, 0)` and
@@ -353,6 +356,21 @@ See [`BIOLOGY.md`](BIOLOGY.md), the
 [figure/animation gallery](../figures/circle/biology_20261114/index.html), and the
 [measured findings](../figures/circle/biology_20261114/FINDINGS.md). The feedback law
 and division process are explicit model extensions; `activefoam/` is unchanged.
+
+## Controlled collective-dynamics pilots
+
+The next batch keeps the original equations and uses external force probes,
+matched controls and persistent contact measurements. It tests forced exchange
+and propagation, local mechanical facilitation, wall versus interior response,
+preparation history, tension persistence at fixed raw variance, and five
+synchronous division rounds from 8 to 256 cells without growth.
+
+See the [protocol and reproduction commands](COLLECTIVE_EXPERIMENTS.md),
+[results and limitations](../figures/circle/collective_dynamics_20261114/FINDINGS.md),
+and [plots](../figures/circle/collective_dynamics_20261114/index.html).
+The force-probe acceptance gates pass in both domains. Division counts now use
+the step-end contact graph; an exact replay audit explains their difference from
+the earlier within-step operation counter. The underlying simulation is unchanged.
 
 ## Limits
 

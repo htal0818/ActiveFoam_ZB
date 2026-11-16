@@ -78,6 +78,28 @@ def plans(foam):
     return output
 
 
+def random_plans(foam,rng,max_draws=128):
+    """Plan a complete wave on one unchanged geometry, redrawing invalid cuts.
+
+    Proposed cut-normal angles are uniform on [0, pi); accepted proposals are
+    conditioned on geometric validity and separation from all reserved cuts.
+    No mother is split until every mother has a valid plan.
+    """
+    output=[];reserved=[];draws=[];separation=max(1e-8,.04*foam.edpc)
+    for cell in range(foam.nFa):
+        polygon=foam._cell_polyline(cell)
+        for attempt in range(1,max_draws+1):
+            theta=float(rng.uniform(0.,np.pi));normal=np.array([np.cos(theta),np.sin(theta)])
+            offset=bisector(polygon,normal)
+            try:cuts=intersections(foam,cell,normal,offset)
+            except DivisionRejected:continue
+            if any(np.linalg.norm(point-previous)<separation for _,_,point in cuts for previous in reserved):continue
+            output.append((normal,offset,theta,0.));reserved.extend(cut[2] for cut in cuts)
+            draws.append(attempt);break
+        else:raise DivisionRejected(f'no valid random cut for mother UID {foam.cell_uid[cell]} after {max_draws} draws')
+    return output,draws
+
+
 def split_film(foam,e,cuts):
     """Split an old film at ordered (fractional-index, point) positions."""
     old=np.array(foam.e_mid[e]);endpoints=foam.e_v[e].copy();faces=foam.e_f[e].copy();tension=foam.e_t[e]
@@ -153,14 +175,21 @@ def divide_cell(foam,cell,plan):
     foam.parent_uid[cell]=parent;foam.parent_uid=np.append(foam.parent_uid,parent)
     foam.birth_time[cell]=foam.bio_time;foam.birth_time=np.append(foam.birth_time,foam.bio_time)
     return dict(time=foam.bio_time,parent=parent,daughters=ids,angle=theta,angle_adjustment=turn,
-                center=foam.vpos[[va,vb]].mean(axis=0),area_before=old_area,preferred_before=old_preferred)
+                center=foam.vpos[[va,vb]].mean(axis=0),area_before=old_area,preferred_before=old_preferred,
+                area_daughters=foam.f_area[[cell,daughter]].copy(),
+                preferred_daughters=foam.preferred[[cell,daughter]].copy(),
+                pressure_before=foam.P0*(old_preferred/old_area-1)/foam.lsc,
+                pressure_daughters=foam.P0*(foam.preferred[[cell,daughter]]/foam.f_area[[cell,daughter]]-1)/foam.lsc,
+                new_edge=int(edge),new_tension=float(foam.e_t[edge]))
 
 
-def divide_round(foam):
+def divide_round(foam,orientation_rng=None):
     """Double all mothers at one clock time, or roll back the entire round."""
+    if orientation_rng is foam.rng:raise ValueError('use a separate orientation generator')
     snap=state.snapshot(foam);count=foam.nFa;total=foam.preferred.sum();physical_area=foam.f_area.sum()
     try:
-        prepared=plans(foam)
+        if orientation_rng is None:prepared=plans(foam);draws=None
+        else:prepared,draws=random_plans(foam,orientation_rng)
         events=[divide_cell(foam,c,plan) for c,plan in enumerate(prepared)]
         if foam.nFa!=2*count or not np.isclose(foam.preferred.sum(),total,rtol=1e-13):raise DivisionRejected('division conservation failure')
         if not np.isclose(foam.f_area.sum(),physical_area,rtol=1e-10):raise DivisionRejected('round area conservation failure')
@@ -172,5 +201,7 @@ def divide_round(foam):
         foam.division_log.append(dict(time=foam.bio_time,accepted=False,mothers=count,reason=str(exc)))
         if isinstance(exc,ValueError):return False
         raise
-    foam.division_log.append(dict(time=foam.bio_time,accepted=True,mothers=count,daughters=foam.nFa,events=events))
+    entry=dict(time=foam.bio_time,accepted=True,mothers=count,daughters=foam.nFa,events=events)
+    if draws is not None:entry.update(orientation_rule='uniform proposals with geometric rejection',orientation_draws=draws)
+    foam.division_log.append(entry)
     return True

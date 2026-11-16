@@ -1,0 +1,23 @@
+preparation 20.0
+preparation 40.0
+preparation 60.0
+preparation 80.0
+preparation 100.0
+preparation 120.0
+Original proposal {'kind': 'T1', 'edge': 97, 'role': 'apical', 'length': 0.034864799158301124, 'cells': [-1, 32], 'elapsed': 9.637499999991249}
+{"name": "sharp_A2", "status": "collapse_guard", "reason": "interface reached numerical collapse guard; no topology rule applied", "last_valid_elapsed": 9.5, "event": {"edge": 97, "role": "apical", "cells": [-1, 32], "length": 0.004900646602139402, "chord": 0.0049006466021394015, "threshold": 0.005224804269552098, "elapsed": 9.762500000000001}, "proposal_roles": ["apical"], "proposal_count": 2, "wall_seconds": 19.848524537999765}
+control_B5 elapsed 25.0
+apical_A0.5 elapsed 25.0
+apical_A2 elapsed 25.0
+control_B5 elapsed 50.0
+apical_A0.5 elapsed 50.0
+apical_A2 elapsed 50.0
+control_B5 elapsed 75.0
+apical_A0.5 elapsed 75.0
+apical_A2 elapsed 75.0
+control_B5 elapsed 100.0
+{"name": "control_B5", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 203.64805006199458}
+apical_A0.5 elapsed 100.0
+{"name": "apical_A0.5", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 209.61164646600082}
+apical_A2 elapsed 100.0
+{"name": "apical_A2", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": ["apical"], "proposal_count": 2, "wall_seconds": 215.0609222799976}

@@ -1,0 +1,58 @@
+{"name": "smooth_equal_total", "status": "collapse_guard", "reason": "interface reached numerical collapse guard; no topology rule applied", "last_valid_elapsed": 19.0, "event": {"edge": 112, "role": "apical", "cells": [-1, 37], "length": 0.00506692862030115, "chord": 0.00506692862030115, "threshold": 0.005224804269552098, "elapsed": 19.35}, "proposal_roles": ["apical"], "proposal_count": 2, "wall_seconds": 52.04719065599784}
+control_B50 elapsed 25.0
+control_B0.5 elapsed 25.0
+apical_A1 elapsed 25.0
+control_B500 elapsed 25.0
+{"name": "apical_A4", "status": "collapse_guard", "reason": "interface reached numerical collapse guard; no topology rule applied", "last_valid_elapsed": 18.0, "event": {"edge": 103, "role": "apical", "cells": [-1, 34], "length": 0.005213279254041887, "chord": 0.005213279254041888, "threshold": 0.005224804269552098, "elapsed": 18.4125}, "proposal_roles": ["apical"], "proposal_count": 2, "wall_seconds": 56.806348268990405}
+control_B50 elapsed 50.0
+control_B0.5 elapsed 50.0
+apical_A1 elapsed 50.0
+control_B500 elapsed 50.0
+lumen_B0.5 elapsed 25.0
+control_B50 elapsed 75.0
+control_B0.5 elapsed 75.0
+control_B500 elapsed 75.0
+apical_A1 elapsed 75.0
+lumen_B0.5 elapsed 50.0
+control_B50 elapsed 100.0
+control_B0.5 elapsed 100.0
+{"name": "control_B50", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 262.90079096800764}
+{"name": "control_B0.5", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 263.5176619319973}
+control_B500 elapsed 100.0
+apical_A1 elapsed 100.0
+{"name": "control_B500", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 290.3235843840084}
+{"name": "apical_A1", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 290.9737598339998}
+lumen_B0.5 elapsed 75.0
+lumen_B50 elapsed 25.0
+lumen_B500 elapsed 25.0
+lateral_L1 elapsed 25.0
+lateral_L0.5 elapsed 25.0
+lumen_B0.5 elapsed 100.0
+{"name": "lumen_B0.5", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": ["apical"], "proposal_count": 2, "wall_seconds": 313.9109482759959}
+lumen_B500 elapsed 50.0
+lumen_B50 elapsed 50.0
+lateral_L1 elapsed 50.0
+lateral_L0.5 elapsed 50.0
+weak_combined elapsed 25.0
+lumen_B50 elapsed 75.0
+lumen_B500 elapsed 75.0
+lateral_L0.5 elapsed 75.0
+lateral_L1 elapsed 75.0
+weak_combined elapsed 50.0
+lumen_B50 elapsed 100.0
+lumen_B500 elapsed 100.0
+weak_combined elapsed 75.0
+{"name": "lumen_B50", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": ["apical"], "proposal_count": 2, "wall_seconds": 456.82365912399837}
+{"name": "lumen_B500", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": ["apical"], "proposal_count": 2, "wall_seconds": 457.4597921329987}
+lateral_L0.5 elapsed 100.0
+lateral_L1 elapsed 100.0
+{"name": "lateral_L0.5", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 474.0608824670053}
+{"name": "lateral_L1", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 476.62175430799834}
+weak_combined elapsed 100.0
+{"name": "patch_P4", "status": "collapse_guard", "reason": "interface reached numerical collapse guard; no topology rule applied", "last_valid_elapsed": 14.0, "event": {"edge": 106, "role": "apical", "cells": [-1, 35], "length": 0.005084581446128639, "chord": 0.005084581446128639, "threshold": 0.005224804269552098, "elapsed": 14.3175}, "proposal_roles": ["apical"], "proposal_count": 2, "wall_seconds": 65.6223600099911}
+{"name": "weak_combined", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 363.1806445609982}
+patch_P12 elapsed 25.0
+patch_P12 elapsed 50.0
+patch_P12 elapsed 75.0
+patch_P12 elapsed 100.0
+{"name": "patch_P12", "status": "complete", "reason": null, "last_valid_elapsed": 100.0, "event": null, "proposal_roles": [], "proposal_count": 0, "wall_seconds": 259.1893037730042}
